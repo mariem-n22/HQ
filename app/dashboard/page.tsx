@@ -1,0 +1,85 @@
+import Link from "next/link";
+import { auth, signOut } from "@/auth";
+import { prisma } from "@/lib/prisma";
+
+export const metadata = {
+  title: "Pit Wall — Mahmoud HQ",
+  robots: { index: false, follow: false },
+};
+
+/**
+ * Dashboard overview. Route protection lives in proxy.ts, so reaching this at
+ * all means the session is valid; the counts confirm the Prisma read path.
+ */
+export default async function DashboardPage() {
+  const session = await auth();
+
+  const [projects, skills, experiences, achievements, identity, ventures, misc, now, messages] =
+    await Promise.all([
+      prisma.project.count(),
+      prisma.skill.count(),
+      prisma.experience.count(),
+      prisma.achievement.count(),
+      prisma.identityMoment.count(),
+      prisma.venture.count(),
+      prisma.miscEntry.count(),
+      prisma.nowEntry.count(),
+      prisma.contactMessage.count(),
+    ]);
+
+  const tiles = [
+    { label: "Projects", value: projects },
+    { label: "Skills", value: skills },
+    { label: "Experience", value: experiences },
+    { label: "Achievements", value: achievements },
+    { label: "Identity moments", value: identity },
+    { label: "Ventures", value: ventures },
+    { label: "Misc entries", value: misc },
+    { label: "Now entries", value: now },
+    { label: "Inbox", value: messages },
+  ];
+
+  return (
+    <div className="min-h-screen bg-base px-4 py-10 sm:px-8">
+      <div className="mx-auto max-w-5xl">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="label-mono text-amber">Pit Wall</p>
+            <h1 className="display-title mt-2 text-4xl text-ink">Overview</h1>
+            <p className="mt-2 text-sm text-mute">Signed in as {session?.user?.email}</p>
+          </div>
+          <div className="flex gap-2">
+            <Link
+              href="/"
+              className="rounded-sm border border-line px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-mute transition-colors hover:border-amber hover:text-amber"
+            >
+              View site
+            </Link>
+            <form
+              action={async () => {
+                "use server";
+                await signOut({ redirectTo: "/dashboard/login" });
+              }}
+            >
+              <button
+                type="submit"
+                className="rounded-sm border border-signal/60 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-signal transition-colors hover:bg-signal hover:text-ink"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {tiles.map((tile) => (
+            <div key={tile.label} className="glow-card px-4 py-5">
+              <p className="display-title text-3xl text-ink">{tile.value}</p>
+              <p className="label-mono mt-2">{tile.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
