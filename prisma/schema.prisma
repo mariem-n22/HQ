@@ -1,0 +1,213 @@
+// Mahmoud HQ — consolidated data model (v6 PART 3).
+//
+// Field names follow the brief. Three fields marked "kept from the live
+// schema" are not in the brief's list but are read by shipped UI, and PART 5
+// requires the migrated UI to be bit-for-bit identical — dropping them would
+// visibly break the contact page and the portfolio header. They are called out
+// individually below.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Prisma 7 no longer accepts `url` here — the connection string lives in
+// prisma.config.ts for the CLI, and reaches PrismaClient through the pg
+// driver adapter in lib/prisma.ts.
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProjectStatus {
+  BUILDING
+  SHIPPED
+  ARCHIVED
+}
+
+/// The single owner account. No sign-up route exists; this row is created by
+/// prisma/seed.ts from ADMIN_EMAIL / ADMIN_PASSWORD.
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Mahmoud")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  tagline     String        @default("")
+  description String        @default("")
+  role        String        @default("")
+  stack       String[]      @default([])
+  links       Json          @default("{}")
+  status      ProjectStatus @default(BUILDING)
+  year        String        @default("")
+  emoji       String        @default("")
+  coverImage  String?
+  featured    Boolean       @default(false)
+  /// Legacy name for the portfolio flag; kept so existing data maps 1:1.
+  showOnResume   Boolean @default(false)
+  /// The brief's explicit name for the same idea. The migration script copies
+  /// showOnResume into it so both agree; the UI reads showOnPortfolio.
+  showOnPortfolio Boolean @default(false)
+  order       Int           @default(0)
+  images      ProjectImage[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([order])
+}
+
+/// Replaces the old `projects.gallery` jsonb column.
+model ProjectImage {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String  @default("")
+  alt       String  @default("")
+  order     Int     @default(0)
+
+  @@index([projectId, order])
+}
+
+model Skill {
+  id       String @id @default(cuid())
+  category String
+  name     String
+  /// 0-100 percentage scale.
+  level    Int    @default(0)
+  /// simple-icons style slug resolved by src/lib/skill-icons.ts.
+  icon     String @default("")
+  /// Kept from the live schema: an uploaded logo URL for anything the icon
+  /// library has no mark for. Falls back to `icon` when empty.
+  iconImage String?
+  order    Int    @default(0)
+
+  @@index([order])
+}
+
+model Experience {
+  id           String   @id @default(cuid())
+  org          String
+  role         String
+  period       String   @default("")
+  location     String?
+  /// Short — rendered on the condensed timeline card.
+  summary      String   @default("")
+  /// Full — rendered only inside the popup.
+  description  String   @default("")
+  achievements String[] @default([])
+  stack        String[] @default([])
+  image        String?
+  order        Int      @default(0)
+
+  @@index([order])
+}
+
+model ContentBlock {
+  id    String @id @default(cuid())
+  key   String @unique
+  title String @default("")
+  body  String @default("")
+}
+
+model IdentityMoment {
+  id          String  @id @default(cuid())
+  year        String  @default("")
+  title       String
+  /// Short — rendered on the card. Live column is `teaser`, and the shipped
+  /// component reads `summary`; the migration reconciles them onto this field.
+  teaser      String  @default("")
+  description String  @default("")
+  image       String?
+  order       Int     @default(0)
+
+  @@index([order])
+}
+
+model Venture {
+  id           String  @id @default(cuid())
+  name         String
+  description  String  @default("")
+  jurisdiction String?
+  status       String  @default("Exploring")
+  image        String?
+  order        Int     @default(0)
+
+  @@index([order])
+}
+
+model MiscEntry {
+  id          String  @id @default(cuid())
+  title       String
+  description String  @default("")
+  emoji       String  @default("")
+  image       String?
+  order       Int     @default(0)
+
+  @@index([order])
+}
+
+model NowEntry {
+  id     String   @id @default(cuid())
+  text   String
+  active Boolean  @default(true)
+  date   DateTime @default(now())
+
+  @@index([date])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  role        String   @default("")
+  category    String   @default("")
+  date        String   @default("")
+  location    String   @default("")
+  description String   @default("")
+  image       String?
+  tags        String[] @default([])
+  order       Int      @default(0)
+
+  @@index([order])
+}
+
+/// Singleton — enforced by always reading/writing id = "singleton".
+model SiteSettings {
+  id                    String  @id @default("singleton")
+  heroImage             String?
+  avatarImage           String?
+  openToOpportunities   Boolean @default(true)
+  philosophyQuote       String  @default("")
+  github                String  @default("")
+  linkedin              String  @default("")
+  instagram             String  @default("")
+  whatsapp              String  @default("")
+  phone                 String  @default("")
+  email                 String  @default("")
+  /// Kept from the live schema — the /contact "Based in" row and the portfolio
+  /// header subtitle read this.
+  location              String  @default("")
+  /// Kept from the live schema — the availability pill on /contact and the
+  /// "open to opportunities" badge on /portfolio read this.
+  availability          String  @default("")
+  /// Kept from the live schema — the CV link in dashboard settings.
+  resumeUrl             String?
+  updatedAt             DateTime @updatedAt
+}
+
+/// The contact form target. Written anonymously, read only by the admin.
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String   @default("")
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

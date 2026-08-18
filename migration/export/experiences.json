@@ -1,0 +1,92 @@
+[
+  {
+    "id": "ed78c21b-1753-4473-b588-a87637f1c8ef",
+    "org": "T1Dub",
+    "role": "Co-Founder & CEO",
+    "period": "2024 — present",
+    "description": "Run the company and own the technical architecture: the dubbing pipeline, voice cloning, diarization, and the billing model behind it. Pitched to the Spark Tank finals.",
+    "sort_order": 1,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "location": null,
+    "achievements": [],
+    "summary": "Run the company and own the technical architecture: the dubbing pipeline, voice cloning, diarization, and the billing model behind it. Pitched to the Spark Tank finals."
+  },
+  {
+    "id": "4e6cef51-34a9-4ae4-9972-30e3bf492d10",
+    "org": "Freelance / owais.media",
+    "role": "Full-stack developer",
+    "period": "2023 — present",
+    "description": "Client work across the stack — Django and FastAPI on the back, React and Next.js on the front. Shipping to real deadlines for people who do not care what framework it is.",
+    "sort_order": 2,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "location": null,
+    "achievements": [],
+    "summary": "Client work across the stack — Django and FastAPI on the back, React and Next.js on the front. Shipping to real deadlines for people who do not care what framework it is."
+  },
+  {
+    "id": "70584049-832e-42e6-b86e-53a4366df396",
+    "org": "Modern Academy University, Cairo",
+    "role": "Computer Engineering student",
+    "period": "2022 — present",
+    "description": "Computer Engineering degree. Most of what I actually use I learned shipping, but the fundamentals came from here.",
+    "sort_order": 3,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "location": null,
+    "achievements": [],
+    "summary": "Computer Engineering degree. Most of what I actually use I learned shipping, but the fundamentals came from here."
+  },
+  {
+    "id": "f85dedb5-f694-4e88-99d1-cb1bb09737e4",
+    "org": "Greennova",
+    "role": "Full-Stack Developer",
+    "period": "Jul 2024 — Nov 2024",
+    "description": "Built restaurant management systems and custom WordPress sites for restaurant clients.",
+    "sort_order": 20,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "location": "Cairo, Egypt",
+    "achievements": [
+      "Shipped ordering and management tooling for multiple restaurant clients",
+      "Integrated Egyptian payment gateways end to end",
+      "Delivered NFC-based ordering and menu solutions"
+    ],
+    "summary": "Built restaurant management systems and custom WordPress sites for restaurant clients."
+  },
+  {
+    "id": "7613e8d5-ce82-430d-8775-031900f5473d",
+    "org": "T1 Dubbing",
+    "role": "AI Engineer & Full-Stack Developer",
+    "period": "Remote — 2024",
+    "description": "Built the dubbing product front to back: React interface plus the backend audio-processing services behind it.",
+    "sort_order": 22,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "location": "Remote",
+    "achievements": [
+      "Shipped the React and Tailwind product interface",
+      "Built backend audio-processing services for dubbing workflows",
+      "Integrated the OpenAI API and owned prompt engineering for the pipeline"
+    ],
+    "summary": "Built the dubbing product front to back: React interface plus the backend audio-processing services behind it."
+  },
+  {
+    "id": "2e9bf6b9-ab7f-4be6-b049-f8bfa14b26a4",
+    "org": "El Safa Egypt",
+    "role": "Web Developer",
+    "period": "Jan 2024 — Nov 2024",
+    "description": "Owned a custom WooCommerce store for a printer-supplies distributor.",
+    "sort_order": 21,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "location": "Cairo, Egypt",
+    "achievements": [
+      "Built a custom WooCommerce storefront with deep product filtering",
+      "Integrated Paymob and Fawry payment flows",
+      "Cut page load times and lifted organic search visibility"
+    ],
+    "summary": "Owned a custom WooCommerce store for a printer-supplies distributor."
+  }
+]

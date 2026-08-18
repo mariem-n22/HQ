@@ -1,0 +1,75 @@
+[
+  {
+    "id": "7af590f6-09c6-4ef7-8109-9a368de78ddf",
+    "title": "Cairo AI Hackathon 2024",
+    "role": "AI & Full-Stack Engineer",
+    "category": "Hackathon",
+    "date": "Mar 2024",
+    "location": "Cairo, Egypt",
+    "description": "Took 3rd place in a team of four, building and demoing a working AI product inside the weekend. 50,000 EGP award.",
+    "image": null,
+    "tags": [
+      "3rd place",
+      "50,000 EGP",
+      "Team of 4",
+      "AI"
+    ],
+    "sort_order": 10,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  },
+  {
+    "id": "968562d9-2e86-4c9c-ba9a-0e67f8a67fb9",
+    "title": "AI Caravan — MENA Region Summit",
+    "role": "Volunteer, Youth Mentor & Project Evaluator",
+    "category": "Conference",
+    "date": "Jan 2024",
+    "location": "Cairo, Egypt",
+    "description": "Mentored student teams and evaluated submitted projects at the MENA regional summit.",
+    "image": null,
+    "tags": [
+      "Mentoring",
+      "Judging",
+      "MENA"
+    ],
+    "sort_order": 20,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  },
+  {
+    "id": "5124ad41-3b79-48d0-b70f-a5af822977a2",
+    "title": "Egypt AI Innovation Forum",
+    "role": "Technical Speaker & Panelist",
+    "category": "Speaking",
+    "date": "Nov 2023",
+    "location": "Cairo, Egypt",
+    "description": "Spoke on practical AI integration and joined the panel on shipping AI features in real products.",
+    "image": null,
+    "tags": [
+      "Speaking",
+      "Panel",
+      "AI"
+    ],
+    "sort_order": 40,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  },
+  {
+    "id": "6e9e754c-e8d0-438e-8147-f4b11aee7d70",
+    "title": "1Billion Summit — AI Film Award",
+    "role": "AI Filmmaker & Creative Technologist",
+    "category": "Award",
+    "date": "May 2024",
+    "location": "Global — virtual",
+    "description": "Submitted \"The Racer\", an AI-assisted short film about motorsport and machine intelligence.",
+    "image": null,
+    "tags": [
+      "AI film",
+      "Creative tech",
+      "The Racer"
+    ],
+    "sort_order": 30,
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  }
+]

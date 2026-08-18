@@ -1,0 +1,57 @@
+[
+  {
+    "id": "bda36ec6-2f52-48be-9141-9be0c038c3a5",
+    "name": "T1Dub",
+    "description": "The AI dubbing company. Real product, real pipeline, currently the main thing.",
+    "jurisdiction": null,
+    "status": "Active",
+    "sort_order": 1,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00",
+    "image": null
+  },
+  {
+    "id": "d0fc4d79-9347-4830-adfc-0a9d1a475592",
+    "name": "UK limited company",
+    "description": "Fastest path to a recognised entity with clean Stripe access. Weighing the yearly filing overhead and corporation tax against how simple setup is.",
+    "jurisdiction": "United Kingdom",
+    "status": "Researching",
+    "sort_order": 2,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00",
+    "image": null
+  },
+  {
+    "id": "7af7c444-9ca3-4b00-873c-aa60db0ca08f",
+    "name": "Estonia e-Residency",
+    "description": "Attractive because of remote administration and the deferred corporate tax on retained profit. Checking how banking and payment processing actually behave in practice.",
+    "jurisdiction": "Estonia",
+    "status": "Researching",
+    "sort_order": 3,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00",
+    "image": null
+  },
+  {
+    "id": "626d08c5-75dc-4c2a-aa93-79918c1133d8",
+    "name": "UAE free zone",
+    "description": "Strong on tax and on being close to home, and it lines up with a possible relocation. Higher setup and renewal cost is the tradeoff.",
+    "jurisdiction": "United Arab Emirates",
+    "status": "Exploring",
+    "sort_order": 4,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00",
+    "image": null
+  },
+  {
+    "id": "626efbc4-f548-459b-bb42-7f224a63fd64",
+    "name": "Passive income / investment models",
+    "description": "A slower thread: understanding which income structures survive without me being in front of a keyboard.",
+    "jurisdiction": null,
+    "status": "Exploring",
+    "sort_order": 5,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00",
+    "image": null
+  }
+]

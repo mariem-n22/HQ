@@ -1,0 +1,58 @@
+[
+  {
+    "id": "01ca99f1-be98-475d-b3be-5b19d37f5287",
+    "key": "story",
+    "title": "Who I actually am",
+    "body": "I am Mahmoud — a Computer Engineering student in Cairo who spends most of his week building products rather than studying them.\n\nThe short version: I write full-stack software. Python, Django and FastAPI on the backend, React, Next.js and TypeScript on the front, Celery and Redis when things need to happen out of band. The longer version is that I keep starting companies. T1Dub is the one I run as CEO. WorkPo is the one I built because freelancing annoyed me. REDLINE is the one where my obsession with racing stopped being separate from my job.\n\nI like the part of building where the thing gets faster, cheaper, or clearer than it was yesterday. Incremental gains. It is the same instinct that makes me watch every practice session of a race weekend.\n\nThis site is my home base, not a display case. The work is in here, but so is everything else.",
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00"
+  },
+  {
+    "id": "5bef88dc-350f-4a80-8fc9-7ca8265f191c",
+    "key": "identity_intro",
+    "title": "Why racing is on this site",
+    "body": "Formula 1 is not a hobby I mention to seem interesting. I follow every session of every weekend — practice included, which is the part people skip and the part where the setup story actually happens.\n\nWhat keeps me there is the same thing that keeps me in software: it is a sport about margins. A tenth per lap compounds into a pit window. A slightly better tyre call beats a slightly faster car. Knowing when to push and when to hold the gap is a real engineering decision made under time pressure, and it maps almost one-to-one onto shipping.\n\nREDLINE is where the two stopped being separate.",
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00"
+  },
+  {
+    "id": "ace8280e-82c1-41ae-966b-a8ff6fccfdd1",
+    "key": "business_intro",
+    "title": "The company question",
+    "body": "I am figuring out where to actually incorporate. It is not a theoretical exercise — Stripe does not work with an Egyptian entity, and payments decide whether a SaaS can exist at all.\n\nSo I am weighing the UK, Estonia and the UAE against each other on payment gateway access, tax exposure, cost of maintaining the entity, and how each one fits with where I might live in a few years. This page is the open version of that research.",
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00"
+  },
+  {
+    "id": "f4c6d59b-344b-49d7-aa28-3dc41e439d64",
+    "key": "misc_intro",
+    "title": "Free practice",
+    "body": "Everything that does not fit a sector. Books, opinions, things I am chewing on. No structure enforced.",
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-14T17:23:26.160844+00:00"
+  },
+  {
+    "id": "9d7d99cf-1454-4b56-a4a0-cfea5d735a4f",
+    "key": "portfolio_pitch",
+    "title": "Mahmoud Hammad",
+    "body": "I build and ship full-stack products end to end — Python, Django and FastAPI on the backend, React, Next.js and TypeScript on the front, with AI wired in where it actually earns its place. Co-Founder & CEO of T1Dub, Computer Engineering student in Cairo, and a racing brain about everything I build.",
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  },
+  {
+    "id": "ab96ef98-8383-4b2c-9465-7f189e0a4030",
+    "key": "portfolio_about",
+    "title": "About",
+    "body": "I go by BMawy. I started building because I wanted things that did not exist yet — a dubbing engine that sounded human, a car rental platform that did not fall over on a busy weekend, a creative suite that did not need five subscriptions.\n\nMost of my work sits at the seam between backend systems and the interface people actually touch. I like owning both sides: designing the data model in the morning and arguing about button spacing in the afternoon. That is also why AI shows up in a lot of what I ship — not as a demo, but as a component with a latency budget and a failure mode.\n\nRacing taught me the working method. You do not win on one heroic lap; you win on setup, telemetry and consistency. I build software the same way: measure, adjust, run it again.\n\nRight now I am running T1Dub, finishing Computer Engineering in Cairo, and taking on selected freelance and full-time work.",
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  },
+  {
+    "id": "047a6327-67e8-4155-af79-8b7f743fd3d2",
+    "key": "portfolio_focus",
+    "title": "Focus areas",
+    "body": "Full-Stack Architecture :: End-to-end ownership — data model, API surface, interface and deploy path as one system rather than three handoffs.\nBackend Engineering :: Python, Django, FastAPI, Node. Queues, audio pipelines, payment gateways and the boring reliability work that keeps them up.\nAI Integration :: Voice cloning, dubbing pipelines and OpenAI-based workflows shipped as production features, with real cost and latency budgets.\nProduct Mindset :: I ship for users, not for the changelog. Scope hard, cut the clever part, keep the part that earns its complexity.",
+    "created_at": "2026-08-15T13:45:07.179104+00:00",
+    "updated_at": "2026-08-15T13:45:07.179104+00:00"
+  }
+]

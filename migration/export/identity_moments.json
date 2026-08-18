@@ -1,0 +1,62 @@
+[
+  {
+    "id": "9325b4ca-a3db-477f-a767-fe1f95a96580",
+    "year": "2016",
+    "title": "The first full race weekend",
+    "description": "I stopped watching only the Sunday race and started watching practice. That is where the sport actually opens up — you can see teams testing a theory instead of executing one.",
+    "sort_order": 1,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "image": null,
+    "teaser": "I stopped watching only the Sunday race and started watching practice. That is where the sport actually opens up — you can see teams testing a theory instead of executing one.",
+    "gallery": []
+  },
+  {
+    "id": "002881d0-ac2a-4fd1-a270-3a05d789f2a4",
+    "year": "2019",
+    "title": "Strategy over speed",
+    "description": "The season where I realised the fastest car does not automatically win. Tyre windows, undercuts, safety car luck. I started thinking about races as resource problems.",
+    "sort_order": 2,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "image": null,
+    "teaser": "The season where I realised the fastest car does not automatically win. Tyre windows, undercuts, safety car luck. I started thinking about races as resource problems.",
+    "gallery": []
+  },
+  {
+    "id": "41beb89a-598a-49fa-8c03-fb0e0896a78a",
+    "year": "2021",
+    "title": "Sim racing as a feedback loop",
+    "description": "Driving badly on purpose to learn what a setup change actually does. Understeer is a much better teacher than a diagram.",
+    "sort_order": 3,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "image": null,
+    "teaser": "Driving badly on purpose to learn what a setup change actually does. Understeer is a much better teacher than a diagram.",
+    "gallery": []
+  },
+  {
+    "id": "18ab0836-8339-4878-8338-0073121c0cbb",
+    "year": "2023",
+    "title": "REDLINE",
+    "description": "I built a go-kart racing platform: multi-branch booking, live leaderboards, tournaments. The first time the racing brain and the engineering brain were doing the same job.",
+    "sort_order": 4,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "image": null,
+    "teaser": "I built a go-kart racing platform: multi-branch booking, live leaderboards, tournaments. The first time the racing brain and the engineering brain were doing the same job.",
+    "gallery": []
+  },
+  {
+    "id": "5a216254-bf52-4cbd-83fc-11b53544b47f",
+    "year": "2026",
+    "title": "Still every session",
+    "description": "Nothing has cooled off. Race weekends still restructure my calendar. [[TODO: add a favourite team / driver / circuit if you want it public]]",
+    "sort_order": 5,
+    "created_at": "2026-08-14T17:23:26.160844+00:00",
+    "updated_at": "2026-08-17T15:03:16.453559+00:00",
+    "image": null,
+    "teaser": "Nothing has cooled off. Race weekends still restructure my calendar. [[TODO: add a favourite team / driver / circuit if you want it public]]",
+    "gallery": []
+  }
+]
