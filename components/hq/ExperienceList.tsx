@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CalendarDays, MapPin } from "lucide-react";
-import type { Experience } from "@/lib/data";
+import type { Experience } from "@/lib/types";
 import { summarize } from "@/lib/summary";
 import { Frame } from "./Frame";
 import { Reveal } from "./Reveal";

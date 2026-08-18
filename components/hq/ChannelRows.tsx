@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy, MapPin } from "lucide-react";
-import { isTodo, type SiteSettings } from "@/lib/data";
+import { isTodo, type SiteSettings } from "@/lib/types";
 import { channelsOf } from "@/lib/channels";
 
 /**

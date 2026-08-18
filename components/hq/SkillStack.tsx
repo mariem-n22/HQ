@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from "framer-motion";
 import { skillIcon } from "@/lib/skill-icons";
-import type { Skill } from "@/lib/data";
+import type { Skill } from "@/lib/types";
 import { Reveal } from "./Reveal";
 
 /**

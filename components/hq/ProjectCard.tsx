@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Project } from "@/lib/data";
+import type { Project } from "@/lib/types";
 import { StatusBadge } from "./StatusBadge";
 import { Frame } from "./Frame";
 

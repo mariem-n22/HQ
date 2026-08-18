@@ -1,5 +1,10 @@
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { authConfig } from "./auth.config";
+
+// Built from the edge-safe config: importing ./auth here would drag Prisma and
+// the pg driver into the edge bundle.
+const { auth } = NextAuth(authConfig);
 
 /**
  * Everything under /dashboard requires the admin session except the login
@@ -25,6 +30,4 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
-export const config = {
-  matcher: ["/dashboard/:path*"],
-};
+export const config = { matcher: ["/dashboard/:path*"] };

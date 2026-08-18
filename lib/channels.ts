@@ -3,7 +3,7 @@ import { SiGithub, SiInstagram, SiWhatsapp } from "react-icons/si";
 // LinkedIn is not in simple-icons v5 — Font Awesome still carries the mark.
 import { FaLinkedinIn } from "react-icons/fa6";
 import { Mail, Phone } from "lucide-react";
-import { isTodo, type SiteSettings } from "@/lib/data";
+import { isTodo, type SiteSettings } from "@/lib/types";
 
 export type Channel = {
   key: string;

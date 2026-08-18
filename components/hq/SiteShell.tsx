@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { SECTORS, getNowEntries, getSettings } from "@/lib/data";
+import { SECTORS } from "@/lib/types";
+import { getNowEntries, getSettings } from "@/lib/data";
 import { CurrentlyLine } from "./TelemetryTicker";
 import { SocialLinks } from "./SocialLinks";
 

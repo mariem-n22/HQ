@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { authConfig } from "./auth.config";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
@@ -15,9 +16,7 @@ const credentialsSchema = z.object({
  * and re-running the seed resets its password.
  */
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: { signIn: "/dashboard/login" },
-  trustHost: true,
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {

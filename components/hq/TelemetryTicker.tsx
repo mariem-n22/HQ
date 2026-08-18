@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { NowEntry } from "@/lib/data";
+import type { NowEntry } from "@/lib/types";
 
 /**
  * Quiet editorial dispatch line under the nav — the current Now entry, or a

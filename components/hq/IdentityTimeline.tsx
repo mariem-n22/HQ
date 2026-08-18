@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { IdentityMoment } from "@/lib/data";
+import type { IdentityMoment } from "@/lib/types";
 import { summarize } from "@/lib/summary";
 import { Frame } from "./Frame";
 import { Reveal } from "./Reveal";

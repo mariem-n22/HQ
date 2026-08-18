@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import type { GalleryImage } from "@/lib/data";
+import type { GalleryImage } from "@/lib/types";
 import { Frame } from "./Frame";
 
 export function Gallery({ images, label = "Gallery" }: { images: GalleryImage[]; label?: string }) {

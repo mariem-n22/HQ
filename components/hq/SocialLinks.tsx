@@ -1,5 +1,5 @@
 import { channelsOf } from "@/lib/channels";
-import type { SiteSettings } from "@/lib/data";
+import type { SiteSettings } from "@/lib/types";
 
 /** Compact icon row — footer, portfolio header. */
 export function SocialLinks({
