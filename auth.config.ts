@@ -1,6 +1,18 @@
 import type { NextAuthConfig } from "next-auth";
 
 /**
+ * First non-blank secret across both supported names. Whitespace-only and
+ * empty values count as absent, which `??` would not catch.
+ */
+export function resolveSecret(): string | undefined {
+  for (const value of [process.env.AUTH_SECRET, process.env.NEXTAUTH_SECRET]) {
+    const trimmed = value?.trim();
+    if (trimmed) return trimmed;
+  }
+  return undefined;
+}
+
+/**
  * Edge-safe half of the auth setup: no providers, no Prisma, no bcrypt — just
  * enough for proxy.ts to read the session cookie. The full configuration with
  * the credentials provider lives in auth.ts, which runs on Node.
@@ -19,8 +31,13 @@ export const authConfig = {
    * so the deployment does not hinge on which name was set. Declared here
    * rather than in auth.ts because the edge proxy needs it too — it cannot
    * decode the session JWT without it.
+   *
+   * resolveSecret, not `??`: nullish coalescing does not fall back on an empty
+   * string, so a variable that exists but is blank would be passed through and
+   * rejected downstream as missing — with the same MissingSecret error and no
+   * hint that the value was empty rather than absent.
    */
-  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
+  secret: resolveSecret(),
   providers: [],
   callbacks: {
     jwt({ token, user }) {
