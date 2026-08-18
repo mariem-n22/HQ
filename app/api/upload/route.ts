@@ -32,14 +32,14 @@ export async function POST(request: Request) {
   }
 
   const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-  // The store is private, so the blob's own URL 403s for site visitors. Store
-  // and return the app-relative proxy path instead — /api/media streams it.
+  // Public store: the blob's own CDN URL is world-readable, so it goes
+  // straight into the database and into <Image> with no proxy in between.
   const blob = await put(`uploads/${safe}`, file, {
-    access: "private",
+    access: "public",
     token,
     addRandomSuffix: true,
     contentType: file.type,
   });
 
-  return NextResponse.json({ url: `/api/media/${blob.pathname}` });
+  return NextResponse.json({ url: blob.url });
 }

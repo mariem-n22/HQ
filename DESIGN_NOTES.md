@@ -123,6 +123,26 @@ Written anonymously by the `/contact` form. Stored: `name`, `email`,
 brief assumed one. Added `readAt DateTime?` in this pass so the inbox can mark
 messages read. No create/edit form: list, mark read/unread, delete.
 
+## Image storage
+
+Uploads go to a **public** Vercel Blob store, and `put()` returns a CDN URL
+that is stored in the database verbatim and rendered directly.
+
+An earlier store was provisioned with private access, which forced a
+`/api/media/[...path]` read-through proxy: private blobs 403 for anonymous
+visitors, so they could not be used in an `<img>` on a public page. That store
+was replaced and the proxy deleted — images now come straight off the CDN with
+no serverless hop.
+
+Two details worth keeping in mind:
+
+- The token env var is `HQ_READ_WRITE_TOKEN`, not the SDK's default
+  `BLOB_READ_WRITE_TOKEN`, so it is passed to `put()` explicitly.
+- `Frame` (public pages) renders a plain `<img>`, so the CDN URL works with no
+  further configuration. The dashboard's `ImageField` uses `next/image`, which
+  *does* require the blob host in `images.remotePatterns` — the wildcard
+  subdomain there is store-specific and changes if the store is recreated.
+
 ## Earlier passes
 
 See git history for the v4–v6 notes (slider peek, staggered experience
