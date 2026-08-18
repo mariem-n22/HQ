@@ -8,7 +8,19 @@ import type { NextAuthConfig } from "next-auth";
 export const authConfig = {
   session: { strategy: "jwt" },
   pages: { signIn: "/dashboard/login" },
+  /**
+   * Vercel gives preview deployments a randomised subdomain, so the host has to
+   * be trusted or every auth request fails URL validation.
+   */
   trustHost: true,
+  /**
+   * v5 reads AUTH_SECRET implicitly and ignores v4's NEXTAUTH_SECRET, which
+   * throws `MissingSecret` if only the older name is configured. Accept either
+   * so the deployment does not hinge on which name was set. Declared here
+   * rather than in auth.ts because the edge proxy needs it too — it cannot
+   * decode the session JWT without it.
+   */
+  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   providers: [],
   callbacks: {
     jwt({ token, user }) {
