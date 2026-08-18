@@ -11,10 +11,9 @@
  * which is the replacement for the email-confirmation flow that locked the
  * owner out of the Supabase build.
  */
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
+// Shared client: Prisma 7 needs a driver adapter, which lib/prisma.ts sets up.
+import { prisma } from "../lib/prisma";
 
 async function main() {
   const email = process.env.ADMIN_EMAIL;

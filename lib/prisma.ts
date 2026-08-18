@@ -1,3 +1,7 @@
+// Standalone scripts (tsx seed/import) do not get Next's automatic .env
+// loading, so pull it in here. dotenv never overwrites an already-set var,
+// so this is a no-op under Next and on Vercel.
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -11,7 +15,7 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 function createClient() {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
-    throw new Error("DATABASE_URL is not set — copy .env.example to .env.local and fill it in.");
+    throw new Error("DATABASE_URL is not set — copy .env.example to .env and fill it in.");
   }
   return new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 }

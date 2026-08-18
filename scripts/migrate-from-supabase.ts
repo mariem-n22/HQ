@@ -20,9 +20,9 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { PrismaClient, ProjectStatus } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ProjectStatus } from "@prisma/client";
+// Shared client: Prisma 7 needs a driver adapter, which lib/prisma.ts sets up.
+import { prisma } from "../lib/prisma";
 const EXPORT_DIR = join(process.cwd(), "migration", "export");
 
 function load<T = Record<string, unknown>>(table: string): T[] {
