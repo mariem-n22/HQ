@@ -27,16 +27,17 @@ export default async function DashboardPage() {
       prisma.contactMessage.count(),
     ]);
 
+  // Every tile links into its management screen — PART 2.
   const tiles = [
-    { label: "Projects", value: projects },
-    { label: "Skills", value: skills },
-    { label: "Experience", value: experiences },
-    { label: "Achievements", value: achievements },
-    { label: "Identity moments", value: identity },
-    { label: "Ventures", value: ventures },
-    { label: "Misc entries", value: misc },
-    { label: "Now entries", value: now },
-    { label: "Inbox", value: messages },
+    { label: "Projects", value: projects, href: "/dashboard/projects" },
+    { label: "Skills", value: skills, href: "/dashboard/skills" },
+    { label: "Experience", value: experiences, href: "/dashboard/experience" },
+    { label: "Achievements", value: achievements, href: "/dashboard/achievements" },
+    { label: "Identity moments", value: identity, href: "/dashboard/identity" },
+    { label: "Ventures", value: ventures, href: "/dashboard/ventures" },
+    { label: "Misc entries", value: misc, href: "/dashboard/misc" },
+    { label: "Now entries", value: now, href: "/dashboard/now" },
+    { label: "Inbox", value: messages, href: "/dashboard/inbox" },
   ];
 
   return (
@@ -73,10 +74,13 @@ export default async function DashboardPage() {
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {tiles.map((tile) => (
-            <div key={tile.label} className="glow-card px-4 py-5">
+            <Link key={tile.label} href={tile.href} className="glow-card block px-4 py-5">
               <p className="display-title text-3xl text-ink">{tile.value}</p>
               <p className="label-mono mt-2">{tile.label}</p>
-            </div>
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-amber">
+                Manage →
+              </p>
+            </Link>
           ))}
         </div>
       </div>

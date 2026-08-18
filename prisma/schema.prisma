@@ -41,6 +41,12 @@ model Project {
   tagline     String        @default("")
   description String        @default("")
   role        String        @default("")
+  /// Client or employer the project was built for, when there was one.
+  company     String        @default("")
+  location    String        @default("")
+  /// Full timeframe for the detail page ("Jul 2024 — Nov 2024"). `year` stays
+  /// as the compact badge the cards render.
+  period      String        @default("")
   stack       String[]      @default([])
   links       Json          @default("{}")
   status      ProjectStatus @default(BUILDING)
@@ -207,6 +213,8 @@ model ContactMessage {
   email     String
   subject   String   @default("")
   message   String
+  /// Null until the inbox marks it read.
+  readAt    DateTime?
   createdAt DateTime @default(now())
 
   @@index([createdAt])
