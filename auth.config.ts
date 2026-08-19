@@ -4,7 +4,7 @@ import type { NextAuthConfig } from "next-auth";
  * First non-blank secret across both supported names. Whitespace-only and
  * empty values count as absent, which `??` would not catch.
  */
-export function resolveSecret(): string | undefined {
+function resolveSecret(): string | undefined {
   for (const value of [process.env.AUTH_SECRET, process.env.NEXTAUTH_SECRET]) {
     const trimmed = value?.trim();
     if (trimmed) return trimmed;
