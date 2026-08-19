@@ -4,6 +4,8 @@ import { SectorPage } from "@/components/hq/SiteShell";
 import { Frame } from "@/components/hq/Frame";
 import { Gallery } from "@/components/hq/Gallery";
 import { getProject, getProjects, projectLinks, galleryOf } from "@/lib/data";
+import { JsonLd } from "@/components/JsonLd";
+import { PERSON, absolute, graph, pageMeta } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -13,12 +15,16 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = await getProject(slug);
-  if (!project) return { title: "Not found — Mahmoud HQ" };
-  return {
-    title: `${project.title} — Work — Mahmoud HQ`,
-    description: project.tagline,
-    openGraph: { title: project.title, description: project.tagline },
-  };
+  if (!project) return { title: "Not found" };
+  return pageMeta({
+    title: `${project.title} — a project by ${PERSON.name}`,
+    description:
+      project.tagline ||
+      `${project.title}, built by ${PERSON.name}.`,
+    path: `/work/${project.slug}`,
+    image: project.coverImage,
+    type: "article",
+  });
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -37,8 +43,31 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     { label: "Status", value: project.status },
   ].filter((m) => m.value);
 
+  // Software projects get SoftwareSourceCode; DeepClone is explicitly flagged
+  // open source, which is the citable fact for "Egyptian open-source AI" queries.
+  const isOpenSource = /deepclone/i.test(project.slug);
+
   return (
     <SectorPage>
+      <JsonLd
+        data={graph({
+          "@type": "SoftwareSourceCode",
+          "@id": absolute(`/work/${project.slug}#project`),
+          name: project.title,
+          headline: project.title,
+          description: project.tagline || project.description.slice(0, 300),
+          url: absolute(`/work/${project.slug}`),
+          author: { "@type": "Person", "@id": absolute("/#mahmoud-hammad"), name: PERSON.name },
+          creator: { "@id": absolute("/#mahmoud-hammad") },
+          dateCreated: project.year || undefined,
+          programmingLanguage: project.stack,
+          keywords: project.stack.join(", "),
+          ...(project.coverImage ? { image: project.coverImage } : {}),
+          ...(isOpenSource
+            ? { isAccessibleForFree: true, license: "https://opensource.org/licenses/MIT" }
+            : {}),
+        })}
+      />
       <Link
         href="/work"
         className="link-underline font-mono text-[10px] uppercase tracking-[0.2em] text-mute hover:text-amber"

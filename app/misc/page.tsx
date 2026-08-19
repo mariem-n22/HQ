@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
 import { Frame } from "@/components/hq/Frame";
 import { getContentBlocks, getMiscEntries, findBlock } from "@/lib/data";
 
-export const metadata = {
-  title: "Free Practice — Mahmoud HQ",
-  description: "The grab bag: books, opinions, habits and everything that fits no other sector.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Free Practice — notes and miscellany",
+  description: "Books, opinions and everything from Mahmoud Hammad that fits no other section.",
+  path: "/misc",
+});
 
 export default async function MiscPage() {
   const [entries, blocks] = await Promise.all([getMiscEntries(), getContentBlocks()]);

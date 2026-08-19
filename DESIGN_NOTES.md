@@ -143,6 +143,65 @@ Two details worth keeping in mind:
   *does* require the blob host in `images.remotePatterns` — the wildcard
   subdomain there is store-specific and changes if the store is recreated.
 
+## SEO/GEO research (v8)
+
+Checked against current sources before implementing. Three findings changed
+what the brief assumed — flagged rather than silently overridden.
+
+### 1. "Claude-Web" is legacy naming
+
+The brief lists `Claude-Web`. Anthropic's current agents are **ClaudeBot**
+(training), **Claude-SearchBot** and **Claude-User** (retrieval), with
+`anthropic-ai` as the older name. `Claude-Web` is kept in the allow list —
+it costs nothing and may still be sent — but the current names are what
+actually matter and were added.
+
+### 2. Training crawlers and retrieval agents are separate opt-ins
+
+The more important distinction the brief does not draw. Blocking GPTBot,
+ClaudeBot or Google-Extended stops *training* but not citation; allowing only
+OAI-SearchBot, Claude-SearchBot and PerplexityBot keeps citations while opting
+out of training. Since the goal here is to be found *and* learned, `robots.ts`
+allows both classes, each named explicitly — several of these agents only
+honour directives addressed to them by name, not to `*`.
+
+### 3. `llms.txt`: the blockquote is the load-bearing line
+
+Per the spec (Jeremy Howard, 2024) the H1 is the only required element. The
+blockquote after it is what generative engines treat as the canonical
+one-sentence definition of the entity — so the same sentence is used verbatim
+in `lib/seo.ts` as `ONE_LINER`, in the site description, and in `llms.txt`. An
+H2 section literally named `Optional` marks content a model may skip under
+context pressure; ours holds `/misc` and the link to `llms-full.txt`.
+
+### 4. GEO evidence supports fact density over keyword repetition
+
+The Princeton GEO work and follow-ups find that citations, quotations,
+statistics and authoritative phrasing measurably raise inclusion in generated
+answers — roughly +30% on position-adjusted word count in the source study —
+while keyword stuffing does not. This confirms the brief's own instinct:
+`llms.txt` is useful infrastructure, but the leverage is crawlable, fact-dense
+HTML plus structured data. Hence concrete names, dates and numbers throughout
+`/identity` rather than adjectives.
+
+### 5. A live bug the audit caught
+
+`public/robots.txt` — carried over from the Supabase build — was **shadowing**
+`app/robots.ts` entirely. Next serves the static file and errors on the
+conflict. The old file allowed Googlebot, Bingbot, Twitterbot and
+facebookexternalhit only: **no AI crawler was listed and no sitemap was
+referenced.** Deleted.
+
+### Structured data shape
+
+One `@graph` per page rather than separate script tags, so `@id` references
+resolve: `Person` (`#mahmoud-hammad`) is referenced as `founder` by the
+`Organization` nodes for T1Dub and WorkPo and as `author` by the
+`SoftwareSourceCode` node for DeepClone, which carries
+`isAccessibleForFree: true` and an explicit licence — the citable fact for
+"Egyptian open-source AI" queries. `sameAs` links GitHub, LinkedIn and
+Instagram so the profiles collapse into one entity.
+
 ## Earlier passes
 
 See git history for the v4–v6 notes (slider peek, staggered experience

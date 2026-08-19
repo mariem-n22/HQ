@@ -1,11 +1,14 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
 import { getContentBlocks, getNowEntries, findBlock } from "@/lib/data";
 
-export const metadata = {
-  title: "Now — Mahmoud HQ",
-  description: "What this week actually looks like: what I'm building, reading and chasing.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "What Mahmoud Hammad is working on now",
+  description: "A running log of what Mahmoud Hammad is building, reading and chasing this week.",
+  path: "/now",
+});
 
 export default async function NowPage() {
   const [entries, blocks] = await Promise.all([getNowEntries(), getContentBlocks()]);

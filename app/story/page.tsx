@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
 import { ExperienceList } from "@/components/hq/ExperienceList";
 import { getContentBlocks, getExperiences, findBlock } from "@/lib/data";
 
-export const metadata = {
-  title: "Story — Mahmoud HQ",
-  description: "How I got here: the narrative behind the projects, plus the track record in full.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Story — how Mahmoud Hammad got here",
+  description: "The narrative behind the projects: how Mahmoud Hammad went from Upper Egypt to building AI products in Cairo, plus the full track record.",
+  path: "/story",
+});
 
 export default async function StoryPage() {
   const [blocks, experiences] = await Promise.all([getContentBlocks(), getExperiences()]);

@@ -1,3 +1,6 @@
+import type { Metadata } from "next";
+import { graph, pageMeta, personSchema, t1dubSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { Frame } from "@/components/hq/Frame";
 import { Reveal } from "@/components/hq/Reveal";
@@ -16,11 +19,11 @@ import {
   parsePairs,
 } from "@/lib/data";
 
-export const metadata = {
-  title: "Mahmoud — Full-stack engineer & founder | Portfolio",
-  description:
-    "Full-stack engineer and founder in Cairo. Python, Django, FastAPI, React, Next.js, TypeScript. Selected work, stack and experience.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Portfolio — full-stack engineer and founder",
+  description: "Mahmoud Hammad: Egyptian full-stack engineer and founder of T1Dub. Selected work, technical stack, experience and achievements on one page.",
+  path: "/portfolio",
+});
 
 export default async function PortfolioPage() {
   const [projects, skills, experiences, achievements, settings, blocks] = await Promise.all([
@@ -47,6 +50,7 @@ export default async function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-base">
+      <JsonLd data={graph(personSchema(), t1dubSchema())} />
       {/* The portfolio carries its own header with the primary actions. */}
       <div className="sticky top-0 z-40 border-b border-line bg-base/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6">

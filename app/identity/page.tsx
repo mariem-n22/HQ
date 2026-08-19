@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
 import { IdentityTimeline } from "@/components/hq/IdentityTimeline";
 import { getContentBlocks, getIdentityMoments, findBlock } from "@/lib/data";
 
-export const metadata = {
-  title: "Identity — Mahmoud HQ",
-  description: "Racing, and why it shows up in how I build.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Racing — an Egyptian driver chasing Formula 1",
+  description: "Mahmoud Hammad is a racing driver from Upper Egypt. Karting, sim racing, Race Prodigy, and a Formula 4 invitation through the Motorsport Performance Academy he could not fund — and what he did about it.",
+  path: "/identity",
+});
 
 export default async function IdentityPage() {
   const [moments, blocks] = await Promise.all([getIdentityMoments(), getContentBlocks()]);

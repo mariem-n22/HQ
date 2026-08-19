@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SectorPage } from "@/components/hq/SiteShell";
 import { ChannelRows } from "@/components/hq/ChannelRows";
 import { ContactForm } from "@/components/hq/ContactForm";
@@ -5,11 +7,11 @@ import { Reveal } from "@/components/hq/Reveal";
 import { getSettings, isTodo } from "@/lib/data";
 import { channelsOf } from "@/lib/channels";
 
-export const metadata = {
-  title: "Contact — Mahmoud HQ",
-  description:
-    "Reach me directly — WhatsApp, phone, LinkedIn, Instagram — or send a message. Cairo, Egypt, open to remote.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Contact Mahmoud Hammad",
+  description: "Reach Mahmoud Hammad directly — WhatsApp, phone, LinkedIn, Instagram — or send a message. Based in Cairo, Egypt, open to remote.",
+  path: "/contact",
+});
 
 /** The handle from the email local-part, else the standing wordmark. */
 function wordmarkOf(email: string | undefined) {

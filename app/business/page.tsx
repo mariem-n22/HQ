@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
 import { Frame } from "@/components/hq/Frame";
 import { getContentBlocks, getVentures, findBlock } from "@/lib/data";
 
-export const metadata = {
-  title: "Business — Mahmoud HQ",
-  description: "Ventures, incorporation and where the company side of things is going.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Ventures",
+  description: "The companies Mahmoud Hammad is building and researching, including T1Dub, and where the business side is heading.",
+  path: "/business",
+});
 
 export default async function BusinessPage() {
   const [ventures, blocks] = await Promise.all([getVentures(), getContentBlocks()]);

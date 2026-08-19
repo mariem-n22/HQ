@@ -4,11 +4,23 @@ import { ProjectCard } from "@/components/hq/ProjectCard";
 import { Frame } from "@/components/hq/Frame";
 import { Reveal } from "@/components/hq/Reveal";
 import { getContentBlocks, getProjects, getSettings, findBlock, SECTORS } from "@/lib/data";
+import { JsonLd } from "@/components/JsonLd";
+import {
+  ONE_LINER, PERSON, SITE_URL, absolute, deepcloneSchema, graph, personSchema,
+  t1dubSchema, workpoSchema, pageMeta,
+} from "@/lib/seo";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Mahmoud HQ — Engineer, founder, Cairo",
-  description:
-    "A personal home base — not a portfolio. Full-stack engineer and founder in Cairo, building T1Dub.",
+export const metadata: Metadata = {
+  ...pageMeta({
+    title: `${PERSON.name} — Engineer, founder, racing driver`,
+    description: ONE_LINER,
+    path: "/",
+    type: "profile",
+  }),
+  // The home page owns the bare name, so it must not inherit the "| Name"
+  // template that every other page uses.
+  title: { absolute: `${PERSON.name} — Engineer, founder, racing driver` },
 };
 
 export default async function HomePage() {
@@ -24,6 +36,25 @@ export default async function HomePage() {
 
   return (
     <SiteShell>
+      {/* Every entity in one graph with resolvable @ids, so T1Dub, WorkPo and
+          DeepClone all point back at the same Person node. */}
+      <JsonLd
+        data={graph(
+          {
+            "@type": "WebSite",
+            "@id": absolute("/#website"),
+            url: SITE_URL,
+            name: `${PERSON.name} — Mahmoud HQ`,
+            description: ONE_LINER,
+            inLanguage: "en",
+            publisher: { "@id": absolute("/#mahmoud-hammad") },
+          },
+          personSchema(),
+          t1dubSchema(),
+          workpoSchema(),
+          deepcloneSchema(),
+        )}
+      />
       <div className="mx-auto max-w-6xl px-6 py-16 sm:px-8 sm:py-24">
         <header className="carbon -mx-6 px-6 py-10 sm:-mx-8 sm:px-8">
           <p className="label-mono text-amber">
