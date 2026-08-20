@@ -7,6 +7,7 @@ import { saveEntity, deleteEntity } from "@/lib/admin/actions";
 import type { Field, ModelConfig } from "@/lib/admin/config";
 import { ImageField } from "./ImageField";
 import { GalleryField, type GalleryItem } from "./GalleryField";
+import { SaveButton, type SaveState } from "./SaveButton";
 
 type Row = Record<string, unknown> & { id: string };
 
@@ -152,7 +153,8 @@ export function EntityManager({ config, rows }: { config: ModelConfig; rows: Row
   const [editing, setEditing] = useState<Row | null>(null);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
-  const [pending, startTransition] = useTransition();
+  const [saveState, setSaveState] = useState<SaveState>("idle");
+  const [, startTransition] = useTransition();
 
   function startCreate() {
     setEditing(null);
@@ -168,14 +170,22 @@ export function EntityManager({ config, rows }: { config: ModelConfig; rows: Row
 
   async function onSubmit(formData: FormData) {
     setError("");
+    setSaveState("saving");
     const result = await saveEntity(config.slug, editing?.id ?? null, formData);
     if (!result.ok) {
       setError(result.error);
+      setSaveState("error");
       return;
     }
-    setOpen(false);
-    setEditing(null);
+    setSaveState("saved");
+    // Refresh straight away, but leave the form open briefly so the confirmation
+    // is actually seen — closing instantly reads as "did that work?".
     startTransition(() => router.refresh());
+    window.setTimeout(() => {
+      setOpen(false);
+      setEditing(null);
+      setSaveState("idle");
+    }, 1200);
   }
 
   function onDelete(row: Row) {
@@ -243,13 +253,12 @@ export function EntityManager({ config, rows }: { config: ModelConfig; rows: Row
           </div>
 
           <div className="mt-6 flex gap-3">
-            <button
-              type="submit"
-              disabled={pending}
-              className="rounded-sm border border-amber bg-amber px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-base disabled:opacity-60"
-            >
-              {editing ? "Save changes" : `Add ${config.label.toLowerCase()}`}
-            </button>
+            <SaveButton
+              state={saveState}
+              idleLabel={editing ? "Save changes" : `Add ${config.label.toLowerCase()}`}
+              savedLabel={editing ? "Saved" : "Added"}
+              className="border"
+            />
             <button
               type="button"
               onClick={() => setOpen(false)}

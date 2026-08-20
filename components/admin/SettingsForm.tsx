@@ -6,6 +6,7 @@ import { Check, FileText, Trash2, Upload } from "lucide-react";
 import { GalleryField, type GalleryItem } from "./GalleryField";
 import { ImageField } from "./ImageField";
 import { saveSettings, setCv, clearCv } from "@/lib/admin/settings-actions";
+import { SaveButton, type SaveState } from "./SaveButton";
 
 const inputClass =
   "mt-2 w-full rounded-sm border border-line bg-base px-3 py-2 text-sm text-ink placeholder:text-mute/50 focus:border-amber focus:outline-none";
@@ -46,7 +47,7 @@ export function SettingsForm({
   heroImages: GalleryItem[];
 }) {
   const router = useRouter();
-  const [status, setStatus] = useState("");
+  const [saveState, setSaveState] = useState<SaveState>("idle");
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
 
@@ -59,13 +60,14 @@ export function SettingsForm({
 
   async function onSubmit(formData: FormData) {
     setError("");
-    setStatus("");
+    setSaveState("saving");
     const result = await saveSettings(formData);
     if (!result.ok) {
       setError(result.error);
+      setSaveState("error");
       return;
     }
-    setStatus("Saved.");
+    setSaveState("saved");
     startTransition(() => router.refresh());
   }
 
@@ -127,12 +129,6 @@ export function SettingsForm({
           {error}
         </p>
       ) : null}
-      {status ? (
-        <p role="status" className="rounded-sm border border-go/50 px-4 py-3 text-sm text-go">
-          {status}
-        </p>
-      ) : null}
-
       <section className="glow-card p-5 sm:p-6">
         <p className="label-mono text-amber">Hero gallery</p>
         <p className="mt-2 text-xs text-mute">
@@ -262,12 +258,15 @@ export function SettingsForm({
         </label>
       </section>
 
-      <button
-        type="submit"
-        className="rounded-sm border border-amber bg-amber px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-base"
-      >
-        Save settings
-      </button>
+      {/* Sticky so the confirmation is visible from anywhere in this long form. */}
+      <div className="sticky bottom-4 flex justify-start">
+        <SaveButton
+          state={saveState}
+          idleLabel="Save settings"
+          onSettled={() => setSaveState("idle")}
+          className="border shadow-lg"
+        />
+      </div>
     </form>
   );
 }

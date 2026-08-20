@@ -216,6 +216,31 @@ export default async function PortfolioPage() {
           </div>
         </Reveal>
 
+        {/* Section-level CV moment between Experience and Achievements — its own
+            block rather than tucked into either section. Hidden entirely when
+            no CV is published, matching the header button's empty state. */}
+        {settings?.cvUrl ? (
+          <Reveal as="section" className="mt-12">
+            <div className="glow-card flex flex-col items-center gap-4 p-6 text-center sm:flex-row sm:justify-between sm:text-left">
+              <div>
+                <p className="label-mono text-amber">Full CV</p>
+                <p className="mt-2 text-sm leading-relaxed text-mute">
+                  The complete record — roles, education and technical detail — in one PDF.
+                </p>
+              </div>
+              <a
+                href="/cv"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex shrink-0 items-center gap-2 rounded-sm border border-cyan bg-cyan px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+              >
+                <FileText aria-hidden className="h-3.5 w-3.5" />
+                Download CV
+              </a>
+            </div>
+          </Reveal>
+        ) : null}
+
         {achievements.length > 0 ? (
           <Reveal as="section" className="mt-12">
             <h2 className="label-mono text-amber">Achievements</h2>
