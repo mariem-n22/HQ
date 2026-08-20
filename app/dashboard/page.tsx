@@ -28,7 +28,7 @@ export default async function DashboardPage() {
     ]);
 
   // Every tile links into its management screen — PART 2.
-  const tiles = [
+  const tiles: { label: string; value: number | string; href: string }[] = [
     { label: "Projects", value: projects, href: "/dashboard/projects" },
     { label: "Skills", value: skills, href: "/dashboard/skills" },
     { label: "Experience", value: experiences, href: "/dashboard/experience" },
@@ -38,6 +38,7 @@ export default async function DashboardPage() {
     { label: "Misc entries", value: misc, href: "/dashboard/misc" },
     { label: "Now entries", value: now, href: "/dashboard/now" },
     { label: "Inbox", value: messages, href: "/dashboard/inbox" },
+    { label: "Settings", value: "—", href: "/dashboard/settings" },
   ];
 
   return (

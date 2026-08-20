@@ -1,8 +1,21 @@
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { auth } from "@/auth";
 
-/** Dashboard image uploads → Vercel Blob. Admin only. */
+/**
+ * Dashboard uploads → Vercel Blob. Admin only.
+ *
+ * `kind=image` (default) accepts images; `kind=pdf` accepts a PDF and is used
+ * for the CV. When `replaces` carries a previous Blob URL, that file is deleted
+ * after the new one lands — the CV is a single current document, not a version
+ * history, so old files must not accumulate in storage.
+ */
+
+const LIMITS = {
+  image: { prefix: "uploads", accept: (t: string) => t.startsWith("image/"), max: 8, label: "images" },
+  pdf: { prefix: "cv", accept: (t: string) => t === "application/pdf", max: 20, label: "PDFs" },
+} as const;
+
 export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user) {
@@ -21,25 +34,39 @@ export async function POST(request: Request) {
 
   const form = await request.formData();
   const file = form.get("file");
+  const kind = String(form.get("kind") ?? "image") === "pdf" ? "pdf" : "image";
+  const replaces = String(form.get("replaces") ?? "").trim();
+  const rules = LIMITS[kind];
+
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "No file received." }, { status: 400 });
   }
-  if (!file.type.startsWith("image/")) {
-    return NextResponse.json({ error: "Only images are accepted." }, { status: 400 });
+  if (!rules.accept(file.type)) {
+    return NextResponse.json({ error: `Only ${rules.label} are accepted here.` }, { status: 400 });
   }
-  if (file.size > 8 * 1024 * 1024) {
-    return NextResponse.json({ error: "Images must be under 8MB." }, { status: 413 });
+  if (file.size > rules.max * 1024 * 1024) {
+    return NextResponse.json({ error: `Files must be under ${rules.max}MB.` }, { status: 413 });
   }
 
   const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-  // Public store: the blob's own CDN URL is world-readable, so it goes
-  // straight into the database and into <Image> with no proxy in between.
-  const blob = await put(`uploads/${safe}`, file, {
+  const blob = await put(`${rules.prefix}/${safe}`, file, {
     access: "public",
     token,
     addRandomSuffix: true,
     contentType: file.type,
   });
 
-  return NextResponse.json({ url: blob.url });
+  // Replacement, not accumulation. A failure here must not fail the upload —
+  // the new file is already stored and is what the user asked for.
+  let replacedOld: boolean | null = null;
+  if (replaces && replaces.includes(".blob.vercel-storage.com")) {
+    try {
+      await del(replaces, { token });
+      replacedOld = true;
+    } catch {
+      replacedOld = false;
+    }
+  }
+
+  return NextResponse.json({ url: blob.url, pathname: blob.pathname, replacedOld });
 }

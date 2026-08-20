@@ -8,12 +8,14 @@
  * type-only and erases at compile time.
  */
 import type {
-  Achievement, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
+  Achievement,
+  HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
   Project, ProjectImage, SiteSettings, Skill, Venture,
 } from "@prisma/client";
 
 export type {
-  Achievement, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
+  Achievement,
+  HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
   Project, ProjectImage, SiteSettings, Skill, Venture,
 };
 
@@ -52,6 +54,12 @@ export function galleryOf(images: ProjectImage[]): GalleryImage[] {
     alt: image.alt || undefined,
   }));
 }
+
+/**
+ * Route the CV through /cv rather than linking the raw Blob URL, so the file
+ * downloads as Mahmoud-Hammad-CV.pdf instead of a hashed storage key.
+ */
+export const CV_PATH = "/cv";
 
 export function findBlock(blocks: ContentBlock[], key: string) {
   return blocks.find((b) => b.key === key);

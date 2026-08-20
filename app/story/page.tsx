@@ -3,7 +3,7 @@ import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
 import { ExperienceList } from "@/components/hq/ExperienceList";
-import { getContentBlocks, getExperiences, findBlock } from "@/lib/data";
+import { getContentBlocks, getExperiences, getSettings, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Story — how Mahmoud Hammad got here",
@@ -12,12 +12,26 @@ export const metadata: Metadata = pageMeta({
 });
 
 export default async function StoryPage() {
-  const [blocks, experiences] = await Promise.all([getContentBlocks(), getExperiences()]);
+  const [blocks, experiences, settings] = await Promise.all([
+    getContentBlocks(),
+    getExperiences(),
+    getSettings(),
+  ]);
   const block = findBlock(blocks, "story");
 
   return (
     <SectorPage>
       <SectorHeader sector="01" label="Story" title={block?.title ?? "Story"} />
+      {settings?.cvUrl ? (
+        <a
+          href="/cv"
+          target="_blank"
+          rel="noreferrer"
+          className="mt-6 inline-flex items-center gap-2 rounded-sm border border-cyan px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan transition-colors hover:bg-cyan hover:text-base"
+        >
+          Download CV
+        </a>
+      ) : null}
       <div className="mt-10 max-w-2xl space-y-5 text-base leading-relaxed text-ink/90">
         {(block?.body ?? "").split("\n\n").map((para, i) => (
           <p key={i}>{para}</p>

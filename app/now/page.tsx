@@ -33,6 +33,17 @@ export default async function NowPage() {
                     {entry.date.toISOString().slice(0, 10)}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-ink/90">{entry.text}</p>
+                  {/* Optional by design — nothing is rendered when absent, unlike
+                      covers and galleries which always reserve a placeholder. */}
+                  {entry.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={entry.image}
+                      alt=""
+                      loading="lazy"
+                      className="mt-3 max-h-56 w-full rounded-sm border border-line object-cover sm:max-w-sm"
+                    />
+                  ) : null}
                 </div>
               </li>
             ))}

@@ -38,9 +38,13 @@ export default async function ManagePage({ params }: { params: Promise<{ type: s
   const d = delegate(config.model);
   if (!d) notFound();
 
-  const rows = (await d.findMany({ orderBy: config.orderBy })) as (Record<string, unknown> & {
-    id: string;
-  })[];
+  // Projects pull their gallery rows so the manager can prefill and reorder.
+  const rows = (await d.findMany({
+    orderBy: config.orderBy,
+    ...(config.slug === "projects"
+      ? { include: { images: { orderBy: { order: "asc" } } } }
+      : {}),
+  })) as (Record<string, unknown> & { id: string })[];
 
   return (
     <div className="min-h-screen bg-base px-4 py-10 sm:px-8">

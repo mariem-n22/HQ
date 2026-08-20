@@ -19,6 +19,8 @@ export type FieldType =
   | "tags"
   | "lines"
   | "image"
+  /** Multi-image manager writing to a related table. */
+  | "gallery"
   | "date"
   | "links";
 
@@ -126,7 +128,20 @@ export const MODELS: Record<string, ModelConfig> = {
         options: ["BUILDING", "SHIPPED", "ARCHIVED"],
       },
       { name: "emoji", label: "Emoji", type: "text", placeholder: "🚗" },
-      { name: "coverImage", label: "Cover image", type: "image", full: true },
+      {
+        name: "coverImage",
+        label: "Cover image",
+        type: "image",
+        full: true,
+        help: "Single image used on /work cards and the portfolio slider.",
+      },
+      {
+        name: "images",
+        label: "Gallery",
+        type: "gallery",
+        full: true,
+        help: "Multiple images with captions, shown in the lightbox on the project page.",
+      },
       { name: "links", label: "Links", type: "links", full: true },
       { name: "featured", label: "Featured on the home page", type: "toggle" },
       { name: "showOnPortfolio", label: "Show on the portfolio page", type: "toggle" },
@@ -303,6 +318,13 @@ export const MODELS: Record<string, ModelConfig> = {
     fields: [
       { name: "text", label: "What's happening", type: "textarea", required: true, full: true },
       { name: "date", label: "Date", type: "date" },
+      {
+        name: "image",
+        label: "Image (optional)",
+        type: "image",
+        full: true,
+        help: "Optional. Nothing is rendered on /now when this is empty.",
+      },
       {
         name: "active",
         label: "Show in the telemetry ticker",

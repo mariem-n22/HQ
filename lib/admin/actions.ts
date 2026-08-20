@@ -33,6 +33,29 @@ function delegate(config: ModelConfig) {
   return d;
 }
 
+export type GalleryRow = { url: string; caption: string; alt: string };
+
+/** The gallery control submits its whole list as one JSON string. */
+function parseGallery(raw: FormDataEntryValue | null): GalleryRow[] {
+  if (typeof raw !== "string" || !raw.trim()) return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((item) => {
+        const o = item as Record<string, unknown>;
+        return {
+          url: String(o?.url ?? "").trim(),
+          caption: String(o?.caption ?? "").trim(),
+          alt: String(o?.alt ?? "").trim(),
+        };
+      })
+      .filter((item) => item.url);
+  } catch {
+    return [];
+  }
+}
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -87,6 +110,10 @@ function coerce(fields: Field[], form: FormData) {
         break;
       }
 
+      case "gallery":
+        // Handled after the row write — it targets a related table, not a column.
+        break;
+
       case "image":
         // Empty string means "cleared"; the column is nullable.
         data[field.name] = String(raw ?? "").trim() || null;
@@ -112,6 +139,15 @@ export async function saveEntity(
 
     const data = coerce(config.fields, form);
 
+    // Gallery fields are relations, so they are split out of the row payload
+    // and rewritten once the owning row exists.
+    const galleryFields = config.fields.filter((f) => f.type === "gallery");
+    const galleries = new Map<string, GalleryRow[]>();
+    for (const field of galleryFields) {
+      galleries.set(field.name, parseGallery(form.get(field.name)));
+      delete data[field.name];
+    }
+
     // Projects need a slug; derive one from the title when left blank.
     if (config.slug === "projects" && !String(data.slug ?? "").trim()) {
       data.slug = slugify(String(data.title ?? "")) || `project-${Date.now()}`;
@@ -132,6 +168,25 @@ export async function saveEntity(
     const row = id
       ? await d.update({ where: { id }, data })
       : await d.create({ data });
+
+    // Replace-in-full: simpler and correct for a reorderable list, since the
+    // submitted array order is the authoritative order.
+    for (const [fieldName, items] of galleries) {
+      if (fieldName === "images" && config.slug === "projects") {
+        await prisma.projectImage.deleteMany({ where: { projectId: row.id } });
+        if (items.length > 0) {
+          await prisma.projectImage.createMany({
+            data: items.map((item, index) => ({
+              projectId: row.id,
+              url: item.url,
+              caption: item.caption,
+              alt: item.alt,
+              order: index,
+            })),
+          });
+        }
+      }
+    }
 
     for (const path of config.revalidate) revalidatePath(path);
     revalidatePath(`/dashboard/${config.slug}`);

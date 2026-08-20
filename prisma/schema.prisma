@@ -162,6 +162,9 @@ model NowEntry {
   id     String   @id @default(cuid())
   text   String
   active Boolean  @default(true)
+  /// Genuinely optional — a Now update is text-first, so no placeholder is
+  /// rendered when this is null.
+  image  String?
   date   DateTime @default(now())
 
   @@index([date])
@@ -178,6 +181,18 @@ model Achievement {
   image       String?
   tags        String[] @default([])
   order       Int      @default(0)
+
+  @@index([order])
+}
+
+/// Portrait/hero images for the /portfolio hero slot. Modelled on
+/// ProjectImage so ordering and the dashboard manager work identically.
+model HeroImage {
+  id      String @id @default(cuid())
+  url     String
+  caption String @default("")
+  alt     String @default("")
+  order   Int    @default(0)
 
   @@index([order])
 }
@@ -201,8 +216,10 @@ model SiteSettings {
   /// Kept from the live schema — the availability pill on /contact and the
   /// "open to opportunities" badge on /portfolio read this.
   availability          String  @default("")
-  /// Kept from the live schema — the CV link in dashboard settings.
-  resumeUrl             String?
+  /// The current CV. Uploading a new one replaces the file in Blob storage —
+  /// there is deliberately no version history.
+  cvUrl                 String?
+  cvUpdatedAt           DateTime?
   updatedAt             DateTime @updatedAt
 }
 

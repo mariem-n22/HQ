@@ -6,6 +6,7 @@ import { Trash2, Pencil, Plus, X } from "lucide-react";
 import { saveEntity, deleteEntity } from "@/lib/admin/actions";
 import type { Field, ModelConfig } from "@/lib/admin/config";
 import { ImageField } from "./ImageField";
+import { GalleryField, type GalleryItem } from "./GalleryField";
 
 type Row = Record<string, unknown> & { id: string };
 
@@ -27,6 +28,16 @@ function toInput(field: Field, value: unknown): string {
 function FieldInput({ field, row }: { field: Field; row: Row | null }) {
   const value = row ? row[field.name] : undefined;
   const defaultValue = toInput(field, value);
+
+  if (field.type === "gallery") {
+    const rows = Array.isArray(value) ? (value as Record<string, unknown>[]) : [];
+    const initial: GalleryItem[] = rows.map((r) => ({
+      url: String(r.url ?? ""),
+      caption: String(r.caption ?? ""),
+      alt: String(r.alt ?? ""),
+    }));
+    return <GalleryField name={field.name} initial={initial} />;
+  }
 
   if (field.type === "image") {
     return <ImageField name={field.name} initial={defaultValue} label={field.label} />;

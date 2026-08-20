@@ -3,6 +3,8 @@ import { graph, pageMeta, personSchema, t1dubSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { Frame } from "@/components/hq/Frame";
+import { HeroGallery } from "@/components/hq/HeroGallery";
+import { FileText } from "lucide-react";
 import { Reveal } from "@/components/hq/Reveal";
 import { Slider } from "@/components/hq/Slider";
 import { SkillStack } from "@/components/hq/SkillStack";
@@ -15,6 +17,7 @@ import {
   getProjects,
   getSettings,
   getSkills,
+  getHeroImages,
   findBlock,
   parsePairs,
 } from "@/lib/data";
@@ -26,14 +29,16 @@ export const metadata: Metadata = pageMeta({
 });
 
 export default async function PortfolioPage() {
-  const [projects, skills, experiences, achievements, settings, blocks] = await Promise.all([
-    getProjects(),
-    getSkills(),
-    getExperiences(),
-    getAchievements(),
-    getSettings(),
-    getContentBlocks(),
-  ]);
+  const [projects, skills, experiences, achievements, settings, blocks, heroImages] =
+    await Promise.all([
+      getProjects(),
+      getSkills(),
+      getExperiences(),
+      getAchievements(),
+      getSettings(),
+      getContentBlocks(),
+      getHeroImages(),
+    ]);
 
   const resumeProjects = projects.filter((p) => p.showOnPortfolio);
   const pitch = findBlock(blocks, "portfolio_pitch");
@@ -68,6 +73,18 @@ export default async function PortfolioPage() {
             >
               Contact
             </Link>
+            {/* Hidden entirely when no CV is published — no dead button. */}
+            {settings?.cvUrl ? (
+              <a
+                href="/cv"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-sm border border-cyan px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan transition-colors hover:bg-cyan hover:text-base"
+              >
+                <FileText aria-hidden className="h-3 w-3" />
+                CV
+              </a>
+            ) : null}
             <Link
               href="/"
               className="rounded-sm border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-mute transition-colors hover:border-amber hover:text-amber"
@@ -99,12 +116,15 @@ export default async function PortfolioPage() {
                 </p>
               ) : null}
             </div>
-            <Frame
-              src={settings?.avatarImage}
-              alt="Portrait of Mahmoud"
-              ratio="3/4"
-              priority
-              className="w-40 shrink-0 rounded-sm sm:w-48"
+            <HeroGallery
+              images={
+                heroImages.length > 0
+                  ? heroImages.map((h) => ({ url: h.url, caption: h.caption, alt: h.alt }))
+                  : settings?.avatarImage
+                    ? [{ url: settings.avatarImage, caption: "", alt: "Portrait of Mahmoud Hammad" }]
+                    : []
+              }
+              className="w-40 shrink-0 sm:w-48"
             />
           </div>
         </header>

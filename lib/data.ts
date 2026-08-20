@@ -48,6 +48,10 @@ export function getContentBlocks() {
   return prisma.contentBlock.findMany();
 }
 
+export function getHeroImages() {
+  return prisma.heroImage.findMany({ orderBy: { order: "asc" } });
+}
+
 export function getSettings() {
   return prisma.siteSettings.findUnique({ where: { id: "singleton" } });
 }
