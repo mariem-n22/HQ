@@ -97,6 +97,12 @@ export const MODELS: Record<string, ModelConfig> = {
         type: "textarea",
         help: "Long form, shown only on /work/<slug>. Blank line separates paragraphs.",
       },
+      {
+        name: "outcome",
+        label: "What came out of it",
+        type: "textarea",
+        help: "Results, impact, or what happened next. Optional — the section is hidden on the project page when empty.",
+      },
       { name: "role", label: "My role", type: "text", placeholder: "Full-stack developer" },
       {
         name: "company",

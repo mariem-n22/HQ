@@ -186,10 +186,10 @@ export default async function PortfolioPage() {
                       {project.year} · {project.status}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-mute">{project.tagline}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-ink/85">
-                    {project.description.split("\n\n")[0]}
-                  </p>
+                  {/* Short description only. The full `description` belongs to
+                      /work/[slug]; rendering its first paragraph here made the
+                      slider cards inconsistently tall. */}
+                  <p className="mt-2 text-sm leading-relaxed text-mute">{project.tagline}</p>
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {project.stack.map((tech) => (
                       <span

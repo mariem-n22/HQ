@@ -40,6 +40,9 @@ model Project {
   title       String
   tagline     String        @default("")
   description String        @default("")
+  /// What actually came of the project — results, impact, what happened next.
+  /// Optional; the detail page hides the section entirely when empty.
+  outcome     String        @default("")
   role        String        @default("")
   /// Client or employer the project was built for, when there was one.
   company     String        @default("")

@@ -106,6 +106,18 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
 
+          {/* Only rendered when filled — no empty heading. */}
+          {project.outcome ? (
+            <section className="mt-10 border-t border-line pt-8">
+              <h2 className="label-mono text-amber">What came out of it</h2>
+              <div className="mt-4 space-y-4 text-base leading-relaxed text-ink/90">
+                {project.outcome.split("\n\n").map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
         <aside className="space-y-8">
           {project.stack.length > 0 ? (
             <div>
@@ -126,19 +138,30 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           {links.length > 0 ? (
             <div>
               <p className="label-mono text-amber">Links</p>
-              <ul className="mt-3 space-y-2">
-                {links.map(([key, url]) => (
-                  <li key={key}>
-                    <a
-                      href={url as string}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="link-underline font-mono text-[11px] uppercase tracking-[0.2em] text-cyan"
-                    >
-                      {key} ↗
-                    </a>
-                  </li>
-                ))}
+              {/* Buttons, not text links. "live" gets the filled primary
+                  treatment used for CTAs elsewhere; the rest are outlined
+                  secondaries so they still read as actionable at a glance. */}
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {links.map(([key, url]) => {
+                  const primary = key === "live";
+                  return (
+                    <li key={key}>
+                      <a
+                        href={url as string}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={
+                          primary
+                            ? "inline-flex items-center gap-1.5 rounded-sm border border-amber bg-amber px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+                            : "inline-flex items-center gap-1.5 rounded-sm border border-line px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink transition-colors hover:border-amber hover:text-amber"
+                        }
+                      >
+                        {key === "live" ? "View live" : key === "github" ? "GitHub" : "Other"}
+                        <span aria-hidden>↗</span>
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ) : null}
