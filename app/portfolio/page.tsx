@@ -216,28 +216,36 @@ export default async function PortfolioPage() {
           </div>
         </Reveal>
 
-        {/* Section-level CV moment between Experience and Achievements — its own
-            block rather than tucked into either section. Hidden entirely when
-            no CV is published, matching the header button's empty state. */}
+        {/* Its own block after Experience ends and before Achievements begins.
+            Wider margins than a normal section (mt-20/mb-20 vs mt-12) plus a
+            hairline rule top and bottom, so it reads as a separate moment
+            rather than the tail of one section or the head of the next.
+            Hidden entirely when no CV is published — same rule as the header
+            button, and the two are independent of each other. */}
         {settings?.cvUrl ? (
-          <Reveal as="section" className="mt-12">
-            <div className="glow-card flex flex-col items-center gap-4 p-6 text-center sm:flex-row sm:justify-between sm:text-left">
-              <div>
+          <Reveal as="section" className="mb-20 mt-20">
+            <span aria-hidden className="kerb block" />
+            <div className="flex flex-col items-center gap-5 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
+              <div className="max-w-md">
                 <p className="label-mono text-amber">Full CV</p>
+                <p className="display-title mt-2 text-2xl text-ink">
+                  The whole record, on paper
+                </p>
                 <p className="mt-2 text-sm leading-relaxed text-mute">
-                  The complete record — roles, education and technical detail — in one PDF.
+                  Roles, education and the technical detail behind everything above — one PDF.
                 </p>
               </div>
               <a
                 href="/cv"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex shrink-0 items-center gap-2 rounded-sm border border-cyan bg-cyan px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+                className="inline-flex shrink-0 items-center gap-2 rounded-sm border border-cyan bg-cyan px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
               >
                 <FileText aria-hidden className="h-3.5 w-3.5" />
                 Download CV
               </a>
             </div>
+            <span aria-hidden className="kerb block" />
           </Reveal>
         ) : null}
 
