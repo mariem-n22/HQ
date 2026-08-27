@@ -110,6 +110,19 @@ function coerce(fields: Field[], form: FormData) {
         break;
       }
 
+      case "list": {
+        // Repeatable rows arrive as a JSON array of strings.
+        try {
+          const parsed = JSON.parse(String(raw ?? "[]")) as unknown;
+          data[field.name] = Array.isArray(parsed)
+            ? parsed.map((v) => String(v).trim()).filter(Boolean)
+            : [];
+        } catch {
+          data[field.name] = [];
+        }
+        break;
+      }
+
       case "gallery":
         // Handled after the row write — it targets a related table, not a column.
         break;

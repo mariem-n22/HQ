@@ -188,6 +188,41 @@ model Achievement {
   @@index([order])
 }
 
+enum BookStatus {
+  READING
+  FINISHED
+}
+
+/// A reading log entry — what he pulled out of a book, not a summary of it.
+model Book {
+  id         String     @id @default(cuid())
+  title      String
+  author     String     @default("")
+  coverImage String?
+  /// Standout lines worth quoting. Rendered as pulled quotes, not prose.
+  highlights String[]   @default([])
+  /// What he actually got from it / how it changed his thinking.
+  takeaway   String     @default("")
+  status     BookStatus @default(FINISHED)
+  order      Int        @default(0)
+
+  @@index([order])
+}
+
+/// A credential, with the certificate image and a link to verify it.
+model Certification {
+  id        String  @id @default(cuid())
+  title     String
+  issuer    String  @default("")
+  image     String?
+  /// Verification / credential page. Optional.
+  sourceUrl String  @default("")
+  date      String  @default("")
+  order     Int     @default(0)
+
+  @@index([order])
+}
+
 /// Portrait/hero images for the /portfolio hero slot. Modelled on
 /// ProjectImage so ordering and the dashboard manager work identically.
 model HeroImage {

@@ -9,12 +9,16 @@
  */
 import type {
   Achievement,
+  Book,
+  Certification,
   HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
   Project, ProjectImage, SiteSettings, Skill, Venture,
 } from "@prisma/client";
 
 export type {
   Achievement,
+  Book,
+  Certification,
   HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
   Project, ProjectImage, SiteSettings, Skill, Venture,
 };
@@ -73,4 +77,6 @@ export const SECTORS = [
   { code: "S5", label: "Business", to: "/business", blurb: "Where the company gets incorporated." },
   { code: "S6", label: "Free Practice", to: "/misc", blurb: "Everything that fits nowhere else." },
   { code: "S7", label: "Now", to: "/now", blurb: "What this week actually looks like." },
+  { code: "S8", label: "Books", to: "/books", blurb: "What I have read, and what I took from it." },
+  { code: "S9", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
 ] as const;

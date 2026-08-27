@@ -48,6 +48,14 @@ export function getContentBlocks() {
   return prisma.contentBlock.findMany();
 }
 
+export function getBooks() {
+  return prisma.book.findMany({ orderBy: { order: "asc" } });
+}
+
+export function getCertifications() {
+  return prisma.certification.findMany({ orderBy: { order: "asc" } });
+}
+
 export function getHeroImages() {
   return prisma.heroImage.findMany({ orderBy: { order: "asc" } });
 }

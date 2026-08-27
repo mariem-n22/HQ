@@ -18,6 +18,7 @@ import {
   getSettings,
   getSkills,
   getHeroImages,
+  getCertifications,
   findBlock,
   parsePairs,
 } from "@/lib/data";
@@ -29,7 +30,7 @@ export const metadata: Metadata = pageMeta({
 });
 
 export default async function PortfolioPage() {
-  const [projects, skills, experiences, achievements, settings, blocks, heroImages] =
+  const [projects, skills, experiences, achievements, settings, blocks, heroImages, certifications] =
     await Promise.all([
       getProjects(),
       getSkills(),
@@ -38,6 +39,7 @@ export default async function PortfolioPage() {
       getSettings(),
       getContentBlocks(),
       getHeroImages(),
+      getCertifications(),
     ]);
 
   const resumeProjects = projects.filter((p) => p.showOnPortfolio);
@@ -283,6 +285,53 @@ export default async function PortfolioPage() {
           <h2 className="label-mono text-amber">Stack</h2>
           <SkillStack skills={skills} className="mt-6" />
         </Reveal>
+
+        {/* Same Slider component as Selected work, so peek, drag, arrows,
+            keyboard and reduced-motion behaviour are identical by construction. */}
+        {certifications.length > 0 ? (
+          <Reveal as="section" className="mt-12">
+            <Slider label="Certifications">
+              {certifications.map((cert) => {
+                const inner = (
+                  <>
+                    <Frame
+                      src={cert.image}
+                      alt={`${cert.title} certificate`}
+                      ratio="16/9"
+                      tone={false}
+                      className="rounded-t-3xl border-0 border-b border-line"
+                    />
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="display-title text-xl leading-tight text-cyan">{cert.title}</h3>
+                      {cert.issuer ? (
+                        <p className="mt-1 text-sm text-mute">{cert.issuer}</p>
+                      ) : null}
+                      {cert.date ? (
+                        <p className="data-mono mt-2 text-[11px] tracking-widest">{cert.date}</p>
+                      ) : null}
+                      {cert.sourceUrl ? (
+                        <span className="mt-auto pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-amber">
+                          Verify ↗
+                        </span>
+                      ) : null}
+                    </div>
+                  </>
+                );
+                const cls =
+                  "glow-card flex w-[78%] shrink-0 snap-start flex-col overflow-hidden sm:w-[42%]";
+                return cert.sourceUrl ? (
+                  <a key={cert.id} href={cert.sourceUrl} target="_blank" rel="noreferrer" className={cls}>
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={cert.id} className={cls}>
+                    {inner}
+                  </div>
+                );
+              })}
+            </Slider>
+          </Reveal>
+        ) : null}
 
         <section className="mt-14 border-t border-line pt-8">
           <h2 className="display-title text-3xl text-ink">Get in touch</h2>

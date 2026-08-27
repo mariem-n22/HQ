@@ -19,7 +19,8 @@ type Column = { name: string; type: string; isList: boolean; isRelation: boolean
 /** Columns every form legitimately ignores. */
 const IGNORED = new Set(["id", "createdAt", "updatedAt", "images", "project", "projectId"]);
 
-const MULTI: FieldType[] = ["tags", "lines"];
+// `list` joined these when Books needed individually editable highlight rows.
+const MULTI: FieldType[] = ["tags", "lines", "list"];
 
 function parseSchema(): Map<string, Column[]> {
   const src = readFileSync(join(process.cwd(), "prisma", "schema.prisma"), "utf8");
@@ -43,11 +44,20 @@ function parseSchema(): Map<string, Column[]> {
         name: fname,
         type: ftype,
         isList: Boolean(list),
-        // Relations point at another model in this file.
-        isRelation: /^[A-Z]/.test(ftype) && ftype !== "DateTime" && ftype !== "Json",
+        // Resolved below once every model name is known — capitalisation alone
+        // is not a signal, since String/Int/Boolean are capitalised too.
+        isRelation: false,
       });
     }
     models.set(name, columns);
+  }
+
+  // A column is a relation when its type is itself a model in this schema.
+  const modelNames = new Set(models.keys());
+  for (const columns of models.values()) {
+    for (const column of columns) {
+      column.isRelation = modelNames.has(column.type);
+    }
   }
 
   return models;
@@ -85,6 +95,14 @@ for (const config of Object.values(MODELS)) {
     const column = byName.get(field.name);
     if (!column) continue;
     const multi = MULTI.includes(field.type);
+    // Relation arrays (Project.images) are driven by the gallery control, which
+    // writes to the related table rather than to a scalar column.
+    if (column.isRelation) {
+      if (field.type !== "gallery") {
+        issues.push(`${field.name}: relation but "${field.type}" input`);
+      }
+      continue;
+    }
     if (column.isList && !multi) issues.push(`${field.name}: array column but "${field.type}" input`);
     if (!column.isList && multi) issues.push(`${field.name}: scalar column but "${field.type}" input`);
     if (column.type === "Boolean" && field.type !== "toggle")

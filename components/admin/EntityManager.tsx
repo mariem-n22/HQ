@@ -8,6 +8,7 @@ import type { Field, ModelConfig } from "@/lib/admin/config";
 import { ImageField } from "./ImageField";
 import { GalleryField, type GalleryItem } from "./GalleryField";
 import { SaveButton, type SaveState } from "./SaveButton";
+import { ListField } from "./ListField";
 
 type Row = Record<string, unknown> & { id: string };
 
@@ -29,6 +30,11 @@ function toInput(field: Field, value: unknown): string {
 function FieldInput({ field, row }: { field: Field; row: Row | null }) {
   const value = row ? row[field.name] : undefined;
   const defaultValue = toInput(field, value);
+
+  if (field.type === "list") {
+    const initial = Array.isArray(value) ? (value as unknown[]).map(String) : [];
+    return <ListField name={field.name} initial={initial} placeholder={field.placeholder} />;
+  }
 
   if (field.type === "gallery") {
     const rows = Array.isArray(value) ? (value as Record<string, unknown>[]) : [];

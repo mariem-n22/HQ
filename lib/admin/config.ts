@@ -18,6 +18,8 @@ export type FieldType =
   | "datalist"
   | "tags"
   | "lines"
+  /** Repeatable single-value rows, each individually editable. */
+  | "list"
   | "image"
   /** Multi-image manager writing to a related table. */
   | "gallery"
@@ -337,6 +339,69 @@ export const MODELS: Record<string, ModelConfig> = {
         type: "toggle",
         help: "Inactive entries stay on /now but drop out of the ticker.",
       },
+    ],
+  },
+
+  books: {
+    slug: "books",
+    label: "Book",
+    plural: "Books",
+    model: "book",
+    primaryField: "title",
+    secondaryFields: ["author", "status"],
+    orderBy: { order: "asc" },
+    revalidate: ["/books"],
+    fields: [
+      { name: "title", label: "Title", type: "text", required: true },
+      { name: "author", label: "Author", type: "text" },
+      {
+        name: "status",
+        label: "Status",
+        type: "select",
+        options: ["FINISHED", "READING"],
+      },
+      { name: "coverImage", label: "Cover image", type: "image", full: true },
+      {
+        name: "highlights",
+        label: "Highlights",
+        type: "list",
+        full: true,
+        placeholder: "A line from the book worth keeping.",
+        help: "Standout sentences, one per row. Rendered as pulled quotes.",
+      },
+      {
+        name: "takeaway",
+        label: "What I took from it",
+        type: "textarea",
+        help: "What you actually got out of it — not a summary of the book.",
+      },
+      { name: "order", label: "Order", type: "number" },
+    ],
+  },
+
+  certifications: {
+    slug: "certifications",
+    label: "Certification",
+    plural: "Certifications",
+    model: "certification",
+    primaryField: "title",
+    secondaryFields: ["issuer", "date"],
+    orderBy: { order: "asc" },
+    revalidate: ["/certifications", "/portfolio"],
+    fields: [
+      { name: "title", label: "Title", type: "text", required: true },
+      { name: "issuer", label: "Issuer", type: "text", placeholder: "Coursera, AWS, …" },
+      { name: "date", label: "Date earned", type: "text", placeholder: "Mar 2024" },
+      {
+        name: "sourceUrl",
+        label: "Verification link",
+        type: "text",
+        full: true,
+        placeholder: "https://…",
+        help: "Optional. The card links out to this when set.",
+      },
+      { name: "image", label: "Certificate image", type: "image", full: true },
+      { name: "order", label: "Order", type: "number" },
     ],
   },
 

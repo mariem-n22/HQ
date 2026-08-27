@@ -14,7 +14,7 @@ export const metadata = {
 export default async function DashboardPage() {
   const session = await auth();
 
-  const [projects, skills, experiences, achievements, identity, ventures, misc, now, messages] =
+  const [projects, skills, experiences, achievements, identity, ventures, misc, now, books, certifications, messages] =
     await Promise.all([
       prisma.project.count(),
       prisma.skill.count(),
@@ -24,6 +24,8 @@ export default async function DashboardPage() {
       prisma.venture.count(),
       prisma.miscEntry.count(),
       prisma.nowEntry.count(),
+      prisma.book.count(),
+      prisma.certification.count(),
       prisma.contactMessage.count(),
     ]);
 
@@ -37,6 +39,8 @@ export default async function DashboardPage() {
     { label: "Ventures", value: ventures, href: "/dashboard/ventures" },
     { label: "Misc entries", value: misc, href: "/dashboard/misc" },
     { label: "Now entries", value: now, href: "/dashboard/now" },
+    { label: "Books", value: books, href: "/dashboard/books" },
+    { label: "Certifications", value: certifications, href: "/dashboard/certifications" },
     { label: "Inbox", value: messages, href: "/dashboard/inbox" },
     { label: "Settings", value: "—", href: "/dashboard/settings" },
   ];
