@@ -10,7 +10,7 @@ type Errors = Partial<Record<keyof Fields, string>>;
 const blank: Fields = { name: "", email: "", subject: "", message: "" };
 
 const inputClass =
-  "mt-2 w-full rounded-md border border-line bg-base px-3 py-2.5 text-sm text-ink placeholder:text-mute/50 focus:border-cyan focus:outline-none";
+  "mt-2 w-full rounded-md border border-line-strong bg-base px-3 py-2.5 text-sm text-ink placeholder:text-mute focus:border-amber focus:outline-none";
 
 function validate(values: Fields): Errors {
   const errors: Errors = {};
@@ -62,7 +62,7 @@ export function ContactForm() {
   if (status === "sent") {
     return (
       <div className="glow-card p-8 text-center" role="status">
-        <p className="display-title text-3xl text-cyan">Message sent.</p>
+        <p className="display-title text-3xl text-ink">Message sent.</p>
         <p className="mt-3 text-sm leading-relaxed text-mute">
           It landed. I typically respond within 24 hours.
         </p>
@@ -144,7 +144,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="inline-flex items-center gap-2 rounded-md border border-cyan bg-cyan px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-md border border-amber bg-ink px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           <Send aria-hidden className="h-3.5 w-3.5" />
           {status === "sending" ? "Sending…" : "Send message"}

@@ -27,7 +27,7 @@ export default async function StoryPage() {
           href="/cv"
           target="_blank"
           rel="noreferrer"
-          className="mt-6 inline-flex items-center gap-2 rounded-sm border border-cyan px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan transition-colors hover:bg-cyan hover:text-base"
+          className="mt-6 inline-flex items-center gap-2 rounded-sm border border-amber px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink transition-colors hover:bg-ink hover:text-base"
         >
           Download CV
         </a>

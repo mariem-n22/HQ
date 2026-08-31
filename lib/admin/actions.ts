@@ -35,6 +35,63 @@ function delegate(config: ModelConfig) {
 
 export type GalleryRow = { url: string; caption: string; alt: string };
 
+const MEDIA_CATEGORIES = new Set([
+  "HERO",
+  "GALLERY",
+  "PLAN",
+  "SECTION",
+  "ELEVATION",
+  "DIAGRAM",
+  "MATERIAL",
+  "CONSTRUCTION",
+  "SITE",
+]);
+
+type MediaRowInput = {
+  category: string;
+  kind: "IMAGE" | "VIDEO";
+  url: string;
+  embedUrl: string;
+  label: string;
+  caption: string;
+  alt: string;
+  width: number | null;
+  height: number | null;
+};
+
+/**
+ * The media control submits every category as one JSON array. Rows with
+ * neither an uploaded file nor an embed URL are dropped — an operator who
+ * clicks "Add video link" and then changes their mind should not persist an
+ * empty row that renders as a blank frame.
+ */
+function parseMedia(raw: FormDataEntryValue | null): MediaRowInput[] {
+  if (typeof raw !== "string" || !raw.trim()) return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((item) => {
+        const o = item as Record<string, unknown>;
+        const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? Math.round(v) : null);
+        return {
+          category: String(o?.category ?? ""),
+          kind: o?.kind === "VIDEO" ? ("VIDEO" as const) : ("IMAGE" as const),
+          url: String(o?.url ?? "").trim(),
+          embedUrl: String(o?.embedUrl ?? "").trim(),
+          label: String(o?.label ?? "").trim(),
+          caption: String(o?.caption ?? "").trim(),
+          alt: String(o?.alt ?? "").trim(),
+          width: num(o?.width),
+          height: num(o?.height),
+        };
+      })
+      .filter((r) => MEDIA_CATEGORIES.has(r.category) && (r.url || r.embedUrl));
+  } catch {
+    return [];
+  }
+}
+
 /** The gallery control submits its whole list as one JSON string. */
 function parseGallery(raw: FormDataEntryValue | null): GalleryRow[] {
   if (typeof raw !== "string" || !raw.trim()) return [];
@@ -124,13 +181,22 @@ function coerce(fields: Field[], form: FormData) {
       }
 
       case "gallery":
-        // Handled after the row write — it targets a related table, not a column.
+      case "media":
+        // Handled after the row write — these target related tables, not columns.
         break;
 
       case "image":
         // Empty string means "cleared"; the column is nullable.
         data[field.name] = String(raw ?? "").trim() || null;
         break;
+
+      case "select": {
+        const picked = String(raw ?? "").trim();
+        // A select offering a blank option maps to a nullable enum column, and
+        // Prisma rejects "" for an enum — it has to be null.
+        data[field.name] = picked || (field.options?.includes("") ? null : picked);
+        break;
+      }
 
       default:
         data[field.name] = String(raw ?? "").trim();
@@ -158,6 +224,13 @@ export async function saveEntity(
     const galleries = new Map<string, GalleryRow[]>();
     for (const field of galleryFields) {
       galleries.set(field.name, parseGallery(form.get(field.name)));
+      delete data[field.name];
+    }
+
+    const mediaFields = config.fields.filter((f) => f.type === "media");
+    const mediaSets = new Map<string, MediaRowInput[]>();
+    for (const field of mediaFields) {
+      mediaSets.set(field.name, parseMedia(form.get(field.name)));
       delete data[field.name];
     }
 
@@ -194,6 +267,32 @@ export async function saveEntity(
               url: item.url,
               caption: item.caption,
               alt: item.alt,
+              order: index,
+            })),
+          });
+        }
+      }
+    }
+
+    // Replace-in-full, same contract as the gallery: the submitted order is
+    // the saved order, and `order` is global across the project so a row can
+    // be reordered within its category without renumbering the others.
+    for (const [fieldName, items] of mediaSets) {
+      if (fieldName === "media" && config.slug === "projects") {
+        await prisma.projectMedia.deleteMany({ where: { projectId: row.id } });
+        if (items.length > 0) {
+          await prisma.projectMedia.createMany({
+            data: items.map((item, index) => ({
+              projectId: row.id,
+              category: item.category as never,
+              kind: item.kind as never,
+              url: item.url,
+              embedUrl: item.embedUrl,
+              label: item.label,
+              caption: item.caption,
+              alt: item.alt,
+              width: item.width,
+              height: item.height,
               order: index,
             })),
           });

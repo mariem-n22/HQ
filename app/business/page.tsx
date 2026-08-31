@@ -27,7 +27,7 @@ export default async function BusinessPage() {
               <li key={venture.id} className="glow-card flex flex-col gap-4 p-5 sm:flex-row sm:items-start">
                 <Frame src={venture.image} alt={`${venture.name} mark`} ratio="4/3" tone={false} className="w-full shrink-0 rounded-md sm:w-40" />
                 <div className="flex-1">
-                  <h3 className="display-title text-2xl text-cyan">{venture.name}</h3>
+                  <h3 className="display-title text-2xl text-ink">{venture.name}</h3>
                   <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-mute">
                     {venture.status}
                     {venture.jurisdiction ? ` · ${venture.jurisdiction}` : ""}

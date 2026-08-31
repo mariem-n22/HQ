@@ -1,24 +1,41 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Work_Sans } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { PERSON, SITE_URL, ONE_LINER } from "@/lib/seo";
 import "./globals.css";
 
-// The Pit Wall type pairing, carried over unchanged. Exposed as CSS variables
-// so the existing --font-display / --font-sans tokens in globals.css resolve.
-const instrumentSerif = Instrument_Serif({
+/**
+ * The Architectural Archive pairing: an editorial serif for display, an
+ * ultra-clean grotesque for everything the interface has to say. Exposed as
+ * CSS variables so the --font-display / --font-sans tokens resolve.
+ */
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-instrument-serif",
+  variable: "--font-cormorant",
 });
 
-const workSans = Work_Sans({
+const manrope = Manrope({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   display: "swap",
-  variable: "--font-work-sans",
+  variable: "--font-manrope",
 });
+
+/**
+ * Runs before first paint, so a returning light-mode visitor never sees a
+ * frame of dark. Deliberately not a module: it has to execute synchronously
+ * in <head>, ahead of hydration and ahead of the body being painted.
+ *
+ * Dark is the product default, full stop — the archive is meant to be read
+ * dark, and the photography is lit for it. `prefers-color-scheme` is
+ * deliberately NOT consulted: an OS-level light preference is a preference
+ * about operating systems, not about this site, and honouring it would show
+ * most first-time visitors a mode the design does not lead with. Only an
+ * explicit choice made here, on the toggle, overrides dark.
+ */
+const THEME_INIT = `(function(){try{var s=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -54,7 +71,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${instrumentSerif.variable} ${workSans.variable}`}>
+    <html
+      lang="en"
+      // The pre-paint script sets data-theme before React sees the document,
+      // so the server markup and the first client render disagree by design.
+      suppressHydrationWarning
+      data-theme="dark"
+      className={`${cormorant.variable} ${manrope.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+      </head>
       <body className="bg-base text-ink antialiased">{children}</body>
     </html>
   );

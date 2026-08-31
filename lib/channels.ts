@@ -42,7 +42,7 @@ export function channelsOf(settings: SiteSettings | null): Channel[] {
       value: settings.github,
       href: settings.github,
       Icon: SiGithub,
-      hover: "hover:text-ink",
+      hover: "hover:text-amber",
     },
     {
       key: "linkedin",
@@ -50,7 +50,7 @@ export function channelsOf(settings: SiteSettings | null): Channel[] {
       value: settings.linkedin,
       href: settings.linkedin,
       Icon: FaLinkedinIn,
-      hover: "hover:text-cyan",
+      hover: "hover:text-amber",
     },
     {
       key: "instagram",
@@ -66,7 +66,7 @@ export function channelsOf(settings: SiteSettings | null): Channel[] {
       value: isTodo(settings.phone) ? whatsappHref : settings.phone,
       href: whatsappHref,
       Icon: SiWhatsapp,
-      hover: "hover:text-go",
+      hover: "hover:text-amber",
     },
     {
       key: "phone",

@@ -1,10 +1,17 @@
 const map: Record<string, string> = {
+  // Architecture project lifecycle.
+  CONCEPT: "text-amber",
+  COMPETITION: "text-amber",
+  UNDER_CONSTRUCTION: "text-amber",
+  COMPLETED: "text-go",
+  UNBUILT: "text-mute",
+  // Retained so any legacy value still renders rather than falling through.
   BUILDING: "text-amber",
   SHIPPED: "text-go",
   ARCHIVED: "text-mute",
   Active: "text-go",
   Exploring: "text-amber",
-  Researching: "text-cyan",
+  Researching: "text-amber",
   Shelved: "text-mute",
 };
 

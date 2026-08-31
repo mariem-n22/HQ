@@ -70,7 +70,7 @@ export default async function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/portfolio"
-              className="rounded-sm border border-amber bg-amber px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+              className="rounded-sm border border-ink bg-ink px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
             >
               The portfolio
             </Link>
@@ -101,7 +101,7 @@ export default async function HomePage() {
                 <span className="data-mono text-[11px] tracking-widest">
                   {featured.year} · {featured.status}
                 </span>
-                <h3 className="display-title mt-2 text-3xl text-cyan sm:text-4xl">
+                <h3 className="display-title mt-2 text-3xl text-ink sm:text-4xl">
                   {featured.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-mute">{featured.tagline}</p>
@@ -135,7 +135,7 @@ export default async function HomePage() {
             {SECTORS.map((sector) => (
               <Link key={sector.to} href={sector.to} className="glow-card p-5">
                 <p className="data-mono text-[11px] tracking-widest">{sector.code}</p>
-                <h3 className="display-title mt-2 text-2xl text-cyan">{sector.label}</h3>
+                <h3 className="display-title mt-2 text-2xl text-ink">{sector.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mute">{sector.blurb}</p>
               </Link>
             ))}

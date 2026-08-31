@@ -5,16 +5,24 @@ import { auth } from "@/auth";
 /**
  * Dashboard uploads → Vercel Blob. Admin only.
  *
- * `kind=image` (default) accepts images; `kind=pdf` accepts a PDF and is used
- * for the CV. When `replaces` carries a previous Blob URL, that file is deleted
- * after the new one lands — the CV is a single current document, not a version
- * history, so old files must not accumulate in storage.
+ * `kind=image` (default) accepts images; `kind=video` accepts short
+ * self-hosted clips (walkthrough loops, drone passes); `kind=pdf` accepts a
+ * PDF and is used for the CV. When `replaces` carries a previous Blob URL,
+ * that file is deleted after the new one lands — the CV is a single current
+ * document, not a version history, so old files must not accumulate.
+ *
+ * The video ceiling is deliberately far above the image one. Long-form
+ * walkthroughs should still go through the embed field (Vimeo/YouTube) rather
+ * than Blob: they stream adaptively there and cost nothing to store.
  */
 
 const LIMITS = {
   image: { prefix: "uploads", accept: (t: string) => t.startsWith("image/"), max: 8, label: "images" },
+  video: { prefix: "video", accept: (t: string) => t.startsWith("video/"), max: 250, label: "videos" },
   pdf: { prefix: "cv", accept: (t: string) => t === "application/pdf", max: 20, label: "PDFs" },
 } as const;
+
+type UploadKind = keyof typeof LIMITS;
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -34,7 +42,8 @@ export async function POST(request: Request) {
 
   const form = await request.formData();
   const file = form.get("file");
-  const kind = String(form.get("kind") ?? "image") === "pdf" ? "pdf" : "image";
+  const requested = String(form.get("kind") ?? "image");
+  const kind: UploadKind = requested in LIMITS ? (requested as UploadKind) : "image";
   const replaces = String(form.get("replaces") ?? "").trim();
   const rules = LIMITS[kind];
 

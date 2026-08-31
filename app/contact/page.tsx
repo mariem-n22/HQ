@@ -32,7 +32,7 @@ export default async function ContactPage() {
       <header className="text-center">
         <p className="label-mono text-amber">// Let&rsquo;s connect</p>
         <h1 className="display-title mx-auto mt-5 max-w-4xl text-5xl leading-[1.05] text-ink sm:text-7xl">
-          Ready to build <span className="text-cyan">something great?</span>
+          Ready to build <span className="text-amber">something great?</span>
         </h1>
         <p className="standfirst mx-auto mt-6 max-w-2xl text-[15px]">
           Whether you have a project in mind, want to collaborate, or just want to say hello —
@@ -73,7 +73,7 @@ export default async function ContactPage() {
           href={closing?.href ?? "#message-form"}
           target={closing?.href.startsWith("http") ? "_blank" : undefined}
           rel={closing?.href.startsWith("http") ? "noreferrer" : undefined}
-          className="mt-8 inline-block rounded-md border border-cyan bg-cyan px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+          className="mt-8 inline-block rounded-md border border-amber bg-ink px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
         >
           Start a conversation
         </a>

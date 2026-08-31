@@ -61,7 +61,7 @@ export function ListField({
               value={item}
               placeholder={placeholder}
               onChange={(e) => set(index, e.target.value)}
-              className="min-w-0 flex-1 rounded-sm border border-line bg-base px-3 py-2 text-sm text-ink placeholder:text-mute/50 focus:border-amber focus:outline-none"
+              className="min-w-0 flex-1 rounded-sm border border-line-strong bg-base px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-amber focus:outline-none"
             />
             <span className="flex shrink-0 flex-col gap-1">
               <button
@@ -86,7 +86,7 @@ export function ListField({
                 type="button"
                 onClick={() => remove(index)}
                 aria-label="Remove"
-                className="rounded-sm border border-signal/60 p-1 text-signal hover:bg-signal hover:text-ink"
+                className="rounded-sm border border-signal/60 p-1 text-signal hover:bg-signal hover:text-on-signal"
               >
                 <Trash2 aria-hidden className="h-3 w-3" />
               </button>

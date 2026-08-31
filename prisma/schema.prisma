@@ -17,10 +17,49 @@ datasource db {
   provider = "postgresql"
 }
 
+/// Architecture project lifecycle. Replaces the software lifecycle
+/// (BUILDING/SHIPPED/ARCHIVED) the site carried when it was a dev portfolio.
 enum ProjectStatus {
-  BUILDING
-  SHIPPED
-  ARCHIVED
+  CONCEPT
+  UNDER_CONSTRUCTION
+  COMPLETED
+  COMPETITION
+  UNBUILT
+}
+
+/// Project typology. The /work filter bar is built from the values actually
+/// present in the data, not from this list, so adding a member here does not
+/// put an empty filter chip on the page.
+enum Typology {
+  RESIDENTIAL
+  HOSPITALITY
+  CULTURAL
+  COMMERCIAL
+  INSTITUTIONAL
+  URBAN
+  INTERIORS
+  LANDSCAPE
+}
+
+/// Which section of the project page a media item belongs to. This is the
+/// replacement for the single flat `images[]` bucket: the detail template
+/// pulls each section straight from its category instead of every image
+/// landing in one gallery.
+enum MediaCategory {
+  HERO
+  GALLERY
+  PLAN
+  SECTION
+  ELEVATION
+  DIAGRAM
+  MATERIAL
+  CONSTRUCTION
+  SITE
+}
+
+enum MediaKind {
+  IMAGE
+  VIDEO
 }
 
 /// The single owner account. No sign-up route exists; this row is created by
@@ -52,7 +91,7 @@ model Project {
   period      String        @default("")
   stack       String[]      @default([])
   links       Json          @default("{}")
-  status      ProjectStatus @default(BUILDING)
+  status      ProjectStatus @default(CONCEPT)
   year        String        @default("")
   emoji       String        @default("")
   coverImage  String?
@@ -63,7 +102,50 @@ model Project {
   /// showOnResume into it so both agree; the UI reads showOnPortfolio.
   showOnPortfolio Boolean @default(false)
   order       Int           @default(0)
+
+  // ---------------------------------------------------------------------
+  // Architecture case-study fields.
+  //
+  // Everything below is optional by design: the detail template renders a
+  // section only when its data exists, so a half-filled project degrades to
+  // a shorter page rather than a page full of empty "Client: —" rows.
+  // ---------------------------------------------------------------------
+
+  /// Typology — drives the /work filter.
+  typology       Typology?
+  /// Gross floor area, free text so the studio controls the unit ("2,400 m²").
+  area           String    @default("")
+  /// The commissioning client. Distinct from the legacy `company` field.
+  client         String    @default("")
+  collaborators  String[]  @default([])
+
+  /// Editorial paragraph on concept and intent — why the building exists.
+  statement      String    @default("")
+
+  /// Context / site.
+  siteDescription String   @default("")
+  orientation     String   @default("")
+  climate         String   @default("")
+
+  /// Technical layer. Optional per project; a handful of flagship projects
+  /// use it, most leave it blank and the whole section disappears.
+  structuralConcept     String @default("")
+  environmentalStrategy String @default("")
+  lightingConcept       String @default("")
+  constructionDetail    String @default("")
+
+  /// Timeline stages, one per entry, written "Label — Year".
+  stages         String[]  @default([])
+  /// Awards or press, one per entry. Deliberately not a relation: the
+  /// site-wide Awards/Press system is out of scope, this is just a line.
+  recognition    String[]  @default([])
+
+  /// Long-form hero video (Vimeo/YouTube). Short self-hosted loops go through
+  /// ProjectMedia with kind = VIDEO instead.
+  heroEmbedUrl   String    @default("")
+
   images      ProjectImage[]
+  media       ProjectMedia[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -71,6 +153,35 @@ model Project {
 }
 
 /// Replaces the old `projects.gallery` jsonb column.
+/// Categorised project media. One row per asset, ordered within its category.
+///
+/// `width`/`height` are captured at upload so galleries and the hero can lay
+/// out landscape, portrait and panoramic shots without blind center-cropping
+/// — architecture photography is frequently wide, and the old flat model had
+/// no dimension data at all.
+model ProjectMedia {
+  id        String        @id @default(cuid())
+  projectId String
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category  MediaCategory
+  kind      MediaKind     @default(IMAGE)
+  /// Self-hosted asset URL (Vercel Blob). Empty when `embedUrl` is used.
+  url       String        @default("")
+  /// Vimeo/YouTube URL for long-form video.
+  embedUrl  String        @default("")
+  /// Material name, diagram step label, drawing title.
+  label     String        @default("")
+  caption   String        @default("")
+  alt       String        @default("")
+  width     Int?
+  height    Int?
+  order     Int           @default(0)
+
+  @@index([projectId, category, order])
+}
+
+/// Legacy flat gallery. Superseded by ProjectMedia and no longer written to
+/// or rendered; kept so nothing that still reads the relation breaks.
 model ProjectImage {
   id        String  @id @default(cuid())
   projectId String
@@ -273,4 +384,34 @@ model ContactMessage {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+/// The Architect — a single-row profile page. Modelled as a singleton the way
+/// SiteSettings is, so the dashboard edits one record rather than managing a
+/// list of one.
+model ArchitectProfile {
+  id          String @id @default("singleton")
+  name        String @default("")
+  /// "Architect / Founder" — one or more role lines.
+  roleLine    String @default("")
+  portrait    String @default("")
+  /// Editorial biography. Moderate length by intent: this page has to let a
+  /// selection committee shortlist the practice in under a minute, so the
+  /// field is sized for a few paragraphs, not an essay.
+  biography   String @default("")
+  /// Education, prior practice, licensure. One per entry, kept to a line or
+  /// two total — this is not a formatted resume.
+  credentials String[] @default([])
+  updatedAt   DateTime @updatedAt
+}
+
+/// Philosophy — an intentionally minimal manifesto. One free-text block the
+/// studio edits directly; deliberately not over-structured.
+model Philosophy {
+  id        String   @id @default("singleton")
+  /// Pull-quote sized statement of the practice's design position.
+  statement String   @default("")
+  /// Optional supporting paragraphs beneath the statement.
+  body      String   @default("")
+  updatedAt DateTime @updatedAt
 }

@@ -99,7 +99,7 @@ export function ExperienceList({ experiences }: { experiences: Experience[] }) {
                     aria-haspopup="dialog"
                     className="glow-card w-full p-5 text-left"
                   >
-                    <h3 className="display-title text-2xl leading-tight text-cyan">{item.role}</h3>
+                    <h3 className="display-title text-2xl leading-tight text-ink">{item.role}</h3>
                     <p className="mt-1 text-sm text-ink/80">{item.org}</p>
                     <MetaRow period={item.period} location={item.location} className="mt-3" />
                     {/* Clamped so the card stays a teaser even if the summary
@@ -147,7 +147,7 @@ export function ExperienceList({ experiences }: { experiences: Experience[] }) {
                 <ul className="mt-3 space-y-2">
                   {(active.achievements ?? []).map((line) => (
                     <li key={line} className="flex gap-2.5 text-sm leading-relaxed text-ink/85">
-                      <span aria-hidden className="text-cyan">
+                      <span aria-hidden className="text-amber">
                         —
                       </span>
                       <span>{line}</span>

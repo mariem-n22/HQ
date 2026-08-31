@@ -42,7 +42,7 @@ function SkillRow({ skill }: { skill: Skill }) {
       <div className="flex items-center gap-3">
         <span
           aria-hidden
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-line bg-raised/60 text-cyan"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-line bg-raised/60 text-amber"
         >
           {Icon ? (
             <Icon className="h-4 w-4" />
@@ -61,7 +61,7 @@ function SkillRow({ skill }: { skill: Skill }) {
         aria-label={`${skill.name}: ${percent} percent`}
       >
         <div
-          className="h-full rounded-full bg-gradient-to-r from-cyan to-amber"
+          className="h-full rounded-full bg-gradient-to-r from-line to-amber"
           style={{
             width: `${percent}%`,
             transition: reduced ? undefined : "width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1)",
@@ -92,7 +92,7 @@ export function SkillStack({ skills, className = "" }: { skills: Skill[]; classN
       {categories.map(([category, items], i) => (
         <Reveal key={category} delay={Math.min(i, 5) * 0.06} className="h-full">
           <section className="glow-card h-full p-5">
-            <h3 className="label-mono text-cyan">{category}</h3>
+            <h3 className="label-mono text-amber">{category}</h3>
             <ul className="mt-4 space-y-3.5">
               {items
                 .slice()

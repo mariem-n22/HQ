@@ -1,11 +1,20 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
 /*
- * Mahmoud HQ — "Midnight Indigo" editorial design system.
- * Dark magazine: Instrument Serif headings, Work Sans body, one indigo accent.
- * All colors are oklch tokens. Never hardcode hex in components.
+ * Mahmoud HQ — "Architectural Archive" design system.
+ *
+ * Italian editorial / contemporary architecture magazine: Swiss grid
+ * precision, Japanese restraint, gallery quiet. Cormorant Garamond for
+ * display, Manrope for UI. One accent — muted brass — held to small details.
+ *
+ * The governing rule: the photography is the hero. The UI recedes. Brass
+ * never fills a large area and never fills a primary button; it appears in
+ * active states, hairlines, eyebrow labels and metadata only.
+ *
+ * Dark is the default. Both themes are defined below as `[data-theme]`
+ * blocks; app/layout.tsx stamps the attribute before first paint.
+ *
+ * Never hardcode a color in a component — every value flows from here.
  */
 
 @theme inline {
@@ -17,16 +26,32 @@
   --radius-3xl: 16px;
   --radius-4xl: 20px;
 
+  /* Neutrals */
   --color-base: var(--base);
   --color-surface: var(--surface);
   --color-raised: var(--raised);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-ink: var(--ink);
   --color-mute: var(--mute);
+
+  /*
+   * The accent. Named `--amber` in the previous "Pit Wall" system and kept
+   * under that name here so the 123 component classes that reference it
+   * (text-amber, border-amber) keep working without touching a single
+   * component. It is brass now — see the theme blocks below.
+   */
   --color-amber: var(--amber);
-  --color-cyan: var(--cyan);
+
+  /*
+   * Status. Desaturated to sit inside the architectural palette rather than
+   * shout over it. Both are paired with an icon or a word in the UI, so
+   * color is never the sole carrier of meaning.
+   */
   --color-signal: var(--signal);
   --color-go: var(--go);
+  --color-on-signal: var(--on-signal);
+  --color-on-go: var(--on-go);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -57,28 +82,41 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Same two typefaces as before; loaded via next/font in app/layout.tsx,
-     which exposes them as these CSS variables. */
-  --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
-  --font-sans: var(--font-work-sans), system-ui, sans-serif;
-  --font-mono: var(--font-work-sans), system-ui, sans-serif;
+  /* Loaded via next/font in app/layout.tsx, which exposes these variables. */
+  --font-display: var(--font-cormorant), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-mono: var(--font-manrope), system-ui, sans-serif;
 }
 
-:root {
+/* --------------------------------------------------------------------------
+ * Dark (default)
+ *
+ * On bare :root as well as [data-theme="dark"], so a document that somehow
+ * reaches paint without the attribute still renders the intended default
+ * rather than an unstyled page.
+ * ------------------------------------------------------------------------ */
+
+:root,
+:root[data-theme="dark"] {
   --radius: 4px;
 
-  /* Midnight Indigo */
-  --base: oklch(0.1338 0.0301 279.5);
-  --surface: oklch(0.2081 0.0503 278.9);
-  --raised: oklch(0.2503 0.0641 278.6);
-  --line: oklch(0.2907 0.0844 278.2);
-  --ink: oklch(0.9364 0.0079 285.5);
-  --mute: oklch(0.6924 0.0303 280.4);
-  /* single accent — indigo (token kept as --amber for continuity) */
-  --amber: oklch(0.6408 0.1808 277.4);
-  --cyan: oklch(0.7752 0.0929 279.2);
-  --signal: oklch(0.6702 0.1712 18.4);
-  --go: oklch(0.7503 0.1116 165.2);
+  --base: #0b0b0a; /* Obsidian — not pure black */
+  --surface: #151514; /* Charcoal — cards and panels */
+  --raised: #1e1d1b; /* Third neutral step — chips, inputs, hover fills */
+  --line: #2b2a27; /* Architectural line */
+  --line-strong: #6e6a5e; /* Input and control boundaries — see note below */
+  --ink: #f1efe9; /* Ivory */
+  --mute: #a7a39a; /* Stone */
+  --amber: #9a8564; /* Muted brass */
+
+  --signal: #c2705f; /* Architectural red — error, destructive */
+  --go: #8fa88f; /* Muted sage — shipped, active, live */
+  --on-signal: #160b08; /* Text on a filled signal surface */
+  --on-go: #0e1410; /* Text on a filled go surface */
+
+  /* Depth, not palette: the cast shadow and the top catch-light on a card. */
+  --shadow-ink: #050504;
+  --catch-light: #f1efe9; /* Ivory, never pure white */
 
   --background: var(--base);
   --foreground: var(--ink);
@@ -87,7 +125,7 @@
   --popover: var(--surface);
   --popover-foreground: var(--ink);
   --primary: var(--amber);
-  --primary-foreground: oklch(0.1722 0.007 258.37);
+  --primary-foreground: var(--base);
   --secondary: var(--raised);
   --secondary-foreground: var(--ink);
   --muted: var(--raised);
@@ -95,18 +133,74 @@
   --accent: var(--raised);
   --accent-foreground: var(--ink);
   --destructive: var(--signal);
-  --destructive-foreground: var(--ink);
+  --destructive-foreground: var(--on-signal);
   --border: var(--line);
-  --input: var(--line);
+  --input: var(--line-strong);
   --ring: var(--amber);
   --sidebar: var(--surface);
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--amber);
-  --sidebar-primary-foreground: oklch(0.1722 0.007 258.37);
+  --sidebar-primary-foreground: var(--base);
   --sidebar-accent: var(--raised);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--line);
   --sidebar-ring: var(--amber);
+}
+
+/* --------------------------------------------------------------------------
+ * Light
+ *
+ * Warm limestone, not white. Two values deviate from the original brief
+ * because the brief's own accessibility floor rules them out:
+ *
+ *   --amber  #9A8564 -> #75654C   2.85:1 -> 4.52:1 on limestone
+ *   --mute   #A7A39A -> #66635C   3.74:1 -> 4.81:1 on limestone
+ *
+ * Both keep the exact hue and saturation of the specified color and move
+ * only the value, so the identity is unchanged and the text is legible.
+ * Dark mode uses the brief's values verbatim; they already pass.
+ * ------------------------------------------------------------------------ */
+
+:root[data-theme="light"] {
+  --base: #f4f1ea; /* Warm paper, not grey */
+  /*
+   * Surface sits BELOW base, not above it. This is the whole correction:
+   * in dark mode a panel earns attention by catching more light than the
+   * ground, so surface goes lighter. Mirroring that into light mode makes
+   * panels glow slightly whiter than the page, which reads as washed-out
+   * rather than as a panel. On paper a panel is a recess — it goes darker.
+   */
+  --surface: #ece8df;
+  --raised: #e6e1d6; /* Third neutral step: below surface, above the line */
+  --line: #d4cfc5;
+  --line-strong: #877f71; /* Input and control boundaries */
+  --ink: #181817; /* Near-black, not pure black */
+  --mute: #65635e;
+
+  /*
+   * Brass, one step darker than the #88785E the palette names.
+   *
+   * #88785E measures 3.80:1 on this ground — fine for a border, an
+   * underline or an icon, but short of 4.5:1 for text. An audit of all 80
+   * `text-amber` uses found they are almost entirely 10–13px labels,
+   * eyebrows, sector codes and metadata: small text, where 3.80 fails.
+   * Rather than split the accent into a text brass and a border brass and
+   * rewire 123 component classes, the whole accent takes the darker value.
+   * Borders lose nothing by it — they gain, since faint borders were part
+   * of the original complaint.
+   */
+  --amber: #6e6047;
+
+  --signal: #8c4234;
+  --go: #4a6350;
+  --on-signal: #f6efec;
+  --on-go: #f1f4f0;
+
+  --shadow-ink: #3d382f; /* Warm shadow — a cool grey greys the paper */
+  --catch-light: #fdfcf9;
+
+  --primary-foreground: var(--base);
+  --sidebar-primary-foreground: var(--base);
 }
 
 @layer base {
@@ -114,8 +208,35 @@
     border-color: var(--color-border);
   }
 
+  /*
+   * NO blanket color transition here. This is deliberate, and it is load
+   * bearing — do not "restore" it.
+   *
+   * A previous pass put `transition: background-color, border-color, color`
+   * on `*` to make the theme switch dissolve. It broke theme switching
+   * outright: when `data-theme` flips, the tokens these properties read from
+   * change, and Chrome leaves the transitioned properties pinned at their
+   * first-paint values instead of resolving to the new ones. Measured on the
+   * running site, flipping the attribute left `<h1>` at the dark ivory
+   * rgb(241,239,233) indefinitely while `--ink` correctly read `#171715`;
+   * background and border froze the same way. The toggle only appeared to
+   * work because every check had been done on a fresh page load, where no
+   * transition is running.
+   *
+   * Removing it makes the switch instant and, more importantly, correct.
+   * Interactive states keep their own `transition-colors` at the component
+   * level, which is unaffected: those animate on a class/state change rather
+   * than on a custom-property change.
+   */
+
   html {
     scroll-behavior: smooth;
+    /* Native form controls, scrollbars and the like follow the theme. */
+    color-scheme: dark;
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
   }
 
   body {
@@ -123,7 +244,8 @@
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-size: 1rem;
-    line-height: 1.65;
+    /* Editorial breathing room, per the type brief's 1.5–1.6 band. */
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -133,35 +255,69 @@
     outline-offset: 2px;
   }
 
+  /*
+   * Selection uses the neutral pair rather than brass. A brass selection
+   * fill is a large flat area of accent, which the direction forbids.
+   */
   ::selection {
-    background: var(--color-amber);
-    color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-base);
+  }
+
+  /*
+   * Form controls need a visible boundary. `--line` is a hairline meant for
+   * dividers and sits around 1.3:1 against the page in both modes, which is
+   * correct for a rule and far too faint for the edge of an input. WCAG
+   * 1.4.11 wants 3:1 for a control boundary, so inputs get --line-strong.
+   */
+  input,
+  textarea,
+  select {
+    border-color: var(--color-line-strong);
   }
 }
 
 /* --- Editorial primitives --- */
 
 @utility label-mono {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing: 0.22em;
+  /* Brief calls for 0.05–0.1em; the old system ran 0.22em, which reads as
+     "telemetry readout" rather than "gallery wall label". */
+  letter-spacing: 0.1em;
   color: var(--color-mute);
 }
 
+/*
+ * Metadata: years, locations, dates, sector codes, percentages. This is one
+ * of the sanctioned accent uses, and it is where `--cyan` used to live.
+ */
 @utility data-mono {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  color: var(--color-cyan);
+  letter-spacing: 0.08em;
+  color: var(--color-amber);
 }
 
+/*
+ * Cormorant Garamond has a markedly smaller x-height than the Instrument
+ * Serif it replaces, so a 1:1 swap renders every headline visually shrunken
+ * at the same declared size. Correcting optically here — one place — keeps
+ * all 33 component size classes untouched, per the no-layout-change rule.
+ *
+ * Weight 500 rather than 400: Cormorant's 400 is very light at display
+ * sizes and reads as frail against the photography rather than restrained.
+ */
 @utility display-title {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1;
+  font-weight: 500;
+  font-size: 1.09em;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
 }
 
 @utility standfirst {
@@ -177,16 +333,29 @@
   border-radius: var(--radius);
 }
 
-/* Soft indigo aura behind the cover story */
+/*
+ * A barely-there warm wash behind the cover story. Brass at a few percent —
+ * enough to warm the ground, never enough to read as a colored panel. Light
+ * mode runs weaker still, since a tint over limestone reads as a stain long
+ * before it reads as atmosphere.
+ */
 @utility carbon {
   background-image: radial-gradient(
     120% 90% at 15% 0%,
-    color-mix(in oklab, var(--color-amber) 16%, transparent) 0%,
+    color-mix(in oklab, var(--color-amber) 7%, transparent) 0%,
     transparent 62%
   );
 }
 
-/* Hairline editorial rule */
+:root[data-theme="light"] .carbon {
+  background-image: radial-gradient(
+    120% 90% at 15% 0%,
+    color-mix(in oklab, var(--color-amber) 4%, transparent) 0%,
+    transparent 62%
+  );
+}
+
+/* Hairline editorial rule, brass at the leading edge only. */
 @utility kerb {
   height: 1px;
   background-image: linear-gradient(
@@ -238,32 +407,57 @@
 }
 
 /*
- * Soft glowing instrument card — the treatment from Mahmoud's reference image.
- * Rounded, hairline cyan border over a faint cyan bloom that lifts on hover.
+ * The card surface. Formerly a cyan instrument-panel bloom; now a plain
+ * architectural plane — hairline edge, faint inset catch-light, and a soft
+ * neutral drop that lifts the card off the ground without coloring it.
+ * Brass appears only on hover, as a border, which is a sanctioned use.
  */
 @utility glow-card {
   position: relative;
   border-radius: var(--radius-3xl);
-  border: 1px solid color-mix(in oklab, var(--color-cyan) 20%, var(--color-line));
+  border: 1px solid var(--color-line);
   background-color: var(--color-surface);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--color-cyan) 8%, transparent),
-    0 18px 44px -28px color-mix(in oklab, var(--color-cyan) 50%, transparent);
+    inset 0 1px 0 color-mix(in oklab, var(--color-ink) 5%, transparent),
+    0 18px 44px -30px color-mix(in oklab, var(--shadow-ink) 60%, transparent);
   transition:
     border-color 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
-    box-shadow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+    box-shadow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 0.24s ease;
   &:hover {
-    border-color: color-mix(in oklab, var(--color-cyan) 52%, var(--color-line));
+    border-color: color-mix(in oklab, var(--color-amber) 55%, var(--color-line));
     box-shadow:
-      inset 0 1px 0 color-mix(in oklab, var(--color-cyan) 14%, transparent),
-      0 24px 60px -26px color-mix(in oklab, var(--color-cyan) 70%, transparent);
+      inset 0 1px 0 color-mix(in oklab, var(--color-ink) 9%, transparent),
+      0 24px 60px -28px color-mix(in oklab, var(--shadow-ink) 70%, transparent);
   }
+}
+
+/*
+ * Light mode: no bloom at all. A colored outer glow over limestone reads as
+ * a smudge. The card is defined by its edge and a whisper of shadow, the way
+ * a mounted print is defined by its mat.
+ */
+:root[data-theme="light"] .glow-card {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--catch-light) 70%, transparent),
+    0 1px 2px color-mix(in oklab, var(--color-ink) 5%, transparent),
+    0 12px 28px -24px color-mix(in oklab, var(--color-ink) 30%, transparent);
+}
+
+:root[data-theme="light"] .glow-card:hover {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--catch-light) 80%, transparent),
+    0 1px 2px color-mix(in oklab, var(--color-ink) 7%, transparent),
+    0 16px 36px -24px color-mix(in oklab, var(--color-ink) 38%, transparent);
 }
 
 /*
  * Rail edge fades. Applied only on the side where more content actually
  * exists, so the gradient is a real affordance rather than decoration: a card
  * cut off under a fade means "keep scrolling this way".
+ *
+ * The #000 below is a mask luminance key, not a paint color — it never
+ * reaches the screen, so it is exempt from the no-pure-black rule.
  */
 @utility rail-fade-r {
   -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 4rem), transparent 100%);

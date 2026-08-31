@@ -59,7 +59,7 @@ export function ChannelRows({ settings }: { settings: SiteSettings | null }) {
       {phone ? (
         <div className="glow-card flex items-center gap-4 p-4">
           <a href={phone.href} className="flex min-w-0 flex-1 items-center gap-4">
-            <IconBox accent="text-cyan">
+            <IconBox accent="text-amber">
               <phone.Icon className="h-4 w-4" />
             </IconBox>
             <span className="min-w-0">
@@ -97,7 +97,7 @@ export function ChannelRows({ settings }: { settings: SiteSettings | null }) {
                   : channel.label
           }
           value={channel.value.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-          accent="text-cyan"
+          accent="text-amber"
         />
       ))}
 

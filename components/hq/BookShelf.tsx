@@ -38,7 +38,7 @@ export function BookShelf({ books }: { books: Book[] }) {
               />
               <div className="flex flex-1 flex-col p-5">
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="display-title text-2xl leading-tight text-cyan">{book.title}</h3>
+                  <h3 className="display-title text-2xl leading-tight text-ink">{book.title}</h3>
                   {book.status === "READING" ? (
                     <span className="shrink-0 rounded-sm border border-go/50 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-go">
                       Reading
@@ -72,7 +72,7 @@ export function BookShelf({ books }: { books: Book[] }) {
                   {active.highlights.map((line, i) => (
                     <li
                       key={i}
-                      className="border-l-2 border-cyan/60 pl-4 text-sm italic leading-relaxed text-ink/90"
+                      className="border-l-2 border-amber/60 pl-4 text-sm italic leading-relaxed text-ink/90"
                     >
                       &ldquo;{line}&rdquo;
                     </li>

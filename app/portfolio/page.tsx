@@ -3,6 +3,7 @@ import { graph, pageMeta, personSchema, t1dubSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { Frame } from "@/components/hq/Frame";
+import { ThemeToggle } from "@/components/hq/ThemeToggle";
 import { HeroGallery } from "@/components/hq/HeroGallery";
 import { FileText } from "lucide-react";
 import { Reveal } from "@/components/hq/Reveal";
@@ -46,7 +47,7 @@ export default async function PortfolioPage() {
   const pitch = findBlock(blocks, "portfolio_pitch");
   const about = findBlock(blocks, "portfolio_about");
   const focus = parsePairs(findBlock(blocks, "portfolio_focus")?.body);
-  const shipped = projects.filter((p) => p.status === "SHIPPED").length;
+  const shipped = projects.filter((p) => p.status === "COMPLETED").length;
 
   const stats = [
     { label: "Projects shipped", value: String(shipped) },
@@ -68,10 +69,11 @@ export default async function PortfolioPage() {
             </span>
           </p>
           <SocialLinks settings={settings} size="sm" />
+          <ThemeToggle />
           <div className="flex gap-2">
             <Link
               href="/contact"
-              className="rounded-sm border border-amber bg-amber px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+              className="rounded-sm border border-ink bg-ink px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
             >
               Contact
             </Link>
@@ -81,7 +83,7 @@ export default async function PortfolioPage() {
                 href="/cv"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-sm border border-cyan px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan transition-colors hover:bg-cyan hover:text-base"
+                className="inline-flex items-center gap-1.5 rounded-sm border border-amber px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-ink transition-colors hover:bg-ink hover:text-base"
               >
                 <FileText aria-hidden className="h-3 w-3" />
                 CV
@@ -183,7 +185,7 @@ export default async function PortfolioPage() {
                 />
                 <div className="flex flex-1 flex-col p-5">
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <h3 className="display-title text-2xl text-cyan">{project.title}</h3>
+                    <h3 className="display-title text-2xl text-ink">{project.title}</h3>
                     <span className="data-mono text-[11px] tracking-widest">
                       {project.year} · {project.status}
                     </span>
@@ -241,7 +243,7 @@ export default async function PortfolioPage() {
                 href="/cv"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex shrink-0 items-center gap-2 rounded-sm border border-cyan bg-cyan px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
+                className="inline-flex shrink-0 items-center gap-2 rounded-sm border border-amber bg-ink px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-base transition-opacity hover:opacity-90"
               >
                 <FileText aria-hidden className="h-3.5 w-3.5" />
                 Download CV
@@ -302,7 +304,7 @@ export default async function PortfolioPage() {
                       className="rounded-t-3xl border-0 border-b border-line"
                     />
                     <div className="flex flex-1 flex-col p-5">
-                      <h3 className="display-title text-xl leading-tight text-cyan">{cert.title}</h3>
+                      <h3 className="display-title text-xl leading-tight text-ink">{cert.title}</h3>
                       {cert.issuer ? (
                         <p className="mt-1 text-sm text-mute">{cert.issuer}</p>
                       ) : null}

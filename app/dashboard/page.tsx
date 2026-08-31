@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { ThemeToggle } from "@/components/hq/ThemeToggle";
 
 export const metadata = {
   title: "Pit Wall — Mahmoud HQ",
@@ -42,6 +43,8 @@ export default async function DashboardPage() {
     { label: "Books", value: books, href: "/dashboard/books" },
     { label: "Certifications", value: certifications, href: "/dashboard/certifications" },
     { label: "Inbox", value: messages, href: "/dashboard/inbox" },
+    { label: "The Architect", value: "—", href: "/dashboard/architect" },
+    { label: "Philosophy", value: "—", href: "/dashboard/philosophy" },
     { label: "Settings", value: "—", href: "/dashboard/settings" },
   ];
 
@@ -54,7 +57,8 @@ export default async function DashboardPage() {
             <h1 className="display-title mt-2 text-4xl text-ink">Overview</h1>
             <p className="mt-2 text-sm text-mute">Signed in as {session?.user?.email}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link
               href="/"
               className="rounded-sm border border-line px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-mute transition-colors hover:border-amber hover:text-amber"
@@ -69,7 +73,7 @@ export default async function DashboardPage() {
             >
               <button
                 type="submit"
-                className="rounded-sm border border-signal/60 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-signal transition-colors hover:bg-signal hover:text-ink"
+                className="rounded-sm border border-signal/60 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-signal transition-colors hover:bg-signal hover:text-on-signal"
               >
                 Sign out
               </button>

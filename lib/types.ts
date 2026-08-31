@@ -12,7 +12,8 @@ import type {
   Book,
   Certification,
   HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
-  Project, ProjectImage, SiteSettings, Skill, Venture,
+  Project, ProjectImage, ProjectMedia, ArchitectProfile, Philosophy,
+  SiteSettings, Skill, Venture,
 } from "@prisma/client";
 
 export type {
@@ -20,10 +21,12 @@ export type {
   Book,
   Certification,
   HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
-  Project, ProjectImage, SiteSettings, Skill, Venture,
+  Project, ProjectImage, ProjectMedia, ArchitectProfile, Philosophy,
+  SiteSettings, Skill, Venture,
 };
 
 export type ProjectWithImages = Project & { images: ProjectImage[] };
+export type ProjectWithMedia = Project & { images: ProjectImage[]; media: ProjectMedia[] };
 export type ProjectLinks = { live?: string; github?: string; other?: string };
 export type GalleryImage = { url: string; caption?: string; alt?: string };
 
@@ -69,6 +72,16 @@ export function findBlock(blocks: ContentBlock[], key: string) {
   return blocks.find((b) => b.key === key);
 }
 
+/**
+ * The Studio group. Kept out of SECTORS deliberately: SECTORS also drives the
+ * home page "contents" grid and the sector codes, and the homepage is out of
+ * scope for this pass. This list is consumed by the nav only.
+ */
+export const STUDIO_LINKS = [
+  { label: "The Architect", to: "/studio/architect" },
+  { label: "Philosophy", to: "/studio/philosophy" },
+] as const;
+
 export const SECTORS = [
   { code: "S1", label: "Story", to: "/story", blurb: "Who I am past the resume line." },
   { code: "S2", label: "Work", to: "/work", blurb: "Products I've shipped and the ones still on track." },
@@ -80,3 +93,119 @@ export const SECTORS = [
   { code: "S8", label: "Books", to: "/books", blurb: "What I have read, and what I took from it." },
   { code: "S9", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
 ] as const;
+
+
+// ---------------------------------------------------------------------------
+// Architecture project helpers
+// ---------------------------------------------------------------------------
+
+export const TYPOLOGY_LABELS: Record<string, string> = {
+  RESIDENTIAL: "Residential",
+  HOSPITALITY: "Hospitality",
+  CULTURAL: "Cultural",
+  COMMERCIAL: "Commercial",
+  INSTITUTIONAL: "Institutional",
+  URBAN: "Urban",
+  INTERIORS: "Interiors",
+  LANDSCAPE: "Landscape",
+};
+
+export const STATUS_LABELS: Record<string, string> = {
+  CONCEPT: "Concept",
+  UNDER_CONSTRUCTION: "Under construction",
+  COMPLETED: "Completed",
+  COMPETITION: "Competition",
+  UNBUILT: "Unbuilt",
+};
+
+export const TYPOLOGY_VALUES = Object.keys(TYPOLOGY_LABELS);
+export const STATUS_VALUES = Object.keys(STATUS_LABELS);
+
+export const MEDIA_CATEGORIES = [
+  "HERO",
+  "GALLERY",
+  "PLAN",
+  "SECTION",
+  "ELEVATION",
+  "DIAGRAM",
+  "MATERIAL",
+  "CONSTRUCTION",
+  "SITE",
+] as const;
+export type MediaCategoryName = (typeof MEDIA_CATEGORIES)[number];
+
+/** A media item flattened for the client components that render it. */
+export type MediaItem = {
+  url: string;
+  embedUrl?: string;
+  kind: "IMAGE" | "VIDEO";
+  label?: string;
+  caption?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+};
+
+export function toMediaItem(m: ProjectMedia): MediaItem {
+  return {
+    url: m.url,
+    embedUrl: m.embedUrl || undefined,
+    kind: m.kind,
+    label: m.label || undefined,
+    caption: m.caption || undefined,
+    alt: m.alt || undefined,
+    width: m.width ?? undefined,
+    height: m.height ?? undefined,
+  };
+}
+
+/** Group a project's media by section, each already ordered. */
+export function mediaByCategory(media: ProjectMedia[]) {
+  const out = {} as Record<MediaCategoryName, MediaItem[]>;
+  for (const key of MEDIA_CATEGORIES) out[key] = [];
+  for (const m of [...media].sort((a, b) => a.order - b.order)) {
+    (out[m.category as MediaCategoryName] ??= []).push(toMediaItem(m));
+  }
+  return out;
+}
+
+/**
+ * Aspect ratio for an item, or undefined when the dimensions were never
+ * captured. Callers fall back to their own default rather than assuming a
+ * shape — blind cropping of wide architectural shots is the bug this exists
+ * to prevent.
+ */
+export function ratioOf(item: { width?: number; height?: number }) {
+  if (!item.width || !item.height) return undefined;
+  return `${item.width} / ${item.height}`;
+}
+
+export type Orientation = "landscape" | "portrait" | "square" | "panorama";
+
+export function orientationOf(item: { width?: number; height?: number }): Orientation | undefined {
+  if (!item.width || !item.height) return undefined;
+  const r = item.width / item.height;
+  if (r >= 2.2) return "panorama";
+  if (r > 1.12) return "landscape";
+  if (r < 0.9) return "portrait";
+  return "square";
+}
+
+/** "Design Development — 2021" → { label, year }. Year is optional. */
+export function parseStage(line: string) {
+  const parts = line.split(/\s+[—–-]\s+/);
+  if (parts.length < 2) return { label: line.trim(), year: "" };
+  const year = parts.pop() as string;
+  return { label: parts.join(" — ").trim(), year: year.trim() };
+}
+
+/** Turn a Vimeo/YouTube URL into an embeddable one. */
+export function embedSrc(url: string): string | null {
+  const u = url.trim();
+  if (!u) return null;
+  const yt = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vim = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vim) return `https://player.vimeo.com/video/${vim[1]}`;
+  return null;
+}

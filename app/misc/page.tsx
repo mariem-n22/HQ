@@ -28,7 +28,7 @@ export default async function MiscPage() {
                 <Frame src={entry.image} alt={entry.title} ratio="16/9" tone={false} className="rounded-t-3xl border-0 border-b border-line" />
                 <div className="flex-1 p-5">
                   <span aria-hidden className="text-2xl">{entry.emoji}</span>
-                  <h2 className="display-title mt-3 text-2xl text-cyan">{entry.title}</h2>
+                  <h2 className="display-title mt-3 text-2xl text-ink">{entry.title}</h2>
                   <p className="mt-2 text-sm leading-relaxed text-mute">{entry.description}</p>
                 </div>
               </article>

@@ -23,6 +23,16 @@ import { join } from "node:path";
 import { ProjectStatus } from "@prisma/client";
 // Shared client: Prisma 7 needs a driver adapter, which lib/prisma.ts sets up.
 import { prisma } from "../lib/prisma";
+
+/**
+ * The Supabase export carries the old software lifecycle. Map it onto the
+ * architecture lifecycle so this one-off importer still runs.
+ */
+const LEGACY_STATUS: Record<string, ProjectStatus> = {
+  BUILDING: ProjectStatus.UNDER_CONSTRUCTION,
+  SHIPPED: ProjectStatus.COMPLETED,
+  ARCHIVED: ProjectStatus.UNBUILT,
+};
 const EXPORT_DIR = join(process.cwd(), "migration", "export");
 
 function load<T = Record<string, unknown>>(table: string): T[] {
@@ -67,9 +77,9 @@ async function main() {
         role: str(p.role),
         stack: arr(p.stack),
         links: (p.links ?? {}) as object,
-        status: (["BUILDING", "SHIPPED", "ARCHIVED"] as const).includes(p.status as never)
-          ? (p.status as ProjectStatus)
-          : ProjectStatus.BUILDING,
+        // The Supabase export carries the old software lifecycle. Map it onto
+        // the architecture one so this one-off importer still runs.
+        status: LEGACY_STATUS[String(p.status)] ?? ProjectStatus.CONCEPT,
         year: str(p.year),
         emoji: str(p.emoji),
         coverImage: str(p.cover_image) || null,

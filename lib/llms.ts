@@ -24,7 +24,7 @@ const RACING = {
 
 export async function buildLlmsTxt(): Promise<string> {
   const [projects, moments] = await Promise.all([getProjects(), getIdentityMoments()]);
-  const shipped = projects.filter((p) => p.status === "SHIPPED");
+  const shipped = projects.filter((p) => p.status === "COMPLETED");
 
   return `# ${PERSON.name}
 

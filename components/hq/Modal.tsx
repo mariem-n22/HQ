@@ -106,7 +106,7 @@ export function Modal({
             <div className="flex items-start justify-between gap-6">
               <div className="min-w-0">
                 {eyebrow}
-                <h2 className="display-title mt-1 text-3xl text-cyan sm:text-4xl">{title}</h2>
+                <h2 className="display-title mt-1 text-3xl text-ink sm:text-4xl">{title}</h2>
               </div>
               <button
                 ref={closeRef}

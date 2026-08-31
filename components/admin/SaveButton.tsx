@@ -48,10 +48,10 @@ export function SaveButton({
 
   const tone =
     shown === "saved"
-      ? "border-go bg-go text-base"
+      ? "border-go bg-go text-on-go"
       : shown === "error"
-        ? "border-signal bg-signal text-ink"
-        : "border-amber bg-amber text-base";
+        ? "border-signal bg-signal text-on-signal"
+        : "border-ink bg-ink text-base";
 
   const content =
     shown === "saving" ? (

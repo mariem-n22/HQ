@@ -117,7 +117,7 @@ export function GalleryField({ name, initial }: { name: string; initial: Gallery
                   value={item.caption}
                   placeholder="Caption (optional)"
                   onChange={(e) => setCaption(index, e.target.value)}
-                  className="min-w-0 flex-1 rounded-sm border border-line bg-base px-2 py-1.5 text-xs text-ink placeholder:text-mute/50 focus:border-amber focus:outline-none"
+                  className="min-w-0 flex-1 rounded-sm border border-line-strong bg-base px-2 py-1.5 text-xs text-ink placeholder:text-mute focus:border-amber focus:outline-none"
                 />
 
                 <span className="data-mono shrink-0 text-[10px]">{index + 1}</span>
@@ -145,7 +145,7 @@ export function GalleryField({ name, initial }: { name: string; initial: Gallery
                     type="button"
                     onClick={() => remove(index)}
                     aria-label="Remove image"
-                    className="rounded-sm border border-signal/60 p-1.5 text-signal hover:bg-signal hover:text-ink"
+                    className="rounded-sm border border-signal/60 p-1.5 text-signal hover:bg-signal hover:text-on-signal"
                   >
                     <Trash2 aria-hidden className="h-3 w-3" />
                   </button>

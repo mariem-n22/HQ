@@ -2,37 +2,48 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
-import { ProjectCard } from "@/components/hq/ProjectCard";
-import { getProjects } from "@/lib/data";
+import { WorkArchive } from "@/components/hq/architecture/WorkArchive";
+import type { ArchiveEntry } from "@/components/hq/architecture/ArchiveCard";
+import { getProjects, mediaByCategory } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Work — every project by Mahmoud Hammad",
-  description: "Every product Mahmoud Hammad has shipped or is building, including T1Dub and the open-source voice cloning model DeepClone.",
+  title: "Work — selected projects",
+  description: "Selected architecture projects: residential, cultural, hospitality and urban work.",
   path: "/work",
 });
 
 export default async function WorkPage() {
-  // Every project, regardless of the portfolio flag — that flag only gates /portfolio.
   const projects = await getProjects();
+
+  // The card cover prefers a HERO media row (which carries real dimensions, so
+  // the card can lay out to the photograph's own shape) and falls back to the
+  // legacy flat `coverImage` string, which has no dimensions and therefore
+  // takes the card's default ratio.
+  const entries: ArchiveEntry[] = projects.map((project) => {
+    const byCategory = mediaByCategory(project.media);
+    const hero = byCategory.HERO[0] ?? byCategory.GALLERY[0] ?? null;
+    return {
+      id: project.id,
+      slug: project.slug,
+      title: project.title,
+      location: project.location,
+      year: project.year,
+      status: project.status,
+      typology: project.typology,
+      cover: hero ?? (project.coverImage ? { url: project.coverImage, kind: "IMAGE" } : null),
+    };
+  });
 
   return (
     <SectorPage>
       <SectorHeader
         sector="02"
         label="Work"
-        title="The grid"
-        intro="Everything I've built that's worth showing, shipped or still on track."
+        title="Selected projects"
+        intro="An archive of built, unbuilt and ongoing work."
       />
       <div className="mt-10">
-        {projects.length === 0 ? (
-          <EmptyState what="projects" />
-        ) : (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-        )}
+        {entries.length === 0 ? <EmptyState what="projects" /> : <WorkArchive entries={entries} />}
       </div>
     </SectorPage>
   );

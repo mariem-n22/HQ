@@ -42,7 +42,7 @@ export default async function CertificationsPage() {
                     className="rounded-t-3xl border-0 border-b border-line"
                   />
                   <div className="flex flex-1 flex-col p-5">
-                    <h2 className="display-title text-xl leading-tight text-cyan">{cert.title}</h2>
+                    <h2 className="display-title text-xl leading-tight text-ink">{cert.title}</h2>
                     {cert.issuer ? <p className="mt-1 text-sm text-ink/80">{cert.issuer}</p> : null}
                     {cert.date ? (
                       <p className="data-mono mt-2 text-[11px] tracking-widest">{cert.date}</p>

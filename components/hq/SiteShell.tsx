@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { SECTORS } from "@/lib/types";
+import { SECTORS, STUDIO_LINKS } from "@/lib/types";
 import { getNowEntries, getSettings } from "@/lib/data";
 import { CurrentlyLine } from "./TelemetryTicker";
 import { SocialLinks } from "./SocialLinks";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navLinkClass =
   "link-underline whitespace-nowrap text-[13px] tracking-wide text-mute transition-colors hover:text-ink";
@@ -38,16 +39,24 @@ export async function SiteShell({ children }: { children: ReactNode }) {
                 {sector.label}
               </Link>
             ))}
+            {STUDIO_LINKS.map((link) => (
+              <Link key={link.to} href={link.to} className={navLinkClass}>
+                {link.label}
+              </Link>
+            ))}
             <Link href="/contact" className={navLinkClass}>
               Contact
             </Link>
           </nav>
-          <Link
-            href="/portfolio"
-            className="ml-auto shrink-0 rounded-full border border-line px-4 py-1.5 text-[11px] uppercase tracking-[0.22em] text-ink transition-colors hover:border-amber hover:text-amber"
-          >
-            Portfolio
-          </Link>
+          <div className="ml-auto flex shrink-0 items-center gap-3">
+            <Link
+              href="/portfolio"
+              className="shrink-0 rounded-full border border-line px-4 py-1.5 text-[11px] uppercase tracking-[0.22em] text-ink transition-colors hover:border-amber hover:text-amber"
+            >
+              Portfolio
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
         <nav
           aria-label="Sections (compact)"
@@ -56,6 +65,11 @@ export async function SiteShell({ children }: { children: ReactNode }) {
           {SECTORS.map((sector) => (
             <Link key={sector.to} href={sector.to} className={navLinkClass}>
               {sector.label}
+            </Link>
+          ))}
+          {STUDIO_LINKS.map((link) => (
+            <Link key={link.to} href={link.to} className={navLinkClass}>
+              {link.label}
             </Link>
           ))}
           <Link href="/contact" className={navLinkClass}>

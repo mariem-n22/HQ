@@ -41,7 +41,7 @@ export function IdentityTimeline({ moments }: { moments: IdentityMoment[] }) {
                   </span>
                   <span className="data-mono text-[11px] tracking-widest">{moment.year}</span>
                 </div>
-                <h3 className="display-title mt-1 text-2xl text-cyan">{moment.title}</h3>
+                <h3 className="display-title mt-1 text-2xl text-ink">{moment.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mute">{summarize(moment)}</p>
                 <span className="mt-auto pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-amber">
                   Full detail →

@@ -6,6 +6,7 @@ import { Trash2, Pencil, Plus, X } from "lucide-react";
 import { saveEntity, deleteEntity } from "@/lib/admin/actions";
 import type { Field, ModelConfig } from "@/lib/admin/config";
 import { ImageField } from "./ImageField";
+import { MediaField, type MediaRow } from "./MediaField";
 import { GalleryField, type GalleryItem } from "./GalleryField";
 import { SaveButton, type SaveState } from "./SaveButton";
 import { ListField } from "./ListField";
@@ -13,7 +14,7 @@ import { ListField } from "./ListField";
 type Row = Record<string, unknown> & { id: string };
 
 const inputClass =
-  "mt-2 w-full rounded-sm border border-line bg-base px-3 py-2 text-sm text-ink placeholder:text-mute/50 focus:border-amber focus:outline-none";
+  "mt-2 w-full rounded-sm border border-line-strong bg-base px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-amber focus:outline-none";
 
 /** Render a stored value into the string the input expects. */
 function toInput(field: Field, value: unknown): string {
@@ -44,6 +45,22 @@ function FieldInput({ field, row }: { field: Field; row: Row | null }) {
       alt: String(r.alt ?? ""),
     }));
     return <GalleryField name={field.name} initial={initial} />;
+  }
+
+  if (field.type === "media") {
+    const rows = Array.isArray(value) ? (value as Record<string, unknown>[]) : [];
+    const initial: MediaRow[] = rows.map((r) => ({
+      category: String(r.category ?? "GALLERY"),
+      kind: r.kind === "VIDEO" ? "VIDEO" : "IMAGE",
+      url: String(r.url ?? ""),
+      embedUrl: String(r.embedUrl ?? ""),
+      label: String(r.label ?? ""),
+      caption: String(r.caption ?? ""),
+      alt: String(r.alt ?? ""),
+      width: typeof r.width === "number" ? r.width : undefined,
+      height: typeof r.height === "number" ? r.height : undefined,
+    }));
+    return <MediaField name={field.name} initial={initial} />;
   }
 
   if (field.type === "image") {
@@ -213,7 +230,7 @@ export function EntityManager({ config, rows }: { config: ModelConfig; rows: Row
         <button
           type="button"
           onClick={startCreate}
-          className="inline-flex items-center gap-2 rounded-sm border border-amber bg-amber px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-base"
+          className="inline-flex items-center gap-2 rounded-sm border border-ink bg-ink px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-base"
         >
           <Plus aria-hidden className="h-3.5 w-3.5" />
           Add {config.label.toLowerCase()}
@@ -311,7 +328,7 @@ export function EntityManager({ config, rows }: { config: ModelConfig; rows: Row
               <button
                 type="button"
                 onClick={() => onDelete(row)}
-                className="inline-flex items-center gap-1.5 rounded-sm border border-signal/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-signal hover:bg-signal hover:text-ink"
+                className="inline-flex items-center gap-1.5 rounded-sm border border-signal/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-signal hover:bg-signal hover:text-on-signal"
               >
                 <Trash2 aria-hidden className="h-3 w-3" />
                 Delete

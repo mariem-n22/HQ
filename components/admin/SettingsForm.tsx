@@ -9,7 +9,7 @@ import { saveSettings, setCv, clearCv } from "@/lib/admin/settings-actions";
 import { SaveButton, type SaveState } from "./SaveButton";
 
 const inputClass =
-  "mt-2 w-full rounded-sm border border-line bg-base px-3 py-2 text-sm text-ink placeholder:text-mute/50 focus:border-amber focus:outline-none";
+  "mt-2 w-full rounded-sm border border-line-strong bg-base px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-amber focus:outline-none";
 
 type Settings = {
   email: string;
@@ -162,7 +162,7 @@ export function SettingsForm({
                 href={cvUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-sm border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan hover:border-cyan"
+                className="inline-flex items-center gap-1.5 rounded-sm border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-ink hover:border-amber"
               >
                 <FileText aria-hidden className="h-3 w-3" />
                 View current
@@ -171,7 +171,7 @@ export function SettingsForm({
                 type="button"
                 onClick={removeCv}
                 disabled={cvBusy}
-                className="inline-flex items-center gap-1.5 rounded-sm border border-signal/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-signal hover:bg-signal hover:text-ink disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-sm border border-signal/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-signal hover:bg-signal hover:text-on-signal disabled:opacity-50"
               >
                 <Trash2 aria-hidden className="h-3 w-3" />
                 Remove
