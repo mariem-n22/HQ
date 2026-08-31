@@ -22,7 +22,7 @@ export function CurrentlyLine({
           <span className="label-mono text-amber">Currently</span>
         </span>
         <p className="min-w-0 text-sm leading-relaxed text-mute sm:flex-1 sm:basis-64">
-          {current ?? "Building, reading and writing from Cairo."}
+          {current ?? "In the studio."}
         </p>
         <Link href="/now" className="link-underline label-mono text-ink">
           The Now page

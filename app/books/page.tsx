@@ -6,9 +6,9 @@ import { BookShelf } from "@/components/hq/BookShelf";
 import { getBooks, getContentBlocks, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Books — what Mahmoud Hammad reads",
+  title: "Books — what the studio reads",
   description:
-    "A reading log: the books Mahmoud Hammad has read, the lines worth keeping from each, and what he actually took away from them.",
+    "A reading log kept by the studio: books on architecture, cities and making, and what was taken from each.",
   path: "/books",
 });
 

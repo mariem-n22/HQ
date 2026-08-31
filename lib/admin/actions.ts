@@ -301,6 +301,10 @@ export async function saveEntity(
     }
 
     for (const path of config.revalidate) revalidatePath(path);
+    // Nav entries hide when their section is empty, and the nav is baked into
+    // every prerendered page, so the first (or last) row in a section has to
+    // invalidate the whole tree.
+    revalidatePath("/", "layout");
     revalidatePath(`/dashboard/${config.slug}`);
     revalidatePath("/dashboard");
 

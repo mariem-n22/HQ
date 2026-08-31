@@ -6,8 +6,8 @@ import { ExperienceList } from "@/components/hq/ExperienceList";
 import { getContentBlocks, getExperiences, getSettings, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Story — how Mahmoud Hammad got here",
-  description: "The narrative behind the projects: how Mahmoud Hammad went from Upper Egypt to building AI products in Cairo, plus the full track record.",
+  title: "Story",
+  description: "The narrative behind the work — how the practice came to be, and how it operates.",
   path: "/story",
 });
 

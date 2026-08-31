@@ -7,7 +7,7 @@ import { getContentBlocks, getVentures, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Ventures",
-  description: "The companies Mahmoud Hammad is building and researching, including T1Dub, and where the business side is heading.",
+  description: "The practice's business side — ventures, structure and where it is heading.",
   path: "/business",
 });
 

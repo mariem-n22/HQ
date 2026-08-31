@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
-import { PERSON, SITE_URL, ONE_LINER } from "@/lib/seo";
+import { STUDIO, SITE_URL, ONE_LINER } from "@/lib/seo";
 import "./globals.css";
 
 /**
@@ -41,25 +41,27 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     // Every page anchors on the name — it is the primary query family.
-    default: `${PERSON.name} — Engineer, founder, racing driver`,
-    template: `%s | ${PERSON.name}`,
+    default: `${STUDIO.name} — selected projects`,
+    template: `%s | ${STUDIO.name}`,
   },
   description: ONE_LINER,
-  applicationName: "Mahmoud HQ",
-  authors: [{ name: PERSON.name, url: SITE_URL }],
-  creator: PERSON.name,
-  publisher: PERSON.name,
+  applicationName: STUDIO.name,
+  authors: [{ name: STUDIO.name, url: SITE_URL }],
+  creator: STUDIO.name,
+  publisher: STUDIO.name,
+  // Discipline and typology terms only. The previous list named a real
+  // individual, his companies and his university; none of that is true of an
+  // architecture studio, and inventing replacements would be worse than none.
   keywords: [
-    "Mahmoud Hammad",
-    "Mahmoud Hamaad",
-    "BMawy",
-    "T1Dub",
-    "DeepClone",
-    "WorkPo",
-    "Egyptian software engineer",
-    "Egyptian AI founder",
-    "Egyptian racing driver",
-    "Formula 1",
+    "architecture studio",
+    "architecture practice",
+    "architectural design",
+    "residential architecture",
+    "cultural architecture",
+    "hospitality architecture",
+    "urban design",
+    "interior architecture",
+    "landscape architecture",
   ],
   icons: { icon: "/favicon.ico" },
   robots: {

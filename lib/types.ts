@@ -64,7 +64,7 @@ export function galleryOf(images: ProjectImage[]): GalleryImage[] {
 
 /**
  * Route the CV through /cv rather than linking the raw Blob URL, so the file
- * downloads as Mahmoud-Hammad-CV.pdf instead of a hashed storage key.
+ * downloads as Studio-Profile.pdf instead of a hashed storage key.
  */
 export const CV_PATH = "/cv";
 
@@ -83,14 +83,14 @@ export const STUDIO_LINKS = [
 ] as const;
 
 export const SECTORS = [
-  { code: "S1", label: "Story", to: "/story", blurb: "Who I am past the resume line." },
-  { code: "S2", label: "Work", to: "/work", blurb: "Products I've shipped and the ones still on track." },
-  { code: "S3", label: "Setup", to: "/skills", blurb: "The stack I actually drive." },
-  { code: "S4", label: "Identity", to: "/identity", blurb: "Racing, and why it shows up in how I build." },
-  { code: "S5", label: "Business", to: "/business", blurb: "Where the company gets incorporated." },
-  { code: "S6", label: "Free Practice", to: "/misc", blurb: "Everything that fits nowhere else." },
-  { code: "S7", label: "Now", to: "/now", blurb: "What this week actually looks like." },
-  { code: "S8", label: "Books", to: "/books", blurb: "What I have read, and what I took from it." },
+  { code: "S1", label: "Story", to: "/story", blurb: "How the practice came to be, and how it works." },
+  { code: "S2", label: "Work", to: "/work", blurb: "Built, unbuilt and ongoing projects." },
+  { code: "S3", label: "Practice", to: "/skills", blurb: "The areas the studio works in." },
+  { code: "S4", label: "Identity", to: "/identity", blurb: "What shapes the way the studio designs." },
+  { code: "S5", label: "Business", to: "/business", blurb: "The practice as a company." },
+  { code: "S6", label: "Studio Notes", to: "/misc", blurb: "Notes and references that fit nowhere else." },
+  { code: "S7", label: "Now", to: "/now", blurb: "What the studio is working on this week." },
+  { code: "S8", label: "Reading", to: "/books", blurb: "What the studio reads, and what it took from it." },
   { code: "S9", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
 ] as const;
 

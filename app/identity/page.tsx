@@ -6,8 +6,8 @@ import { IdentityTimeline } from "@/components/hq/IdentityTimeline";
 import { getContentBlocks, getIdentityMoments, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Racing — an Egyptian driver chasing Formula 1",
-  description: "Mahmoud Hammad is a racing driver from Upper Egypt. Karting, sim racing, Race Prodigy, and a Formula 4 invitation through the Motorsport Performance Academy he could not fund — and what he did about it.",
+  title: "Identity",
+  description: "What shapes the way the studio designs.",
   path: "/identity",
 });
 

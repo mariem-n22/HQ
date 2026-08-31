@@ -42,7 +42,10 @@ export async function saveArchitect(form: FormData): Promise<Result> {
       update: data,
       create: { id: "singleton", ...data },
     });
-    revalidatePath("/studio/architect");
+    // The nav renders in SiteShell on every statically prerendered page, so a
+    // change to whether this entry should appear has to invalidate all of
+    // them — not just this page.
+    revalidatePath("/", "layout");
     revalidatePath("/dashboard/architect");
     return { ok: true };
   } catch (error) {
@@ -62,7 +65,7 @@ export async function savePhilosophy(form: FormData): Promise<Result> {
       update: data,
       create: { id: "singleton", ...data },
     });
-    revalidatePath("/studio/philosophy");
+    revalidatePath("/", "layout");
     revalidatePath("/dashboard/philosophy");
     return { ok: true };
   } catch (error) {

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 /**
  * One source of truth for canonical identity, URLs and structured data.
  *
- * Entity naming is deliberately rigid — "Mahmoud Hammad" and "T1Dub" are
+ * Entity naming is deliberately rigid — the studio name is
  * spelled identically everywhere on the site. Generative engines resolve
  * entities by consistent surface form, so variant spellings split the entity
  * and weaken every mention.
@@ -16,25 +16,37 @@ export const SITE_URL = (
     : "https://portfolio-hq-e8g7.vercel.app")
 ).replace(/\/$/, "");
 
-export const PERSON = {
-  name: "Mahmoud Hammad",
-  /** Every variant the same person is searched by. */
-  alternateNames: ["Mahmoud Hamaad", "BMawy", "Mahmoud Hammad Bmawy"],
-  jobTitle: "Software Engineer and Founder",
-  nationality: "Egyptian",
-  origin: "Upper Egypt",
-  base: "Cairo, Egypt",
+/**
+ * Studio identity.
+ *
+ * Deliberately unnamed. The site was built for a named individual with real
+ * social accounts and real companies attached; repurposing it as an
+ * architecture studio meant either inventing an architect or asserting a
+ * profession about a real person. Neither is acceptable, so every personal
+ * fact was removed rather than rewritten, and nothing here claims a name,
+ * a location, a founding date or a credential that has not been supplied.
+ *
+ * `name` is the one value to replace once the studio's real name is decided —
+ * change it here and it propagates to titles, the footer, the OG card and the
+ * structured data. Until then it is a generic descriptor, which is accurate.
+ */
+export const STUDIO = {
+  name: "Architecture Studio",
+  /** Shown wherever a discipline line is needed. */
+  discipline: "Architecture",
 } as const;
 
-export const SOCIALS = [
-  "https://github.com/MahmoudM21",
-  "https://www.linkedin.com/in/mahmoud-hamaad/",
-  "https://www.instagram.com/mahmoud.hmaad1_bmawy/",
-] as const;
+/** No accounts are asserted until real ones are supplied. */
+export const SOCIALS: readonly string[] = [];
 
-/** One-sentence canonical definition. Kept identical in llms.txt. */
+/**
+ * One-sentence canonical definition. Kept identical in llms.txt.
+ *
+ * Describes what the site *is* rather than who runs it, because the latter is
+ * not yet known. Contains no unverifiable claim.
+ */
 export const ONE_LINER =
-  "Mahmoud Hammad is an Egyptian software engineer and founder — co-founder of the AI dubbing company T1Dub, author of the open-source voice-cloning model DeepClone, and a racing driver from Upper Egypt working toward Formula 1.";
+  "An architecture studio's archive of selected projects — residential, cultural, hospitality and urban work, presented as drawings, photography and written project statements.";
 
 export function absolute(path = "/") {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -69,7 +81,7 @@ export function pageMeta({
       title,
       description,
       url,
-      siteName: `${PERSON.name} — Mahmoud HQ`,
+      siteName: STUDIO.name,
       locale: "en_US",
       type,
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
@@ -89,76 +101,39 @@ export function pageMeta({
 
 export type Json = Record<string, unknown>;
 
-export const personSchema = (): Json => ({
-  "@type": "Person",
-  "@id": absolute("/#mahmoud-hammad"),
-  name: PERSON.name,
-  alternateName: [...PERSON.alternateNames],
+/**
+ * The studio as an organisation.
+ *
+ * Replaces the Person/T1Dub/WorkPo/DeepClone graph the site carried as a
+ * developer portfolio. Only fields that are actually true of this site are
+ * emitted: no founder, no founding date, no address, no sameAs — asserting
+ * any of those in structured data would be publishing a fabricated fact in
+ * the most machine-trusted place on the page.
+ */
+export const studioSchema = (): Json => ({
+  "@type": "Organization",
+  "@id": absolute("/#studio"),
+  name: STUDIO.name,
   url: SITE_URL,
-  jobTitle: PERSON.jobTitle,
   description: ONE_LINER,
-  nationality: { "@type": "Country", name: "Egypt" },
-  homeLocation: { "@type": "Place", name: PERSON.base },
-  birthPlace: { "@type": "Place", name: `${PERSON.origin}, Egypt` },
-  sameAs: [...SOCIALS],
   knowsAbout: [
-    "Full-stack software engineering",
-    "Artificial intelligence",
-    "Voice cloning",
-    "Speaker diarization",
-    "Python",
-    "Django",
-    "FastAPI",
-    "React",
-    "Next.js",
-    "TypeScript",
-    "PostgreSQL",
-    "Motorsport",
-    "Karting",
-    "Sim racing",
-    "Formula 1",
+    "Architecture",
+    "Architectural design",
+    "Residential architecture",
+    "Cultural architecture",
+    "Hospitality design",
+    "Urban design",
+    "Interior architecture",
+    "Landscape architecture",
   ],
-  alumniOf: {
-    "@type": "CollegeOrUniversity",
-    name: "Modern Academy University",
-    address: { "@type": "PostalAddress", addressLocality: "Cairo", addressCountry: "EG" },
-  },
+  ...(SOCIALS.length > 0 ? { sameAs: [...SOCIALS] } : {}),
 });
 
-export const t1dubSchema = (): Json => ({
-  "@type": "Organization",
-  "@id": absolute("/#t1dub"),
-  name: "T1Dub",
-  description:
-    "T1Dub is an AI video dubbing company that translates video into another language while preserving the original speaker's voice, using speaker diarization and voice cloning.",
-  founder: { "@id": absolute("/#mahmoud-hammad") },
-  foundingDate: "2024",
-  foundingLocation: { "@type": "Place", name: "Cairo, Egypt" },
-  industry: "Artificial Intelligence",
-});
-
-export const workpoSchema = (): Json => ({
-  "@type": "Organization",
-  "@id": absolute("/#workpo"),
-  name: "WorkPo",
-  description: "WorkPo is a software product founded and built by Mahmoud Hammad.",
-  founder: { "@id": absolute("/#mahmoud-hammad") },
-});
-
-export const deepcloneSchema = (): Json => ({
-  "@type": "SoftwareSourceCode",
-  "@id": absolute("/#deepclone"),
-  name: "DeepClone",
-  description:
-    "DeepClone is an open-source voice cloning model built from scratch by Mahmoud Hammad — dataset preparation, model training and an inference service that turns a short reference sample into a usable synthetic voice. It was his Computer Engineering graduation project.",
-  author: { "@id": absolute("/#mahmoud-hammad") },
-  creator: { "@id": absolute("/#mahmoud-hammad") },
-  license: "https://opensource.org/licenses/MIT",
-  isAccessibleForFree: true,
-  programmingLanguage: "Python",
-  applicationCategory: "Machine learning",
-  codeRepository: "https://github.com/MahmoudM21",
-});
+/**
+ * Kept as an alias so the pages that referenced the old person node keep
+ * resolving to the site's single entity. Remove once every caller has moved.
+ */
+export const personSchema = studioSchema;
 
 /** `@graph` keeps every entity in one script tag with resolvable @ids. */
 export function graph(...nodes: Json[]): Json {

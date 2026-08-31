@@ -8,7 +8,7 @@ export type ContactResult = { ok: true } | { ok: false; error: string };
  * Contact form target. Replaces the Supabase insert the old build used — the
  * "anyone can send a message" RLS policy becomes a plain Server Action here.
  *
- * [[TODO: connect email provider]] — nothing notifies Mahmoud when a message
+ * [[TODO: connect email provider]] — nothing notifies the studio when a message
  * lands; it has to be read in /dashboard/inbox. Wiring Resend or Postmark in
  * right here is the remaining integration.
  */

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { graph, pageMeta, personSchema, t1dubSchema } from "@/lib/seo";
+import { STUDIO, graph, pageMeta, studioSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { Frame } from "@/components/hq/Frame";
@@ -25,8 +25,8 @@ import {
 } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Portfolio — full-stack engineer and founder",
-  description: "Mahmoud Hammad: Egyptian full-stack engineer and founder of T1Dub. Selected work, technical stack, experience and achievements on one page.",
+  title: "Portfolio — selected projects",
+  description: "A single-page overview of the studio: selected projects, practice, experience and recognition.",
   path: "/portfolio",
 });
 
@@ -50,7 +50,7 @@ export default async function PortfolioPage() {
   const shipped = projects.filter((p) => p.status === "COMPLETED").length;
 
   const stats = [
-    { label: "Projects shipped", value: String(shipped) },
+    { label: "Projects completed", value: String(shipped) },
     { label: "Technologies", value: String(skills.length) },
     { label: "Roles held", value: String(experiences.length) },
     { label: "Awards & talks", value: String(achievements.length) },
@@ -58,12 +58,12 @@ export default async function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-base">
-      <JsonLd data={graph(personSchema(), t1dubSchema())} />
+      <JsonLd data={graph(studioSchema())} />
       {/* The portfolio carries its own header with the primary actions. */}
       <div className="sticky top-0 z-40 border-b border-line bg-base/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
           <p className="display-title mr-auto text-xl text-ink">
-            Mahmoud
+            {STUDIO.name}
             <span className="ml-1 align-super font-mono text-[9px] uppercase tracking-[0.3em] text-amber">
               Portfolio
             </span>
@@ -102,16 +102,16 @@ export default async function PortfolioPage() {
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
         <header className="border-b border-line pb-10">
           <p className="label-mono text-amber">
-            Full-stack engineer &amp; founder — {settings?.location || "Cairo, EG"}
+            {STUDIO.discipline}{settings?.location ? ` — ${settings.location}` : ""}
           </p>
           <div className="mt-4 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
               <h1 className="display-title text-5xl text-ink sm:text-7xl">
-                {pitch?.title || "Mahmoud"}
+                {pitch?.title || STUDIO.name}
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-mute">
                 {pitch?.body ||
-                  "I build and ship full-stack products end to end — Python, Django and FastAPI on the backend, React, Next.js and TypeScript on the front."}
+                  "An architecture practice. Set the studio's own introduction from the dashboard."}
               </p>
               {settings?.openToOpportunities ? (
                 <p className="mt-5 inline-flex items-center gap-2 border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-go">
@@ -125,7 +125,7 @@ export default async function PortfolioPage() {
                 heroImages.length > 0
                   ? heroImages.map((h) => ({ url: h.url, caption: h.caption, alt: h.alt }))
                   : settings?.avatarImage
-                    ? [{ url: settings.avatarImage, caption: "", alt: "Portrait of Mahmoud Hammad" }]
+                    ? [{ url: settings.avatarImage, caption: "", alt: "Studio portrait" }]
                     : []
               }
               className="w-40 shrink-0 sm:w-48"
@@ -284,7 +284,7 @@ export default async function PortfolioPage() {
         ) : null}
 
         <Reveal as="section" className="mt-12">
-          <h2 className="label-mono text-amber">Stack</h2>
+          <h2 className="label-mono text-amber">Practice</h2>
           <SkillStack skills={skills} className="mt-6" />
         </Reveal>
 
@@ -338,7 +338,7 @@ export default async function PortfolioPage() {
         <section className="mt-14 border-t border-line pt-8">
           <h2 className="display-title text-3xl text-ink">Get in touch</h2>
           <p className="mt-2 text-sm text-mute">
-            Open to full-time roles, freelance builds and founder conversations.
+            Open to new commissions, competitions and collaborations.
           </p>
           <div className="mt-6">
             <ContactChannels settings={settings} />

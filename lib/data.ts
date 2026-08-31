@@ -197,6 +197,70 @@ export function getHeroImages() {
   return safeRead("getHeroImages", () => prisma.heroImage.findMany({ orderBy: { order: "asc" } }), []);
 }
 
+/**
+ * Which nav sections have anything behind them.
+ *
+ * The nav hides entries whose page would be empty, so a studio that has not
+ * filled in Books or Certifications does not advertise a blank page. Counts
+ * rather than full rows: this runs on every page render through SiteShell.
+ *
+ * The two Studio singletons count as present only when they actually carry
+ * text — a row created by an accidental save with every field blank is still
+ * an empty page to a visitor.
+ */
+export async function getNavPresence(): Promise<Record<string, boolean>> {
+  return safeRead(
+    "getNavPresence",
+    async (): Promise<Record<string, boolean>> => {
+      const [
+        projects,
+        experiences,
+        skills,
+        identity,
+        ventures,
+        misc,
+        now,
+        books,
+        certifications,
+        architect,
+        philosophy,
+      ] = await Promise.all([
+        prisma.project.count(),
+        prisma.experience.count(),
+        prisma.skill.count(),
+        prisma.identityMoment.count(),
+        prisma.venture.count(),
+        prisma.miscEntry.count(),
+        prisma.nowEntry.count(),
+        prisma.book.count(),
+        prisma.certification.count(),
+        prisma.architectProfile.findUnique({ where: { id: "singleton" } }),
+        prisma.philosophy.findUnique({ where: { id: "singleton" } }),
+      ]);
+      return {
+        "/work": projects > 0,
+        "/story": experiences > 0,
+        "/skills": skills > 0,
+        "/identity": identity > 0,
+        "/business": ventures > 0,
+        "/misc": misc > 0,
+        "/now": now > 0,
+        "/books": books > 0,
+        "/certifications": certifications > 0,
+        "/studio/architect": Boolean(
+          architect && (architect.biography.trim() || architect.name.trim() || architect.portrait.trim()),
+        ),
+        "/studio/philosophy": Boolean(
+          philosophy && (philosophy.statement.trim() || philosophy.body.trim()),
+        ),
+      };
+    },
+    // On a degraded build every entry shows, which is the safe direction:
+    // a visible link to an empty page beats a site with no navigation.
+    {},
+  );
+}
+
 export function getSettings() {
   return safeRead(
     "getSettings",

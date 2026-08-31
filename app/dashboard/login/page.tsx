@@ -3,7 +3,7 @@ import { LoginForm } from "./LoginForm";
 import { ThemeToggle } from "@/components/hq/ThemeToggle";
 
 export const metadata = {
-  title: "Pit Wall — Mahmoud HQ",
+  title: "Sign in — Studio dashboard",
   robots: { index: false, follow: false },
 };
 

@@ -27,7 +27,7 @@ export function HeroGallery({
 
   if (images.length === 0) {
     return (
-      <Frame src={null} alt="Portrait of Mahmoud Hammad" ratio="3/4" priority className={className} />
+      <Frame src={null} alt="Studio image" ratio="3/4" priority className={className} />
     );
   }
 
@@ -39,7 +39,7 @@ export function HeroGallery({
     <div className={`relative ${className}`}>
       <Frame
         src={current?.url ?? null}
-        alt={current?.alt || current?.caption || "Portrait of Mahmoud Hammad"}
+        alt={current?.alt || current?.caption || "Studio image"}
         ratio="3/4"
         priority
         className="rounded-sm"

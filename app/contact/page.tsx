@@ -8,8 +8,8 @@ import { getSettings, isTodo } from "@/lib/data";
 import { channelsOf } from "@/lib/channels";
 
 export const metadata: Metadata = pageMeta({
-  title: "Contact Mahmoud Hammad",
-  description: "Reach Mahmoud Hammad directly — WhatsApp, phone, LinkedIn, Instagram — or send a message. Based in Cairo, Egypt, open to remote.",
+  title: "Contact the studio",
+  description: "Reach the studio about a commission, a competition or a collaboration.",
   path: "/contact",
 });
 
@@ -19,7 +19,7 @@ function wordmarkOf(email: string | undefined) {
     const local = email.split("@")[0]?.replace(/[^a-zA-Z]/g, "");
     if (local && local.length >= 3) return local.toUpperCase();
   }
-  return "BMAWY";
+  return "STUDIO";
 }
 
 export default async function ContactPage() {
@@ -44,10 +44,9 @@ export default async function ContactPage() {
         <Reveal>
           <h2 className="display-title text-3xl text-ink">Let&rsquo;s turn your vision into reality</h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-mute">
-            I&rsquo;m always up for work that pushes on something — a full-stack build, backend
-            architecture that has to hold under real load, or an AI integration that needs to do more
-            than demo well. Tell me what you&rsquo;re trying to make happen and I&rsquo;ll tell you
-            straight whether I&rsquo;m the right person for it.
+            The studio takes on residential, cultural, hospitality and urban work, from early
+            feasibility through to construction. Tell us what you are trying to build, the site and
+            the constraints, and we will tell you plainly whether the practice is the right fit.
           </p>
           <div className="mt-8">
             <ChannelRows settings={settings} />

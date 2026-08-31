@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Minus, Plus, RotateCcw, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Minus, Plus, RotateCcw, X } from "lucide-react";
 import type { MediaItem } from "@/lib/types";
 import { embedSrc } from "@/lib/types";
 
@@ -66,8 +66,16 @@ export function MediaViewer({
     closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") step(1);
-      if (e.key === "ArrowLeft") step(-1);
+      // preventDefault, or the arrow keys scroll the locked page underneath
+      // and the viewer drifts off-centre as you page through a set.
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        step(1);
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        step(-1);
+      }
       if (zoomable && (e.key === "+" || e.key === "=")) setScale((s) => Math.min(MAX, s + 0.5));
       if (zoomable && e.key === "-") setScale((s) => Math.max(MIN, s - 0.5));
       if (zoomable && e.key === "0") reset();
@@ -155,9 +163,30 @@ export function MediaViewer({
           </div>
         </div>
 
+        <div className="relative flex min-h-0 flex-1">
+        {items.length > 1 ? (
+          <button
+            type="button"
+            aria-label="Previous image"
+            onClick={() => step(-1)}
+            className="absolute left-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-base/80 text-mute backdrop-blur-sm transition-colors hover:border-amber hover:text-amber focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+          >
+            <ChevronLeft aria-hidden className="h-5 w-5" />
+          </button>
+        ) : null}
+        {items.length > 1 ? (
+          <button
+            type="button"
+            aria-label="Next image"
+            onClick={() => step(1)}
+            className="absolute right-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-base/80 text-mute backdrop-blur-sm transition-colors hover:border-amber hover:text-amber focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+          >
+            <ChevronRight aria-hidden className="h-5 w-5" />
+          </button>
+        ) : null}
         <div
           ref={surfaceRef}
-          className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-3 py-4"
+          className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-16 py-4"
           style={{ cursor: canPan ? (drag.current ? "grabbing" : "grab") : "auto" }}
           onDoubleClick={() => (zoomable ? (scale > 1 ? reset() : setScale(2.5)) : undefined)}
           onPointerDown={(e) => {
@@ -236,29 +265,13 @@ export function MediaViewer({
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-line px-3 py-2">
-          <button
-            type="button"
-            className={btn}
-            aria-label="Previous"
-            onClick={() => step(-1)}
-            disabled={items.length < 2}
-          >
-            ←
-          </button>
-          <p className="min-w-0 flex-1 truncate px-2 text-center text-xs text-mute">
-            {current.caption ?? ""}
-          </p>
-          <button
-            type="button"
-            className={btn}
-            aria-label="Next"
-            onClick={() => step(1)}
-            disabled={items.length < 2}
-          >
-            →
-          </button>
         </div>
+
+        {current.caption ? (
+          <p className="border-t border-line px-4 py-3 text-center text-xs text-mute">
+            {current.caption}
+          </p>
+        ) : null}
       </motion.div>
     </AnimatePresence>
   );

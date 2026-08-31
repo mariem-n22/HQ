@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { ThemeToggle } from "@/components/hq/ThemeToggle";
 
 export const metadata = {
-  title: "Pit Wall — Mahmoud HQ",
+  title: "Studio dashboard",
   robots: { index: false, follow: false },
 };
 

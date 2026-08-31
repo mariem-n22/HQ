@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Stable public CV URL. Streams the current Blob file under a human filename
- * so the browser saves "Mahmoud-Hammad-CV.pdf" rather than a hashed key, and
+ * so the browser saves "Studio-Profile.pdf" rather than a hashed key, and
  * so the public link never changes when the CV is replaced.
  */
 export async function GET() {
@@ -23,7 +23,7 @@ export async function GET() {
     headers: {
       "Content-Type": "application/pdf",
       // `inline` opens in the browser's PDF viewer; the name is used on save.
-      "Content-Disposition": 'inline; filename="Mahmoud-Hammad-CV.pdf"',
+      "Content-Disposition": 'inline; filename="Studio-Profile.pdf"',
       "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=3600",
     },
   });

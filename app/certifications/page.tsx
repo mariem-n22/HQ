@@ -7,9 +7,9 @@ import { Reveal } from "@/components/hq/Reveal";
 import { getCertifications, getContentBlocks, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Certifications — Mahmoud Hammad",
+  title: "Certifications",
   description:
-    "Credentials and certifications earned by Mahmoud Hammad, with links to verify each one.",
+    "Credentials and certifications held by the studio, with links to verify each one.",
   path: "/certifications",
 });
 

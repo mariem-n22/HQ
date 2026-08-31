@@ -5,8 +5,8 @@ import { SectorHeader } from "@/components/hq/SectorHeader";
 import { getContentBlocks, getNowEntries, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "What Mahmoud Hammad is working on now",
-  description: "A running log of what Mahmoud Hammad is building, reading and chasing this week.",
+  title: "What the studio is working on now",
+  description: "Current work, in progress.",
   path: "/now",
 });
 

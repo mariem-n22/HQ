@@ -6,21 +6,20 @@ import { Reveal } from "@/components/hq/Reveal";
 import { getContentBlocks, getProjects, getSettings, findBlock, SECTORS } from "@/lib/data";
 import { JsonLd } from "@/components/JsonLd";
 import {
-  ONE_LINER, PERSON, SITE_URL, absolute, deepcloneSchema, graph, personSchema,
-  t1dubSchema, workpoSchema, pageMeta,
+  ONE_LINER, STUDIO, SITE_URL, absolute, graph, studioSchema, pageMeta,
 } from "@/lib/seo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   ...pageMeta({
-    title: `${PERSON.name} — Engineer, founder, racing driver`,
+    title: `${STUDIO.name} — selected projects`,
     description: ONE_LINER,
     path: "/",
     type: "profile",
   }),
   // The home page owns the bare name, so it must not inherit the "| Name"
   // template that every other page uses.
-  title: { absolute: `${PERSON.name} — Engineer, founder, racing driver` },
+  title: { absolute: `${STUDIO.name} — selected projects` },
 };
 
 export default async function HomePage() {
@@ -36,36 +35,34 @@ export default async function HomePage() {
 
   return (
     <SiteShell>
-      {/* Every entity in one graph with resolvable @ids, so T1Dub, WorkPo and
-          DeepClone all point back at the same Person node. */}
+      {/* One entity: the studio. The previous graph asserted a person, two
+          companies and an open-source project, none of which describe this
+          site any more. */}
       <JsonLd
         data={graph(
           {
             "@type": "WebSite",
             "@id": absolute("/#website"),
             url: SITE_URL,
-            name: `${PERSON.name} — Mahmoud HQ`,
+            name: STUDIO.name,
             description: ONE_LINER,
             inLanguage: "en",
-            publisher: { "@id": absolute("/#mahmoud-hammad") },
+            publisher: { "@id": absolute("/#studio") },
           },
-          personSchema(),
-          t1dubSchema(),
-          workpoSchema(),
-          deepcloneSchema(),
+          studioSchema(),
         )}
       />
       <div className="mx-auto max-w-6xl px-6 py-16 sm:px-8 sm:py-24">
         <header className="carbon -mx-6 px-6 py-10 sm:-mx-8 sm:px-8">
           <p className="label-mono text-amber">
-            Engineer, founder — {settings?.location || "Cairo, EG"}
+            {STUDIO.discipline}{settings?.location ? ` — ${settings.location}` : ""}
           </p>
           <h1 className="display-title mt-5 max-w-4xl text-5xl leading-[1.05] text-ink sm:text-7xl">
-            {intro?.title || "A home base, not a display case."}
+            {intro?.title || "Selected work from the studio."}
           </h1>
           <p className="standfirst mt-6 max-w-2xl text-[17px]">
             {intro?.body ||
-              "I build and ship full-stack products end to end — Python, Django and FastAPI on the backend, React, Next.js and TypeScript on the front."}
+              "An archive of built, unbuilt and ongoing projects. Set the studio's own introduction from the dashboard."}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link

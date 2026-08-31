@@ -1,10 +1,10 @@
 import { ImageResponse } from "next/og";
-import { ONE_LINER, PERSON } from "@/lib/seo";
+import { ONE_LINER, STUDIO } from "@/lib/seo";
 import { ARCHIVE_DARK } from "@/lib/theme";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${PERSON.name} — engineer, founder, racing driver`;
+export const alt = `${STUDIO.name} — selected projects`;
 
 /**
  * Site-wide social card, in the Architectural Archive palette.
@@ -30,13 +30,13 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", fontSize: 22, letterSpacing: 8, color: ARCHIVE_DARK.brass }}>
-          MAHMOUD HQ
+          {STUDIO.discipline.toUpperCase()}
         </div>
         <div style={{ display: "flex", fontSize: 82, marginTop: 26, lineHeight: 1.05 }}>
-          {PERSON.name}
+          {STUDIO.name}
         </div>
         <div style={{ display: "flex", fontSize: 30, marginTop: 20, color: ARCHIVE_DARK.mute }}>
-          Engineer · Founder · Racing driver
+          Selected projects
         </div>
         <div
           style={{
