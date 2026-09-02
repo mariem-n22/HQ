@@ -149,7 +149,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {/* 1 — Hero */}
       <ProjectHero
         title={project.title}
-        typology={project.typology ? TYPOLOGY_LABELS[project.typology] ?? project.typology : null}
         location={project.location}
         year={project.year}
         item={heroItem}
