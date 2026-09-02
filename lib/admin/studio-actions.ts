@@ -35,6 +35,15 @@ export async function saveArchitect(form: FormData): Promise<Result> {
       roleLine: String(form.get("roleLine") ?? "").trim(),
       portrait: String(form.get("portrait") ?? "").trim(),
       biography: String(form.get("biography") ?? "").trim(),
+      earlyYears: String(form.get("earlyYears") ?? "").trim(),
+      education: String(form.get("education") ?? "").trim(),
+      career: String(form.get("career") ?? "").trim(),
+      foundingPractice: String(form.get("foundingPractice") ?? "").trim(),
+      philosophyNote: String(form.get("philosophyNote") ?? "").trim(),
+      milestones: String(form.get("milestones") ?? "").trim(),
+      currently: String(form.get("currently") ?? "").trim(),
+      awards: lines(form.get("awards")),
+      publications: lines(form.get("publications")),
       credentials: lines(form.get("credentials")),
     };
     await prisma.architectProfile.upsert({

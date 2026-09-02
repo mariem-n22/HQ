@@ -278,7 +278,11 @@ model MiscEntry {
 
 model NowEntry {
   id     String   @id @default(cuid())
+  /// The line shown on the card. Kept short; `details` carries the rest.
   text   String
+  /// Long form, shown only in the popup. Optional — an entry with none simply
+  /// does not open, so a card never promises detail it does not have.
+  details String  @default("")
   active Boolean  @default(true)
   /// Genuinely optional — a Now update is text-first, so no placeholder is
   /// rendered when this is null.
@@ -288,9 +292,39 @@ model NowEntry {
   @@index([date])
 }
 
+/// Which of an achievement's two photo sets a media row belongs to.
+///
+/// A competition entry produces two genuinely different bodies of imagery:
+/// the submitted work, and the event it was submitted to. They are shot in
+/// different places on different days and read as separate sets, so they are
+/// modelled as separate galleries rather than one merged pile.
+enum AchievementMediaSet {
+  WORK
+  EVENT
+}
+
+model AchievementMedia {
+  id            String              @id @default(cuid())
+  achievementId String
+  achievement   Achievement         @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  set           AchievementMediaSet
+  url           String              @default("")
+  caption       String              @default("")
+  alt           String              @default("")
+  width         Int?
+  height        Int?
+  order         Int                 @default(0)
+
+  @@index([achievementId, set, order])
+}
+
 model Achievement {
   id          String   @id @default(cuid())
   title       String
+  /// URL segment for /achievements/<slug>. Sanitised on every save through the
+  /// same slugify the project slug uses, so a title with spaces or commas can
+  /// never produce an unreachable page.
+  slug        String   @unique @default("")
   role        String   @default("")
   category    String   @default("")
   date        String   @default("")
@@ -299,6 +333,7 @@ model Achievement {
   image       String?
   tags        String[] @default([])
   order       Int      @default(0)
+  media       AchievementMedia[]
 
   @@index([order])
 }
@@ -393,16 +428,40 @@ model ContactMessage {
 /// The Architect — a single-row profile page. Modelled as a singleton the way
 /// SiteSettings is, so the dashboard edits one record rather than managing a
 /// list of one.
+/// The About page. A singleton, the way SiteSettings is.
+///
+/// The biography is broken into named sections rather than held as one block,
+/// because a visitor scans this page for specific facts — where they trained,
+/// what they have built — and a single wall of prose hides all of them. Every
+/// section is optional and the page renders only the ones with content, so a
+/// half-written profile reads as a shorter page rather than a skeleton.
 model ArchitectProfile {
   id          String @id @default("singleton")
   name        String @default("")
   /// "Architect / Founder" — one or more role lines.
   roleLine    String @default("")
   portrait    String @default("")
-  /// Editorial biography. Moderate length by intent: this page has to let a
-  /// selection committee shortlist the practice in under a minute, so the
-  /// field is sized for a few paragraphs, not an essay.
+
+  /// Standfirst above the sections. The former single `biography` field; kept
+  /// under the same name so nothing already written is orphaned.
   biography   String @default("")
+
+  earlyYears        String @default("")
+  education         String @default("")
+  career            String @default("")
+  foundingPractice  String @default("")
+  /// A short excerpt only. The full statement lives on the Philosophy page and
+  /// is rendered from that record, so the two can never disagree.
+  philosophyNote    String @default("")
+  milestones        String @default("")
+  currently         String @default("")
+
+  /// Page-scoped lists, written "Name — Year" and "Title — URL". Deliberately
+  /// not relations: the site-wide Awards/Press systems are out of scope, and
+  /// these are a handful of lines on one page.
+  awards       String[] @default([])
+  publications String[] @default([])
+
   /// Education, prior practice, licensure. One per entry, kept to a line or
   /// two total — this is not a formatted resume.
   credentials String[] @default([])

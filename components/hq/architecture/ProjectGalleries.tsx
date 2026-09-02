@@ -5,7 +5,7 @@ import type { MediaItem } from "@/lib/types";
 import { orientationOf } from "@/lib/types";
 import { MediaFigure } from "./MediaFigure";
 import { MediaViewer } from "./MediaViewer";
-import { InertialSlider } from "./InertialSlider";
+import { CinematicSlider } from "./CinematicSlider";
 
 /**
  * Final photography — full-bleed, mixed aspect ratios.
@@ -74,42 +74,34 @@ export function PhotoStrip({ items, label }: { items: MediaItem[]; label: string
   const [open, setOpen] = useState<number | null>(null);
   if (items.length === 0) return null;
   return (
-    <section aria-label={label}>
+    <div>
       <p className="label-mono text-amber">{label}</p>
       <div className="mt-6">
-        <InertialSlider
+        <CinematicSlider
           count={items.length}
           label={label}
-          itemClass="w-[82%] sm:w-[56%] lg:w-[42%]"
-          renderItem={(i) => {
-            const item = items[i];
-            return (
-              <figure>
-                <button
-                  type="button"
-                  onClick={() => setOpen(i)}
-                  className="group block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
-                  aria-label={`Open ${item.caption ?? `${label} image ${i + 1}`}`}
-                >
-                  <MediaFigure
-                    item={item}
-                    fallbackRatio="3 / 2"
-                    className="border border-line"
-                    sizes="(min-width: 1024px) 42vw, 82vw"
-                  />
-                </button>
-                {item.caption ? (
-                  <figcaption className="mt-2 text-xs leading-relaxed text-mute">
-                    {item.caption}
-                  </figcaption>
-                ) : null}
-              </figure>
-            );
-          }}
+          ratio="16 / 9"
+          creditFor={(i) => items[i].caption ?? items[i].label ?? null}
+          renderItem={(i) => (
+            <button
+              type="button"
+              onClick={() => setOpen(i)}
+              className="block h-full w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+              aria-label={`Open ${items[i].caption ?? `${label} image ${i + 1}`}`}
+            >
+              <MediaFigure
+                item={items[i]}
+                fallbackRatio="16 / 9"
+                fill
+                className="h-full w-full border-0"
+                sizes="100vw"
+              />
+            </button>
+          )}
         />
       </div>
       <MediaViewer items={items} index={open} onClose={() => setOpen(null)} onIndex={setOpen} />
-    </section>
+    </div>
   );
 }
 
@@ -144,36 +136,30 @@ function DrawingStrip({ label, items }: { label: string; items: MediaItem[] }) {
     <div>
       <h3 className="label-mono">{label}</h3>
       <div className="mt-3">
-        <InertialSlider
+        <CinematicSlider
           count={items.length}
           label={label}
-          itemClass="w-[80%] sm:w-[50%] lg:w-[36%]"
-          renderItem={(i) => {
-            const item = items[i];
-            return (
-              <figure>
-                <button
-                  type="button"
-                  onClick={() => setOpen(i)}
-                  className="group block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
-                  aria-label={`Enlarge ${item.label || label} ${i + 1}`}
-                >
-                  <MediaFigure
-                    item={item}
-                    fallbackRatio="4 / 3"
-                    fit="contain"
-                    className="border border-line bg-surface p-3 transition-colors group-hover:border-amber"
-                    sizes="(min-width: 1024px) 36vw, 80vw"
-                  />
-                </button>
-                {item.caption || item.label ? (
-                  <figcaption className="mt-2 text-xs text-mute">
-                    {item.caption ?? item.label}
-                  </figcaption>
-                ) : null}
-              </figure>
-            );
-          }}
+          ratio="4 / 3"
+          creditFor={(i) => items[i].caption ?? items[i].label ?? null}
+          renderItem={(i) => (
+            <button
+              type="button"
+              onClick={() => setOpen(i)}
+              className="block h-full w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+              aria-label={`Enlarge ${items[i].label || label} ${i + 1}`}
+            >
+              {/* Drawings are contained, never cropped — a trimmed section is
+                  an unreadable section. */}
+              <MediaFigure
+                item={items[i]}
+                fallbackRatio="4 / 3"
+                fill
+                fit="contain"
+                className="h-full w-full border-0 bg-surface p-4 sm:p-8"
+                sizes="100vw"
+              />
+            </button>
+          )}
         />
       </div>
       <MediaViewer items={items} index={open} onClose={() => setOpen(null)} onIndex={setOpen} zoomable />
@@ -192,42 +178,35 @@ export function DiagramSequence({ items }: { items: MediaItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
   if (items.length === 0) return null;
   return (
-    <section aria-label="Concept">
+    <div>
       <p className="label-mono text-amber">Concept</p>
       <div className="mt-6">
-        <InertialSlider
+        <CinematicSlider
           count={items.length}
           label="Concept"
-          itemClass="w-[70%] sm:w-[44%] lg:w-[30%]"
-          renderItem={(i) => {
-            const item = items[i];
-            return (
-              <figure>
-                <button
-                  type="button"
-                  onClick={() => setOpen(i)}
-                  className="group block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
-                  aria-label={`Enlarge diagram ${i + 1}`}
-                >
-                  <MediaFigure
-                    item={item}
-                    fallbackRatio="1 / 1"
-                    fit="contain"
-                    className="border border-line bg-surface p-4 transition-colors group-hover:border-amber"
-                    sizes="(min-width: 1024px) 30vw, 70vw"
-                  />
-                </button>
-                <figcaption className="mt-2 flex gap-2 text-xs text-mute">
-                  <span className="data-mono">{String(i + 1).padStart(2, "0")}</span>
-                  <span>{item.label ?? item.caption ?? ""}</span>
-                </figcaption>
-              </figure>
-            );
-          }}
+          ratio="16 / 10"
+          creditFor={(i) => items[i].label ?? items[i].caption ?? null}
+          renderItem={(i) => (
+            <button
+              type="button"
+              onClick={() => setOpen(i)}
+              className="block h-full w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+              aria-label={`Enlarge diagram ${i + 1}`}
+            >
+              <MediaFigure
+                item={items[i]}
+                fallbackRatio="16 / 10"
+                fill
+                fit="contain"
+                className="h-full w-full border-0 bg-surface p-4 sm:p-8"
+                sizes="100vw"
+              />
+            </button>
+          )}
         />
       </div>
       <MediaViewer items={items} index={open} onClose={() => setOpen(null)} onIndex={setOpen} zoomable />
-    </section>
+    </div>
   );
 }
 

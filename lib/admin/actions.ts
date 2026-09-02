@@ -238,10 +238,10 @@ export async function saveEntity(
      * 404ed. Running every value through slugify closes that off: a manual
      * override is still honoured, it just cannot be malformed.
      */
-    if (config.slug === "projects") {
+    if (config.fields.some((f) => f.name === "slug")) {
       const typed = String(data.slug ?? "").trim();
       data.slug =
-        slugify(typed) || slugify(String(data.title ?? "")) || `project-${Date.now()}`;
+        slugify(typed) || slugify(String(data.title ?? "")) || `${config.slug}-${Date.now()}`;
     }
 
     // Keep the legacy flag in step so nothing reading it goes stale.
@@ -263,6 +263,28 @@ export async function saveEntity(
     // Replace-in-full: simpler and correct for a reorderable list, since the
     // submitted array order is the authoritative order.
     for (const [fieldName, items] of galleries) {
+      // The two achievement galleries share one table, separated by `set`, so
+      // each is replaced independently and neither can clobber the other.
+      if (config.slug === "achievements" && (fieldName === "workMedia" || fieldName === "eventMedia")) {
+        const set = fieldName === "workMedia" ? "WORK" : "EVENT";
+        await prisma.achievementMedia.deleteMany({
+          where: { achievementId: row.id, set: set as never },
+        });
+        if (items.length > 0) {
+          await prisma.achievementMedia.createMany({
+            data: items.map((item, index) => ({
+              achievementId: row.id,
+              set: set as never,
+              url: item.url,
+              caption: item.caption,
+              alt: item.alt,
+              order: index,
+            })),
+          });
+        }
+        continue;
+      }
+
       if (fieldName === "images" && config.slug === "projects") {
         await prisma.projectImage.deleteMany({ where: { projectId: row.id } });
         if (items.length > 0) {
@@ -318,7 +340,7 @@ export async function saveEntity(
     const message = error instanceof Error ? error.message : "Something went wrong.";
     // Unique-constraint violations are the common case worth naming.
     if (message.includes("Unique constraint")) {
-      return { ok: false, error: "That slug is already taken by another project." };
+      return { ok: false, error: "That slug is already taken by another entry." };
     }
     return { ok: false, error: message };
   }

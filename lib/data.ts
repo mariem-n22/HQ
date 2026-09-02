@@ -148,7 +148,36 @@ export function getExperiences() {
 export function getAchievements() {
   return safeRead(
     "getAchievements",
-    () => prisma.achievement.findMany({ orderBy: { order: "asc" } }),
+    () =>
+      prisma.achievement.findMany({
+        orderBy: { order: "asc" },
+        include: { media: { orderBy: { order: "asc" } } },
+      }),
+    [],
+  );
+}
+
+export function getAchievement(slug: string) {
+  return safeRead(
+    "getAchievement",
+    () =>
+      prisma.achievement.findUnique({
+        where: { slug },
+        include: { media: { orderBy: { order: "asc" } } },
+      }),
+    null,
+  );
+}
+
+/** Slugs and titles only, for the neighbour pager on a detail page. */
+export function getAchievementOrder() {
+  return safeRead(
+    "getAchievementOrder",
+    () =>
+      prisma.achievement.findMany({
+        orderBy: { order: "asc" },
+        select: { slug: true, title: true, image: true, category: true, date: true },
+      }),
     [],
   );
 }
@@ -222,6 +251,7 @@ export async function getNavPresence(): Promise<Record<string, boolean>> {
         now,
         books,
         certifications,
+        achievements,
         architect,
         philosophy,
       ] = await Promise.all([
@@ -234,6 +264,7 @@ export async function getNavPresence(): Promise<Record<string, boolean>> {
         prisma.nowEntry.count(),
         prisma.book.count(),
         prisma.certification.count(),
+        prisma.achievement.count(),
         prisma.architectProfile.findUnique({ where: { id: "singleton" } }),
         prisma.philosophy.findUnique({ where: { id: "singleton" } }),
       ]);
@@ -247,8 +278,20 @@ export async function getNavPresence(): Promise<Record<string, boolean>> {
         "/now": now > 0,
         "/books": books > 0,
         "/certifications": certifications > 0,
+        "/achievements": achievements > 0,
         "/studio/architect": Boolean(
-          architect && (architect.biography.trim() || architect.name.trim() || architect.portrait.trim()),
+          architect &&
+            [
+              architect.name,
+              architect.portrait,
+              architect.biography,
+              architect.earlyYears,
+              architect.education,
+              architect.career,
+              architect.foundingPractice,
+              architect.milestones,
+              architect.currently,
+            ].some((v) => v.trim()),
         ),
         "/studio/philosophy": Boolean(
           philosophy && (philosophy.statement.trim() || philosophy.body.trim()),

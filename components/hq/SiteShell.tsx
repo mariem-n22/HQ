@@ -39,7 +39,7 @@ export async function SiteShell({ children }: { children: ReactNode }) {
   })).filter((group) => group.children.length > 0);
 
   return (
-    <div className="flex min-h-screen flex-col bg-base">
+    <div className="flex min-h-screen flex-col overflow-x-clip bg-base">
       <header className="sticky top-0 z-40 border-b border-line bg-base/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-5 sm:px-8">
           <Link

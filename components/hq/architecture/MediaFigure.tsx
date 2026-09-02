@@ -29,6 +29,7 @@ export function MediaFigure({
   className = "",
   imgClassName = "",
   priority = false,
+  fill = false,
   sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
 }: {
   item: MediaItem;
@@ -37,15 +38,22 @@ export function MediaFigure({
   className?: string;
   imgClassName?: string;
   priority?: boolean;
+  /**
+   * Fill the parent box instead of imposing an aspect ratio. Used where the
+   * frame is already sized — the full-bleed hero and the slider stage — since
+   * setting `aspect-ratio` there would fight the container's own height.
+   */
+  fill?: boolean;
   sizes?: string;
 }) {
   const [failed, setFailed] = useState(false);
   const ratio = ratioOf(item) ?? fallbackRatio;
+  const box = fill ? undefined : { aspectRatio: ratio };
   const objectFit = fit === "contain" ? "object-contain" : "object-cover";
 
   if (item.kind === "VIDEO") {
     return (
-      <div className={`relative overflow-hidden bg-surface ${className}`} style={{ aspectRatio: ratio }}>
+      <div className={`relative overflow-hidden bg-surface ${className}`} style={box}>
         <video
           src={item.url}
           poster={undefined}
@@ -69,7 +77,7 @@ export function MediaFigure({
     return (
       <div
         className={`flex items-center justify-center border border-line bg-surface ${className}`}
-        style={{ aspectRatio: ratio }}
+        style={box}
       >
         <span className="label-mono">No image yet</span>
       </div>
@@ -77,7 +85,7 @@ export function MediaFigure({
   }
 
   return (
-    <div className={`relative overflow-hidden bg-surface ${className}`} style={{ aspectRatio: ratio }}>
+    <div className={`relative overflow-hidden bg-surface ${className}`} style={box}>
       <img
         src={item.url}
         alt={item.alt ?? item.caption ?? item.label ?? ""}

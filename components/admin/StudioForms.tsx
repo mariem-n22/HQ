@@ -6,6 +6,21 @@ import { ImageField } from "./ImageField";
 import { SaveButton, type SaveState } from "./SaveButton";
 import { saveArchitect, savePhilosophy } from "@/lib/admin/studio-actions";
 
+const SECTIONS: { name: "earlyYears" | "education" | "career" | "foundingPractice" | "philosophyNote" | "milestones" | "currently"; label: string; help?: string; rows?: number }[] = [
+  { name: "earlyYears", label: "Early years" },
+  { name: "education", label: "Education" },
+  { name: "career", label: "Career" },
+  { name: "foundingPractice", label: "Founding the practice" },
+  {
+    name: "philosophyNote",
+    label: "Architectural philosophy — excerpt",
+    help: "A short excerpt only. The full statement lives on the Philosophy page, and the About page links to it. Leave blank to show the opening of that statement automatically.",
+    rows: 4,
+  },
+  { name: "milestones", label: "Major milestones" },
+  { name: "currently", label: "Currently", rows: 4 },
+];
+
 const inputClass =
   "mt-2 w-full rounded-sm border border-line-strong bg-base px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-amber focus:outline-none";
 
@@ -38,7 +53,12 @@ function useSaver(action: (form: FormData) => Promise<{ ok: boolean; error?: str
 export function ArchitectForm({
   initial,
 }: {
-  initial: { name: string; roleLine: string; portrait: string; biography: string; credentials: string[] };
+  initial: {
+    name: string; roleLine: string; portrait: string; biography: string; credentials: string[];
+    earlyYears: string; education: string; career: string; foundingPractice: string;
+    philosophyNote: string; milestones: string; currently: string;
+    awards: string[]; publications: string[];
+  };
 }) {
   const { state, error, onSubmit, settle } = useSaver(saveArchitect);
 
@@ -84,6 +104,62 @@ export function ArchitectForm({
           rows={10}
           className={inputClass}
           placeholder="Leave blank until the real text is written."
+        />
+      </label>
+
+      {/*
+        The biography is entered section by section rather than as one field.
+        Each is optional and the public page omits any section left blank, so
+        a partly-written profile reads as a shorter page, never a skeleton.
+      */}
+      <fieldset className="rounded-sm border border-line bg-surface p-4">
+        <legend className="label-mono px-1">Biography sections</legend>
+        <p className="mt-1 text-xs text-mute">
+          Every section is optional. Blank line separates paragraphs.
+        </p>
+        <div className="mt-4 space-y-5">
+          {SECTIONS.map((f) => (
+            <label key={f.name} className="block">
+              <span className="label-mono">{f.label}</span>
+              {f.help ? <p className="mt-1 text-xs text-mute">{f.help}</p> : null}
+              <textarea
+                name={f.name}
+                defaultValue={initial[f.name]}
+                rows={f.rows ?? 5}
+                className={inputClass}
+              />
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <label className="block">
+        <span className="label-mono">Awards</span>
+        <p className="mt-1 text-xs text-mute">
+          One per line, written &ldquo;Award name — Year&rdquo;. A short list scoped to this page,
+          not a site-wide awards section.
+        </p>
+        <textarea
+          name="awards"
+          defaultValue={initial.awards.join("\n")}
+          rows={4}
+          className={inputClass}
+          placeholder={"Aga Khan Award, shortlist — 2024"}
+        />
+      </label>
+
+      <label className="block">
+        <span className="label-mono">Publications</span>
+        <p className="mt-1 text-xs text-mute">
+          One per line, written &ldquo;Title — URL&rdquo;. The URL is optional; with one the title
+          becomes a link.
+        </p>
+        <textarea
+          name="publications"
+          defaultValue={initial.publications.join("\n")}
+          rows={4}
+          className={inputClass}
+          placeholder={"Domus, issue 1082 — https://…"}
         />
       </label>
 

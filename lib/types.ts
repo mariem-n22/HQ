@@ -12,7 +12,7 @@ import type {
   Book,
   Certification,
   HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
-  Project, ProjectImage, ProjectMedia, ArchitectProfile, Philosophy,
+  Project, ProjectImage, ProjectMedia, AchievementMedia, ArchitectProfile, Philosophy,
   SiteSettings, Skill, Venture,
 } from "@prisma/client";
 
@@ -21,7 +21,7 @@ export type {
   Book,
   Certification,
   HeroImage, ContentBlock, Experience, IdentityMoment, MiscEntry, NowEntry,
-  Project, ProjectImage, ProjectMedia, ArchitectProfile, Philosophy,
+  Project, ProjectImage, ProjectMedia, AchievementMedia, ArchitectProfile, Philosophy,
   SiteSettings, Skill, Venture,
 };
 
@@ -92,7 +92,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Studio",
     children: [
-      { label: "The Architect", to: "/studio/architect" },
+      { label: "About", to: "/studio/architect" },
       { label: "Philosophy", to: "/studio/philosophy" },
     ],
   },
@@ -108,6 +108,7 @@ export const SECTORS = [
   { code: "S7", label: "Now", to: "/now", blurb: "What the studio is working on this week." },
   { code: "S8", label: "Books", to: "/books", blurb: "Books read, and what the studio took from each." },
   { code: "S9", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
+  { code: "S10", label: "Achievements", to: "/achievements", blurb: "Competitions, awards and the work behind them." },
 ] as const;
 
 
@@ -239,4 +240,22 @@ export function slugify(value: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+
+/** An achievement's two photo sets, each already ordered. */
+export function achievementMediaSets(media: AchievementMedia[]) {
+  const pick = (set: "WORK" | "EVENT"): MediaItem[] =>
+    media
+      .filter((m) => m.set === set)
+      .sort((a, b) => a.order - b.order)
+      .map((m) => ({
+        url: m.url,
+        kind: "IMAGE" as const,
+        caption: m.caption || undefined,
+        alt: m.alt || undefined,
+        width: m.width ?? undefined,
+        height: m.height ?? undefined,
+      }));
+  return { work: pick("WORK"), event: pick("EVENT") };
 }

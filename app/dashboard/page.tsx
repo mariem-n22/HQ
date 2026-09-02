@@ -43,7 +43,7 @@ export default async function DashboardPage() {
     { label: "Books", value: books, href: "/dashboard/books" },
     { label: "Certifications", value: certifications, href: "/dashboard/certifications" },
     { label: "Inbox", value: messages, href: "/dashboard/inbox" },
-    { label: "The Architect", value: "—", href: "/dashboard/architect" },
+    { label: "About", value: "—", href: "/dashboard/architect" },
     { label: "Philosophy", value: "—", href: "/dashboard/philosophy" },
     { label: "Settings", value: "—", href: "/dashboard/settings" },
   ];

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { SectorPage, EmptyState } from "@/components/hq/SiteShell";
 import { SectorHeader } from "@/components/hq/SectorHeader";
+import { NowList } from "@/components/hq/NowList";
 import { getContentBlocks, getNowEntries, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
@@ -21,33 +22,7 @@ export default async function NowPage() {
         {entries.length === 0 ? (
           <EmptyState what="now entries" />
         ) : (
-          <ul className="grid gap-4">
-            {entries.map((entry) => (
-              <li key={entry.id} className="glow-card flex gap-4 p-5">
-                <span
-                  aria-hidden
-                  className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${entry.active ? "pulse-pip bg-go" : "bg-line"}`}
-                />
-                <div className="min-w-0">
-                  <p className="data-mono text-[11px] tracking-widest">
-                    {entry.date.toISOString().slice(0, 10)}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-ink/90">{entry.text}</p>
-                  {/* Optional by design — nothing is rendered when absent, unlike
-                      covers and galleries which always reserve a placeholder. */}
-                  {entry.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={entry.image}
-                      alt=""
-                      loading="lazy"
-                      className="mt-3 max-h-56 w-full rounded-sm border border-line object-cover sm:max-w-sm"
-                    />
-                  ) : null}
-                </div>
-              </li>
-            ))}
-          </ul>
+          <NowList entries={entries} />
         )}
       </div>
     </SectorPage>

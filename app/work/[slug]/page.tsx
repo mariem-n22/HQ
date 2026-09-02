@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SectorPage } from "@/components/hq/SiteShell";
 import { MediaFigure } from "@/components/hq/architecture/MediaFigure";
+import { ProjectHero } from "@/components/hq/architecture/ProjectHero";
 import {
   DiagramSequence,
   DrawingSet,
@@ -146,39 +147,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </Link>
 
       {/* 1 — Hero */}
-      <header className="mt-8">
-        {project.typology ? (
-          <p className="label-mono text-amber">
-            {TYPOLOGY_LABELS[project.typology] ?? project.typology}
-          </p>
-        ) : null}
-        <h1 className="display-title mt-3 text-5xl text-ink sm:text-7xl">{project.title}</h1>
-        <p className="mt-4 text-[15px] text-mute">
-          {[project.location, project.year].filter(Boolean).join(" · ")}
-        </p>
-      </header>
-
-      {heroEmbed ? (
-        <div className="mt-10 aspect-video w-full">
-          <iframe
-            src={heroEmbed}
-            title={`${project.title} film`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen"
-            allowFullScreen
-            className="h-full w-full border border-line"
-          />
-        </div>
-      ) : heroItem ? (
-        <div className="mt-10">
-          <MediaFigure
-            item={heroItem}
-            fallbackRatio="16 / 9"
-            priority
-            className="border border-line"
-            sizes="100vw"
-          />
-        </div>
-      ) : null}
+      <ProjectHero
+        title={project.title}
+        typology={project.typology ? TYPOLOGY_LABELS[project.typology] ?? project.typology : null}
+        location={project.location}
+        year={project.year}
+        item={heroItem}
+        embedSrc={heroEmbed}
+      />
 
       {/* 2 — Overview */}
       {facts.length > 0 ? (

@@ -5,7 +5,7 @@ import { ArchitectForm } from "@/components/admin/StudioForms";
 import { ThemeToggle } from "@/components/hq/ThemeToggle";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "The Architect — Pit Wall", robots: { index: false, follow: false } };
+export const metadata = { title: "About — Studio dashboard", robots: { index: false, follow: false } };
 
 export default async function ArchitectDashboardPage() {
   const profile = await prisma.architectProfile.findUnique({ where: { id: "singleton" } });
@@ -23,9 +23,9 @@ export default async function ArchitectDashboardPage() {
           </Link>
           <ThemeToggle />
         </div>
-        <h1 className="display-title mt-4 text-4xl text-ink">The Architect</h1>
+        <h1 className="display-title mt-4 text-4xl text-ink">About</h1>
         <p className="mt-2 text-sm text-mute">
-          Portrait, role, biography and credentials for /studio/architect.
+          Portrait, role, sectioned biography, awards and publications for /studio/architect.
         </p>
 
         <div className="mt-10">
@@ -35,6 +35,15 @@ export default async function ArchitectDashboardPage() {
               roleLine: profile?.roleLine ?? "",
               portrait: profile?.portrait ?? "",
               biography: profile?.biography ?? "",
+              earlyYears: profile?.earlyYears ?? "",
+              education: profile?.education ?? "",
+              career: profile?.career ?? "",
+              foundingPractice: profile?.foundingPractice ?? "",
+              philosophyNote: profile?.philosophyNote ?? "",
+              milestones: profile?.milestones ?? "",
+              currently: profile?.currently ?? "",
+              awards: profile?.awards ?? [],
+              publications: profile?.publications ?? [],
               credentials: profile?.credentials ?? [],
             }}
           />
