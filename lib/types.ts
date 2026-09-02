@@ -73,14 +73,30 @@ export function findBlock(blocks: ContentBlock[], key: string) {
 }
 
 /**
- * The Studio group. Kept out of SECTORS deliberately: SECTORS also drives the
- * home page "contents" grid and the sector codes, and the homepage is out of
- * scope for this pass. This list is consumed by the nav only.
+ * Grouped nav entries.
+ *
+ * A group renders as a single parent label with its children beneath, and it
+ * follows the same rule as everything else in the nav: the parent appears only
+ * if at least one child has content, and only the children that have content
+ * are listed. A group whose children are all empty disappears entirely.
+ *
+ * Kept out of SECTORS deliberately: SECTORS also drives the home page
+ * "contents" grid and the sector codes, and a group has no sector code.
  */
-export const STUDIO_LINKS = [
-  { label: "The Architect", to: "/studio/architect" },
-  { label: "Philosophy", to: "/studio/philosophy" },
-] as const;
+export type NavGroup = {
+  label: string;
+  children: { label: string; to: string }[];
+};
+
+export const NAV_GROUPS: NavGroup[] = [
+  {
+    label: "Studio",
+    children: [
+      { label: "The Architect", to: "/studio/architect" },
+      { label: "Philosophy", to: "/studio/philosophy" },
+    ],
+  },
+];
 
 export const SECTORS = [
   { code: "S1", label: "Story", to: "/story", blurb: "How the practice came to be, and how it works." },
@@ -90,7 +106,7 @@ export const SECTORS = [
   { code: "S5", label: "Business", to: "/business", blurb: "The practice as a company." },
   { code: "S6", label: "Studio Notes", to: "/misc", blurb: "Notes and references that fit nowhere else." },
   { code: "S7", label: "Now", to: "/now", blurb: "What the studio is working on this week." },
-  { code: "S8", label: "Reading", to: "/books", blurb: "What the studio reads, and what it took from it." },
+  { code: "S8", label: "Books", to: "/books", blurb: "Books read, and what the studio took from each." },
   { code: "S9", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
 ] as const;
 
@@ -208,4 +224,19 @@ export function embedSrc(url: string): string | null {
   const vim = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vim) return `https://player.vimeo.com/video/${vim[1]}`;
   return null;
+}
+
+/**
+ * URL-safe slug: lowercase, alphanumerics only, single hyphens, no leading or
+ * trailing separator. Accented Latin characters are folded to their base form
+ * first, so "Málaga" becomes "malaga" rather than losing the letter entirely.
+ */
+export function slugify(value: string) {
+  return value
+    .normalize("NFKD")
+    // Strip combining marks left behind by the decomposition above.
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }

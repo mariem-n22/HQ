@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
+    "start:qa": "next start -p 3020",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:import": "tsx scripts/migrate-from-supabase.ts",
     "db:studio": "prisma studio",
+    "fix:slugs": "tsx scripts/fix-slugs.ts",
     "qa:seed": "tsx scripts/qa-seed-projects.ts",
     "qa:clean": "tsx scripts/qa-seed-projects.ts --remove",
     "postinstall": "prisma generate"

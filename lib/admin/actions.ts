@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { MODELS, type Field, type ModelConfig } from "./config";
+import { slugify } from "@/lib/types";
 
 /**
  * Generic create/update/delete for every dashboard content type.
@@ -113,12 +114,6 @@ function parseGallery(raw: FormDataEntryValue | null): GalleryRow[] {
   }
 }
 
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
 
 /** Turn the submitted FormData into a Prisma payload, typed per field. */
 function coerce(fields: Field[], form: FormData) {
@@ -234,9 +229,19 @@ export async function saveEntity(
       delete data[field.name];
     }
 
-    // Projects need a slug; derive one from the title when left blank.
-    if (config.slug === "projects" && !String(data.slug ?? "").trim()) {
-      data.slug = slugify(String(data.title ?? "")) || `project-${Date.now()}`;
+    /*
+     * Slugs are always sanitised, never merely defaulted.
+     *
+     * This previously ran only when the field came in blank, so a slug typed
+     * by hand went to the database verbatim — "K-Project Seoul, South Korea"
+     * was stored with spaces, commas and capitals, and /work/<slug> then
+     * 404ed. Running every value through slugify closes that off: a manual
+     * override is still honoured, it just cannot be malformed.
+     */
+    if (config.slug === "projects") {
+      const typed = String(data.slug ?? "").trim();
+      data.slug =
+        slugify(typed) || slugify(String(data.title ?? "")) || `project-${Date.now()}`;
     }
 
     // Keep the legacy flag in step so nothing reading it goes stale.

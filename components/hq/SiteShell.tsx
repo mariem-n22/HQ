@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { SECTORS, STUDIO_LINKS } from "@/lib/types";
+import { NAV_GROUPS, SECTORS } from "@/lib/types";
 import { STUDIO } from "@/lib/seo";
 import { getNavPresence, getNowEntries, getSettings } from "@/lib/data";
 import { CurrentlyLine } from "./TelemetryTicker";
@@ -29,7 +29,14 @@ export async function SiteShell({ children }: { children: ReactNode }) {
   // showing one empty page.
   const show = (to: string) => present[to] !== false;
   const sectors = SECTORS.filter((sector) => show(sector.to));
-  const studioLinks = STUDIO_LINKS.filter((link) => show(link.to));
+
+  // A group keeps only its populated children, and drops out entirely when
+  // none survive — so "Studio" appears the moment either The Architect or
+  // Philosophy has real content, listing just the one that does.
+  const groups = NAV_GROUPS.map((group) => ({
+    ...group,
+    children: group.children.filter((child) => show(child.to)),
+  })).filter((group) => group.children.length > 0);
 
   return (
     <div className="flex min-h-screen flex-col bg-base">
@@ -50,10 +57,33 @@ export async function SiteShell({ children }: { children: ReactNode }) {
                 {sector.label}
               </Link>
             ))}
-            {studioLinks.map((link) => (
-              <Link key={link.to} href={link.to} className={navLinkClass}>
-                {link.label}
-              </Link>
+            {groups.map((group) => (
+              <div key={group.label} className="group relative">
+                <span
+                  className="cursor-default whitespace-nowrap text-[13px] tracking-wide text-mute transition-colors group-hover:text-ink group-focus-within:text-ink"
+                  aria-hidden
+                >
+                  {group.label}
+                </span>
+                {/*
+                  Hover/focus reveals the children, but they stay in the DOM
+                  and in the tab order at all times — a keyboard or screen
+                  reader user never depends on a hover to reach them.
+                */}
+                <div
+                  role="group"
+                  aria-label={group.label}
+                  className="absolute left-1/2 top-full z-50 hidden -translate-x-1/2 pt-3 group-hover:block group-focus-within:block"
+                >
+                  <div className="flex flex-col gap-2 border border-line bg-surface px-4 py-3 shadow-lg">
+                    {group.children.map((child) => (
+                      <Link key={child.to} href={child.to} className={navLinkClass}>
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
             <Link href="/contact" className={navLinkClass}>
               Contact
@@ -78,11 +108,15 @@ export async function SiteShell({ children }: { children: ReactNode }) {
               {sector.label}
             </Link>
           ))}
-          {studioLinks.map((link) => (
-            <Link key={link.to} href={link.to} className={navLinkClass}>
-              {link.label}
-            </Link>
-          ))}
+          {/* No hover on touch, so the group is flattened rather than hidden
+              behind a disclosure the visitor cannot open. */}
+          {groups.flatMap((group) =>
+            group.children.map((child) => (
+              <Link key={child.to} href={child.to} className={navLinkClass}>
+                {child.label}
+              </Link>
+            )),
+          )}
           <Link href="/contact" className={navLinkClass}>
             Contact
           </Link>
@@ -94,7 +128,13 @@ export async function SiteShell({ children }: { children: ReactNode }) {
       <main className="flex-1">{children}</main>
 
       <footer className="mt-28 border-t border-line">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
+        {/* Column count follows the number of link lists, since a nav group
+            only exists when it has content. */}
+        <div
+          className={`mx-auto grid max-w-6xl gap-12 px-6 py-16 sm:px-8 ${
+            groups.length > 0 ? "md:grid-cols-[1.4fr_1fr_1fr_1fr]" : "md:grid-cols-[1.4fr_1fr_1fr]"
+          }`}
+        >
           <div>
             <p className="display-title text-3xl text-ink">{STUDIO.name}</p>
             <p className="standfirst mt-4 max-w-sm text-[15px]">
@@ -114,6 +154,20 @@ export async function SiteShell({ children }: { children: ReactNode }) {
               ))}
             </ul>
           </div>
+          {groups.map((group) => (
+            <div key={group.label}>
+              <p className="label-mono">{group.label}</p>
+              <ul className="mt-5 space-y-2.5">
+                {group.children.map((child) => (
+                  <li key={child.to}>
+                    <Link href={child.to} className="link-underline text-sm text-mute hover:text-ink">
+                      {child.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
           <div>
             <p className="label-mono">Elsewhere</p>
             <ul className="mt-5 space-y-2.5 text-sm">

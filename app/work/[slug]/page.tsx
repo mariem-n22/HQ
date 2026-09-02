@@ -7,6 +7,7 @@ import {
   DiagramSequence,
   DrawingSet,
   MaterialPalette,
+  PhotoStrip,
   PhotographyGallery,
 } from "@/components/hq/architecture/ProjectGalleries";
 import { getProject, getProjectOrder } from "@/lib/data";
@@ -26,9 +27,23 @@ export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
+/**
+ * Next hands the param percent-encoded, so a legacy slug containing a space
+ * arrives as "K-Project%20Seoul" and would never match the stored value.
+ * Decoding is a backstop for rows written before slugs were sanitised on save;
+ * the fix for new rows is in the save path, not here.
+ */
+function decodeSlug(raw: string) {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = await getProject(slug);
+  const project = await getProject(decodeSlug(slug));
   if (!project) return { title: "Not found" };
   const where = [project.location, project.year].filter(Boolean).join(", ");
   return pageMeta({
@@ -63,7 +78,7 @@ function Prose({ label, body }: { label?: string; body: string }) {
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [project, order] = await Promise.all([getProject(slug), getProjectOrder()]);
+  const [project, order] = await Promise.all([getProject(decodeSlug(slug)), getProjectOrder()]);
   if (!project) notFound();
 
   const m = mediaByCategory(project.media);
@@ -214,7 +229,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
           {m.SITE.length > 0 ? (
             <div className="mt-10">
-              <PhotographyGallery items={m.SITE} label="Site" />
+              <PhotoStrip items={m.SITE} label="Site" />
             </div>
           ) : null}
         </Band>

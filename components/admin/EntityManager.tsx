@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, Pencil, Plus, X } from "lucide-react";
 import { saveEntity, deleteEntity } from "@/lib/admin/actions";
@@ -10,6 +10,7 @@ import { MediaField, type MediaRow } from "./MediaField";
 import { GalleryField, type GalleryItem } from "./GalleryField";
 import { SaveButton, type SaveState } from "./SaveButton";
 import { ListField } from "./ListField";
+import { slugify } from "@/lib/types";
 
 type Row = Record<string, unknown> & { id: string };
 
@@ -159,6 +160,10 @@ function FieldInput({ field, row }: { field: Field; row: Row | null }) {
     );
   }
 
+  if (field.name === "slug") {
+    return <SlugInput field={field} defaultValue={defaultValue} />;
+  }
+
   return (
     <input
       type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
@@ -168,6 +173,60 @@ function FieldInput({ field, row }: { field: Field; row: Row | null }) {
       {...(field.type === "number" && field.name === "level" ? { min: 0, max: 100 } : {})}
       className={inputClass}
     />
+  );
+}
+
+/**
+ * Slug field that mirrors the title until someone edits it.
+ *
+ * Two behaviours, both aimed at the same bug: a slug is only ever URL-safe.
+ * While untouched it tracks the title live, slugified. Once edited by hand it
+ * stops following, but every keystroke still goes through the same slugify, so
+ * typing a space or a comma cannot reintroduce a broken URL. The server
+ * sanitises again on save regardless — this is convenience and feedback, not
+ * the guarantee.
+ */
+function SlugInput({ field, defaultValue }: { field: Field; defaultValue: string }) {
+  const [value, setValue] = useState(defaultValue);
+  const [linked, setLinked] = useState(!defaultValue);
+
+  useEffect(() => {
+    if (!linked) return;
+    const form = document.getElementById("entity-form") as HTMLFormElement | null;
+    const title = form?.elements.namedItem("title") as HTMLInputElement | null;
+    if (!title) return;
+    const sync = () => setValue(slugify(title.value));
+    title.addEventListener("input", sync);
+    return () => title.removeEventListener("input", sync);
+  }, [linked]);
+
+  return (
+    <>
+      <input
+        type="text"
+        name={field.name}
+        value={value}
+        placeholder={field.placeholder}
+        onChange={(e) => {
+          setLinked(false);
+          setValue(slugify(e.target.value));
+        }}
+        className={inputClass}
+      />
+      {linked ? (
+        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-mute">
+          Following the project name
+        </p>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setLinked(true)}
+          className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-amber"
+        >
+          Reset to project name
+        </button>
+      )}
+    </>
   );
 }
 
@@ -244,7 +303,7 @@ export function EntityManager({ config, rows }: { config: ModelConfig; rows: Row
       ) : null}
 
       {open ? (
-        <form action={onSubmit} className="glow-card p-5 sm:p-6">
+        <form id="entity-form" action={onSubmit} className="glow-card p-5 sm:p-6">
           <div className="flex items-center justify-between">
             <p className="label-mono text-amber">
               {editing ? `Edit ${config.label.toLowerCase()}` : `New ${config.label.toLowerCase()}`}

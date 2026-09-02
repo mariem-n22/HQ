@@ -21,10 +21,10 @@ export default async function BooksPage() {
       <SectorHeader
         sector="08"
         label="Books"
-        title={block?.title ?? "Reading log"}
+        title={block?.title ?? "Books"}
         intro={
           block?.body ??
-          "What I have read, the lines that stuck, and what actually changed in how I think. Not summaries."
+          "Books read by the studio, the lines that stuck, and what each one changed in how the practice thinks."
         }
       />
       <div className="mt-10">

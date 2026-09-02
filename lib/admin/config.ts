@@ -315,12 +315,20 @@ export const MODELS: Record<string, ModelConfig> = {
     plural: "Identity moments",
     model: "identityMoment",
     primaryField: "title",
-    secondaryFields: ["year"],
+    secondaryFields: ["year", "category"],
     orderBy: { order: "asc" },
     revalidate: ["/identity"],
     fields: [
       { name: "title", label: "Title", type: "text", required: true },
       { name: "year", label: "Year", type: "text", placeholder: "2019" },
+      {
+        name: "category",
+        label: "Category",
+        type: "datalist",
+        options: ["Practice", "Material", "Place", "Influence", "Method"],
+        placeholder: "Practice",
+        help: "Groups the moment on /identity. Pick an existing one or type a new one — the public filter lists only categories actually in use.",
+      },
       {
         name: "teaser",
         label: "Short teaser (card)",

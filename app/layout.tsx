@@ -37,6 +37,22 @@ const manrope = Manrope({
  */
 const THEME_INIT = `(function(){try{var s=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
 
+/**
+ * Nav visibility depends on database content, so the public pages must not be
+ * frozen at deploy time.
+ *
+ * The primary mechanism is on-demand: every CMS write calls
+ * revalidatePath("/", "layout"), so saving the first project or the Philosophy
+ * statement invalidates every prerendered page immediately. This value is the
+ * safety net underneath it — content changed outside the dashboard (a direct
+ * database edit, a restored backup) still surfaces within the window instead
+ * of waiting for the next deploy.
+ *
+ * As a route-segment default on the root layout it applies to every page
+ * beneath it, which is exactly the set that renders the nav.
+ */
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {

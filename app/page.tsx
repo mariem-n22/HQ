@@ -3,7 +3,7 @@ import { SiteShell } from "@/components/hq/SiteShell";
 import { ProjectCard } from "@/components/hq/ProjectCard";
 import { Frame } from "@/components/hq/Frame";
 import { Reveal } from "@/components/hq/Reveal";
-import { getContentBlocks, getProjects, getSettings, findBlock, SECTORS } from "@/lib/data";
+import { getContentBlocks, getNavPresence, getProjects, getSettings, findBlock, SECTORS } from "@/lib/data";
 import { JsonLd } from "@/components/JsonLd";
 import {
   ONE_LINER, STUDIO, SITE_URL, absolute, graph, studioSchema, pageMeta,
@@ -23,11 +23,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [projects, blocks, settings] = await Promise.all([
+  const [projects, blocks, settings, navPresent] = await Promise.all([
     getProjects(),
     getContentBlocks(),
-    getSettings(),
-  ]);
+    getSettings(), getNavPresence()]);
 
   const intro = findBlock(blocks, "home_intro");
   const featured = projects.find((p) => p.featured) ?? projects[0];
@@ -129,7 +128,10 @@ export default async function HomePage() {
         <Reveal as="section" className="mt-16">
           <h2 className="label-mono text-amber">Contents</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SECTORS.map((sector) => (
+            {/* The contents grid is navigation too, so it follows the same
+                rule as the header: a sector with nothing behind it is not
+                advertised as a destination. */}
+            {SECTORS.filter((sector) => navPresent[sector.to] !== false).map((sector) => (
               <Link key={sector.to} href={sector.to} className="glow-card p-5">
                 <p className="data-mono text-[11px] tracking-widest">{sector.code}</p>
                 <h3 className="display-title mt-2 text-2xl text-ink">{sector.label}</h3>

@@ -22,9 +22,7 @@ export default async function IdentityPage() {
         {moments.length === 0 ? (
           <EmptyState what="moments" />
         ) : (
-          <div className="mt-6">
-            <IdentityTimeline moments={moments} />
-          </div>
+          <IdentityTimeline moments={moments} />
         )}
       </div>
     </SectorPage>

@@ -239,6 +239,10 @@ model IdentityMoment {
   id          String  @id @default(cuid())
   year        String  @default("")
   title       String
+  /// Free-text grouping. The public filter is built from the values actually
+  /// in use, so a new category needs no schema or code change — type it once
+  /// on a moment and it appears as a filter.
+  category    String  @default("")
   /// Short — rendered on the card. Live column is `teaser`, and the shipped
   /// component reads `summary`; the migration reconciles them onto this field.
   teaser      String  @default("")
