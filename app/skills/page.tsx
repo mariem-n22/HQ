@@ -7,7 +7,7 @@ import { getSkills } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Expertise",
-  description: "How the studio works, and the areas it works in.",
+  description: "The areas of architecture and design Mariem Nasser Elsbelgy works in, and how far each one runs.",
   path: "/skills",
 });
 
@@ -20,7 +20,7 @@ export default async function SkillsPage() {
         sector="03"
         label="Setup"
         title="Expertise"
-        intro="The areas the studio works in, and how deep the practice runs in each."
+        intro="The areas Mariem works in, and how far each one runs."
       />
       <div className="mt-10">
         {skills.length === 0 ? <EmptyState what="skills" /> : <SkillStack skills={skills} />}

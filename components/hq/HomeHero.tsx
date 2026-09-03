@@ -1,4 +1,4 @@
-import { STUDIO } from "@/lib/seo";
+import { PERSON } from "@/lib/seo";
 import { HeroLabel } from "./HeroLabel";
 
 /**
@@ -93,7 +93,7 @@ export function HomeHero({
             lineHeight: 0.9,
           }}
         >
-          <HeroLabel>{STUDIO.name}</HeroLabel>
+          <HeroLabel>{PERSON.short}</HeroLabel>
         </p>
         {places.length > 0 ? (
           <p
@@ -107,7 +107,9 @@ export function HomeHero({
 
       <div className="relative mx-auto w-full max-w-6xl px-6 pb-12 sm:px-8 sm:pb-16">
         <p className="label-mono" style={{ fontSize: "clamp(11px, 0.95vw, 14px)" }}>
-          <HeroLabel>Architect</HeroLabel>
+          {/* Her actual standing, not "Architect" — she graduates in 2027 and
+              the shorter word would be a claim the site cannot make. */}
+          <HeroLabel>{PERSON.jobTitle}</HeroLabel>
         </p>
         {line ? (
           <p
@@ -122,8 +124,8 @@ export function HomeHero({
           </p>
         ) : (
           <p className="mt-4 max-w-xl border border-dashed border-line bg-surface/80 p-4 text-sm text-mute backdrop-blur-sm">
-            Add the studio&rsquo;s signature statement under Dashboard → Settings. It should be a
-            real line from the architect, not written for her.
+            Add Mariem&rsquo;s signature statement under Dashboard → Settings. It must be a real
+            line in her own words, not written for her.
           </p>
         )}
 

@@ -1,6 +1,6 @@
 /**
  * Checks every dashboard form field against the Prisma schema, so a typo in
- * config.ts surfaces here rather than as a 500 when Mahmoud hits save. Also
+ * config.ts surfaces here rather than as a 500 when an editor hits save. Also
  * reports columns no form exposes, which is how a field silently becomes
  * uneditable.
  *

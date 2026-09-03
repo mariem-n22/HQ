@@ -7,7 +7,7 @@ import { getContentBlocks, getMiscEntries, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Misc Entries — notes and miscellany",
-  description: "Notes, references and everything from the studio that fits no other section.",
+  description: "Notes, references and material from Mariem Nasser Elsbelgy that fits no other section.",
   path: "/misc",
 });
 

@@ -7,7 +7,7 @@ import { getContentBlocks, getExperiences, getSettings, findBlock } from "@/lib/
 
 export const metadata: Metadata = pageMeta({
   title: "Experience",
-  description: "The narrative behind the work — how the practice came to be, and how it operates.",
+  description: "How Mariem Nasser Elsbelgy came to architecture, and the studies, competitions and projects since.",
   path: "/story",
 });
 

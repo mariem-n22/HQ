@@ -7,7 +7,7 @@ import { getContentBlocks, getIdentityMoments, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Identity",
-  description: "What shapes the way the studio designs.",
+  description: "The references and preoccupations behind Mariem Nasser Elsbelgy's work — heritage, ancient Egyptian and Roman architecture among them.",
   path: "/identity",
 });
 

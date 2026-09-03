@@ -1,9 +1,15 @@
 # portfolio-HQ
 
-Personal home base for Mahmoud — full-stack engineer and founder in Cairo.
-Public sectors (Story, Work, Setup, Identity, Business, Free Practice, Now,
-Contact), a standalone shareable `/portfolio` page, and a private admin
-dashboard called the **Pit Wall**.
+Portfolio and archive for **Mariem Nasser Elsbelgy** — architecture student at
+Modern Academy, graduating 2027. Public sections (Projects, About, Experience,
+Identity, Expertise, Philosophy, Recognition, Now, Contact), a standalone
+shareable `/portfolio` page, and a private admin dashboard called the
+**Pit Wall**.
+
+The site was originally built as a software-engineering portfolio for a
+different person and has been progressively rewritten; see DESIGN_NOTES.md for
+the design system and MIGRATIONS.md before running any schema change against
+production.
 
 Design direction: "Pit Wall / Telemetry" — dark instrument-panel surfaces,
 condensed display type, monospaced data readouts.

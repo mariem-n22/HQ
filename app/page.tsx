@@ -14,20 +14,20 @@ import {
 } from "@/components/hq/home/HomeSections";
 import { JsonLd } from "@/components/JsonLd";
 import {
-  ONE_LINER, STUDIO, SITE_URL, absolute, graph, studioSchema, pageMeta,
+  ONE_LINER, PERSON, SITE_URL, absolute, graph, personSchema, profilePageSchema, pageMeta,
 } from "@/lib/seo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   ...pageMeta({
-    title: `${STUDIO.name} — selected projects`,
+    title: `${PERSON.title} — Architecture Portfolio`,
     description: ONE_LINER,
     path: "/",
     type: "profile",
   }),
   // The home page owns the bare name, so it must not inherit the "| Name"
   // template that every other page uses.
-  title: { absolute: `${STUDIO.name} — selected projects` },
+  title: { absolute: `${PERSON.title} — Architecture Portfolio` },
 };
 
 export default async function HomePage() {
@@ -47,21 +47,22 @@ export default async function HomePage() {
 
   return (
     <SiteShell hasHero>
-      {/* One entity: the studio. The previous graph asserted a person, two
-          companies and an open-source project, none of which describe this
-          site any more. */}
+      {/* One entity: Mariem. WebSite and ProfilePage both point at the same
+          Person @id, so an engine reads this as a page *about* her rather than
+          one that merely mentions her. */}
       <JsonLd
         data={graph(
           {
             "@type": "WebSite",
             "@id": absolute("/#website"),
             url: SITE_URL,
-            name: STUDIO.name,
+            name: `${PERSON.title} — Architecture Portfolio`,
             description: ONE_LINER,
             inLanguage: "en",
-            publisher: { "@id": absolute("/#studio") },
+            publisher: { "@id": absolute("/#person") },
           },
-          studioSchema(),
+          personSchema(),
+          profilePageSchema(),
         )}
       />
       {/* 01 — Hero */}

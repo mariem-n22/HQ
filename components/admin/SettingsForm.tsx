@@ -304,7 +304,7 @@ export function SettingsForm({
             rows={2}
             defaultValue={settings.signatureStatement}
             className={inputClass}
-            placeholder="Add the studio's signature statement"
+            placeholder="Mariem's own words — not written for her"
           />
         </label>
 
@@ -351,7 +351,7 @@ export function SettingsForm({
       <section className="glow-card p-5 sm:p-6">
         <h2 className="label-mono text-amber">The Practice</h2>
         <p className="mt-2 text-xs text-mute">
-          A home page section with no page behind it &mdash; how the studio works. It stays
+          A home page section with no page behind it &mdash; how Mariem works. It stays
           hidden entirely until at least one of these three has content, so leaving it blank
           costs nothing.
         </p>
@@ -369,14 +369,14 @@ export function SettingsForm({
         <label className="mt-5 block">
           <span className="label-mono">Body</span>
           <p className="mt-1 text-xs text-mute">
-            A short paragraph on the studio&rsquo;s approach, in its own words.
+            A short paragraph on Mariem&rsquo;s approach.
           </p>
           <textarea
             name="practiceBody"
             rows={5}
             defaultValue={settings.practiceBody}
             className={inputClass}
-            placeholder="Add the studio's own description of how it works"
+            placeholder="How Mariem works"
           />
         </label>
 

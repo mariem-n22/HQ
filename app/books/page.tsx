@@ -6,9 +6,9 @@ import { BookShelf } from "@/components/hq/BookShelf";
 import { getBooks, getContentBlocks, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Books — what the studio reads",
+  title: "Reading",
   description:
-    "A reading log kept by the studio: books on architecture, cities and making, and what was taken from each.",
+    "Books on architecture, cities and making that Mariem Nasser Elsbelgy has read, and what she took from each.",
   path: "/books",
 });
 
@@ -24,7 +24,7 @@ export default async function BooksPage() {
         title={block?.title ?? "Books"}
         intro={
           block?.body ??
-          "Books read by the studio, the lines that stuck, and what each one changed in how the practice thinks."
+          "Books read, the lines that stuck, and what each one changed."
         }
       />
       <div className="mt-10">

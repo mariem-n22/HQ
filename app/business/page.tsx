@@ -7,7 +7,7 @@ import { getContentBlocks, getVentures, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Ventures",
-  description: "The practice's business side — ventures, structure and where it is heading.",
+  description: "Ventures and independent work alongside Mariem Nasser Elsbelgy's architecture studies.",
   path: "/business",
 });
 

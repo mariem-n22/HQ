@@ -9,7 +9,7 @@ import { parseStage } from "@/lib/types";
 
 export const metadata: Metadata = pageMeta({
   title: "About",
-  description: "The architect behind the practice — background, training, work and recognition.",
+  description: "Mariem Nasser Elsbelgy — architecture student at Modern Academy, graduating 2027, ranked second in her cohort. Background, training, work and recognition.",
   path: "/studio/architect",
 });
 

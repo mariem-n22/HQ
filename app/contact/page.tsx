@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { pageMeta } from "@/lib/seo";
+import { PERSON, pageMeta } from "@/lib/seo";
 import { SectorPage } from "@/components/hq/SiteShell";
 import { ChannelRows } from "@/components/hq/ChannelRows";
 import { ContactForm } from "@/components/hq/ContactForm";
@@ -8,8 +8,8 @@ import { getSettings, isTodo } from "@/lib/data";
 import { channelsOf } from "@/lib/channels";
 
 export const metadata: Metadata = pageMeta({
-  title: "Contact the studio",
-  description: "Reach the studio about a commission, a competition or a collaboration.",
+  title: "Contact",
+  description: "Get in touch with Mariem Nasser Elsbelgy about a project, a competition or a collaboration.",
   path: "/contact",
 });
 
@@ -19,7 +19,7 @@ function wordmarkOf(email: string | undefined) {
     const local = email.split("@")[0]?.replace(/[^a-zA-Z]/g, "");
     if (local && local.length >= 3) return local.toUpperCase();
   }
-  return "STUDIO";
+  return PERSON.short.toUpperCase();
 }
 
 export default async function ContactPage() {
@@ -44,9 +44,9 @@ export default async function ContactPage() {
         <Reveal>
           <h2 className="display-title text-3xl text-ink">Let&rsquo;s turn your vision into reality</h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-mute">
-            The studio takes on residential, cultural, hospitality and urban work, from early
-            feasibility through to construction. Tell us what you are trying to build, the site and
-            the constraints, and we will tell you plainly whether the practice is the right fit.
+            Mariem takes on freelance commissions alongside her studies at Modern Academy, and
+            competes regularly. Tell her what you are trying to build, the site and the
+            constraints, and she will say plainly whether she is the right fit for it.
           </p>
           <div className="mt-8">
             <ChannelRows settings={settings} />

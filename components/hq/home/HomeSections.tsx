@@ -319,7 +319,7 @@ export function HomeLatest({ entries }: { entries: NowEntry[] }) {
   return (
     <Section eyebrow="Latest">
       <div className="mt-8 flex items-baseline justify-between gap-4">
-        <p className="text-sm text-mute">Recent activity from the studio.</p>
+        <p className="text-sm text-mute">What Mariem is working on at the moment.</p>
         <Link href="/now" className="link-underline label-mono shrink-0 text-ink">
           The Now page
         </Link>

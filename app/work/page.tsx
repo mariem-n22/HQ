@@ -7,8 +7,8 @@ import type { ArchiveEntry } from "@/components/hq/architecture/ArchiveCard";
 import { getProjects, mediaByCategory } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Work — selected projects",
-  description: "Selected architecture projects: residential, cultural, hospitality and urban work.",
+  title: "Selected Projects",
+  description: "Architecture projects by Mariem Nasser Elsbelgy — studio work, competition entries and freelance commissions, presented as drawings and written project statements.",
   path: "/work",
 });
 

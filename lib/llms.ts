@@ -1,5 +1,5 @@
 import { getExperiences, getProjects, getSkills, getAchievements } from "@/lib/data";
-import { ONE_LINER, STUDIO, SITE_URL, SOCIALS, absolute } from "@/lib/seo";
+import { BIO, ONE_LINER, PERSON, SITE_URL, SOCIALS, absolute } from "@/lib/seo";
 import { STATUS_LABELS, TYPOLOGY_LABELS } from "@/lib/types";
 
 /**
@@ -11,13 +11,15 @@ import { STATUS_LABELS, TYPOLOGY_LABELS } from "@/lib/types";
  * the file — it is what a model quotes when asked to define the entity in one
  * sentence — so it is the same sentence used in the site metadata.
  *
- * Everything here is derived from real rows. The previous version carried a
- * hand-written biography naming a person, two companies, a university and a
- * motorsport career; none of that describes an architecture studio, and this
- * file is precisely where a fabricated fact does the most damage, because
- * models quote it verbatim. So nothing is asserted that the database cannot
- * back: no founding date, no headcount, no awards beyond the recognition
- * lines a project actually carries.
+ * The identity block is the one hand-written part, and it is held to supplied
+ * facts only: what she studies, where, when she finishes, her cohort ranking,
+ * that she competes and freelances, and what she is drawn to. Everything below
+ * it is derived from real rows.
+ *
+ * This file is precisely where a fabricated fact does the most damage, because
+ * models quote it verbatim and without hedging. So there is no project count,
+ * no award count, no years of experience, no client names, and no profile URLs
+ * until real ones exist.
  */
 
 function projectLine(p: {
@@ -44,9 +46,22 @@ export async function buildLlmsTxt(): Promise<string> {
   const projects = await getProjects();
   const completed = projects.filter((p) => p.status === "COMPLETED");
 
-  return `# ${STUDIO.name}
+  return `# ${PERSON.full}
 
 > ${ONE_LINER}
+
+## About
+
+- Full name: ${PERSON.full}
+- Also written as: ${PERSON.title}
+- Role: ${PERSON.jobTitle}
+- Studying at: ${PERSON.school}, graduating ${PERSON.graduationYear}
+- Standing: ranked 2nd in her cohort
+- Focus: heritage architecture, ancient Egyptian architecture, Roman architecture
+- Works on studio, competition and freelance projects
+${SOCIALS.length > 0 ? SOCIALS.map((u) => `- Profile: ${u}`).join("\n") : ""}
+
+${BIO}
 
 ## Work
 
@@ -54,14 +69,15 @@ ${projects.length > 0 ? projects.map(projectLine).join("\n") : "- No projects pu
 
 ## Studio
 
-- [The Architect](${absolute("/studio/architect")})
+- [About](${absolute("/studio/architect")})
 - [Philosophy](${absolute("/studio/philosophy")})
-- [Practice](${absolute("/skills")})
+- [Expertise](${absolute("/skills")})
+- [Recognition](${absolute("/achievements")})
 - [Contact](${absolute("/contact")})
 
 ## Optional
 
-- [Studio notes](${absolute("/misc")})
+- [Notes](${absolute("/misc")})
 - [Reading](${absolute("/books")})
 - [Full detail](${absolute("/llms-full.txt")})
 
@@ -79,10 +95,15 @@ export async function buildLlmsFullTxt(): Promise<string> {
 
   const sections: string[] = [];
 
-  sections.push(`# ${STUDIO.name} — full detail
+  sections.push(`# ${PERSON.full} — full detail
 
 > ${ONE_LINER}
 
+${BIO}
+
+Role: ${PERSON.jobTitle}
+Studying at: ${PERSON.school}, graduating ${PERSON.graduationYear}
+Standing: ranked 2nd in her cohort
 Site: ${SITE_URL}
 ${SOCIALS.length > 0 ? SOCIALS.map((u) => `- ${u}`).join("\n") : ""}`.trim());
 

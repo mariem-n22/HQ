@@ -1,4 +1,4 @@
-// Mahmoud HQ — consolidated data model (v6 PART 3).
+// Mariem N. Elsbelgy — consolidated data model (v6 PART 3).
 //
 // Field names follow the brief. Three fields marked "kept from the live
 // schema" are not in the brief's list but are read by shipped UI, and PART 5
@@ -68,7 +68,7 @@ model AdminUser {
   id           String   @id @default(cuid())
   email        String   @unique
   passwordHash String
-  name         String   @default("Mahmoud")
+  name         String   @default("Mariem")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

@@ -6,8 +6,8 @@ import { NowList } from "@/components/hq/NowList";
 import { getContentBlocks, getNowEntries, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "What the studio is working on now",
-  description: "Current work, in progress.",
+  title: "Now",
+  description: "What Mariem Nasser Elsbelgy is working on at the moment — projects, studies and competitions in progress.",
   path: "/now",
 });
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { NAV_GROUPS } from "@/lib/types";
-import { STUDIO } from "@/lib/seo";
+import { PERSON } from "@/lib/seo";
 import { getNavPresence, getNowEntries, getSettings } from "@/lib/data";
 import { CurrentlyLine } from "./TelemetryTicker";
 import { SocialLinks } from "./SocialLinks";
@@ -74,7 +74,7 @@ export async function SiteShell({
             // of them being clipped off the edge.
             className="display-title min-w-0 truncate text-lg text-ink transition-colors hover:text-amber sm:text-2xl"
           >
-            {STUDIO.name}
+            {PERSON.short}
           </Link>
           <nav
             aria-label="Sections"
@@ -121,9 +121,10 @@ export async function SiteShell({
         */}
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-8 gap-y-12 px-6 py-16 sm:px-8 md:grid-cols-4 lg:grid-cols-6">
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
-            <p className="display-title text-3xl text-ink">{STUDIO.name}</p>
+            <p className="display-title text-3xl text-ink">{PERSON.short}</p>
             <p className="standfirst mt-4 max-w-sm text-[15px]">
-              An archive of selected projects, kept current by the studio.
+              Architecture student at Modern Academy. Selected projects, competitions and
+              writing, kept current.
             </p>
             <SocialLinks settings={settings} className="mt-6" />
           </div>
@@ -152,7 +153,7 @@ export async function SiteShell({
         <div className="border-t border-line px-6 py-5 sm:px-8">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-[11px] uppercase tracking-[0.25em] text-mute">
-              © {new Date().getFullYear()} {STUDIO.name}
+              © {new Date().getFullYear()} {PERSON.full}
             </p>
             <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
               <li>

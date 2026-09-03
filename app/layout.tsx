@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
-import { STUDIO, SITE_URL, ONE_LINER } from "@/lib/seo";
+import { PERSON, SITE_URL, ONE_LINER } from "@/lib/seo";
 import "./globals.css";
 
 /**
@@ -57,27 +57,36 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     // Every page anchors on the name — it is the primary query family.
-    default: `${STUDIO.name} — selected projects`,
-    template: `%s | ${STUDIO.name}`,
+    default: `${PERSON.title} — Architecture Portfolio`,
+    template: `%s | ${PERSON.title}`,
   },
   description: ONE_LINER,
-  applicationName: STUDIO.name,
-  authors: [{ name: STUDIO.name, url: SITE_URL }],
-  creator: STUDIO.name,
-  publisher: STUDIO.name,
+  applicationName: PERSON.title,
+  authors: [{ name: PERSON.full, url: SITE_URL }],
+  creator: PERSON.full,
+  publisher: PERSON.full,
   // Discipline and typology terms only. The previous list named a real
   // individual, his companies and his university; none of that is true of an
   // architecture studio, and inventing replacements would be worse than none.
+  /*
+   * Kept, but with no illusions: Google has ignored this tag since 2009 and it
+   * carries no ranking weight anywhere that matters. It stays because some
+   * smaller indexers and scrapers still read it, and because leaving it
+   * describing an anonymous studio would have been the only place on the site
+   * still saying so. Name variants first — those are the queries this site has
+   * to win.
+   */
   keywords: [
-    "architecture studio",
-    "architecture practice",
+    "Mariem Nasser Elsbelgy",
+    "Mariem N. Elsbelgy",
+    "Mariem Elsbelgy",
+    "architecture student",
+    "Modern Academy architecture",
     "architectural design",
-    "residential architecture",
-    "cultural architecture",
-    "hospitality architecture",
-    "urban design",
-    "interior architecture",
-    "landscape architecture",
+    "heritage architecture",
+    "ancient Egyptian architecture",
+    "Roman architecture",
+    "architectural conservation",
   ],
   icons: { icon: "/favicon.ico" },
   robots: {

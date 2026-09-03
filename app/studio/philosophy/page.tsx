@@ -5,7 +5,7 @@ import { getPhilosophy } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Philosophy",
-  description: "The practice's design position.",
+  description: "Mariem Nasser Elsbelgy's design position, in her own words.",
   path: "/studio/philosophy",
 });
 

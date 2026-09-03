@@ -30,7 +30,7 @@ async function main() {
   const admin = await prisma.adminUser.upsert({
     where: { email },
     update: { passwordHash },
-    create: { email, passwordHash, name: process.env.ADMIN_NAME ?? "Mahmoud" },
+    create: { email, passwordHash, name: process.env.ADMIN_NAME ?? "Mariem" },
   });
 
   const total = await prisma.adminUser.count();

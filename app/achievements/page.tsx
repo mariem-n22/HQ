@@ -9,7 +9,7 @@ import { getAchievements } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
   title: "Achievements",
-  description: "Competitions, awards and recognition, and the work behind each.",
+  description: "Competitions, hackathons and awards Mariem Nasser Elsbelgy has taken part in, with the work submitted to each.",
   path: "/achievements",
 });
 

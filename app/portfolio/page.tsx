@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { STUDIO, graph, pageMeta, studioSchema } from "@/lib/seo";
+import { PERSON, graph, pageMeta, personSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { Frame } from "@/components/hq/Frame";
@@ -25,8 +25,8 @@ import {
 } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Portfolio — selected projects",
-  description: "A single-page overview of the studio: selected projects, practice, experience and recognition.",
+  title: "Portfolio",
+  description: "A single-page overview of Mariem Nasser Elsbelgy: selected projects, expertise, experience and recognition.",
   path: "/portfolio",
 });
 
@@ -58,12 +58,12 @@ export default async function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-base">
-      <JsonLd data={graph(studioSchema())} />
+      <JsonLd data={graph(personSchema())} />
       {/* The portfolio carries its own header with the primary actions. */}
       <div className="sticky top-0 z-40 border-b border-line bg-base/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
           <p className="display-title mr-auto text-xl text-ink">
-            {STUDIO.name}
+            {PERSON.title}
             <span className="ml-1 align-super font-mono text-[9px] uppercase tracking-[0.3em] text-amber">
               Portfolio
             </span>
@@ -102,16 +102,16 @@ export default async function PortfolioPage() {
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
         <header className="border-b border-line pb-10">
           <p className="label-mono text-amber">
-            {STUDIO.discipline}{settings?.location ? ` — ${settings.location}` : ""}
+            {PERSON.jobTitle}{settings?.location ? ` — ${settings.location}` : ""}
           </p>
           <div className="mt-4 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
               <h1 className="display-title text-5xl text-ink sm:text-7xl">
-                {pitch?.title || STUDIO.name}
+                {pitch?.title || PERSON.title}
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-mute">
                 {pitch?.body ||
-                  "An architecture practice. Set the studio's own introduction from the dashboard."}
+                  "Architecture student at Modern Academy. Set the introduction from the dashboard."}
               </p>
               {settings?.openToOpportunities ? (
                 <p className="mt-5 inline-flex items-center gap-2 border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-go">

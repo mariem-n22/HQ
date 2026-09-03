@@ -1,4 +1,4 @@
-# Mahmoud HQ — Design Notes (Next.js)
+# Mariem N. Elsbelgy — Design Notes (Next.js)
 
 Design system: "Pit Wall / Telemetry" — dark instrument-panel surfaces,
 Instrument Serif display type, Work Sans body, indigo accent held in `--amber`,
@@ -37,7 +37,7 @@ pre-migration app (`pitwall-hq/src`), not from the schema alone. Columns:
 | `showOnPortfolio` | `/portfolio` slider filter | toggle |
 | `order` | sort | number |
 
-`tagline` **is** what Mahmoud means by "short description" — it is the only
+`tagline` **is** what is meant by "short description" — it is the only
 string the card renders, and the detail page renders `description` separately.
 Relabelled "Short description (cards)" in the form so this is unambiguous.
 
@@ -195,12 +195,21 @@ referenced.** Deleted.
 ### Structured data shape
 
 One `@graph` per page rather than separate script tags, so `@id` references
-resolve: `Person` (`#mahmoud-hammad`) is referenced as `founder` by the
-`Organization` nodes for T1Dub and WorkPo and as `author` by the
-`SoftwareSourceCode` node for DeepClone, which carries
-`isAccessibleForFree: true` and an explicit licence — the citable fact for
-"Egyptian open-source AI" queries. `sameAs` links GitHub, LinkedIn and
-Instagram so the profiles collapse into one entity.
+resolve. The site's single entity is `Person` (`#person`) — Mariem Nasser
+Elsbelgy — carrying `jobTitle`, `alumniOf` (Modern Academy) and `knowsAbout`.
+The home page adds `WebSite` (`#website`) and `ProfilePage` (`#profilepage`),
+both pointing at that same `@id`; `mainEntity` on the ProfilePage is what marks
+this as a page *about* her rather than one that merely mentions her.
+
+`jobTitle` is "Architecture Student" and not "Architect" on purpose — she
+graduates in 2027 and the latter is a protected title in most jurisdictions.
+
+`sameAs` is deliberately absent until real profile URLs exist. It is the field
+that reconciles this site with her other presences into one entity, so it is
+both the highest-value one here and the one most damaged by a guess.
+
+This replaced an anonymous `Organization` node, which had itself replaced a
+developer-portfolio graph of a person and three companies.
 
 ## Earlier passes
 
