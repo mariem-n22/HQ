@@ -5,7 +5,13 @@ import { Frame } from "@/components/hq/Frame";
 import { Reveal } from "@/components/hq/Reveal";
 import { HomeHero } from "@/components/hq/HomeHero";
 import { SignatureStatement } from "@/components/hq/SignatureStatement";
-import { getContentBlocks, getProjects, getSettings, findBlock } from "@/lib/data";
+import {
+  getContentBlocks, getProjects, getSettings, findBlock,
+  getArchitectProfile, getPhilosophy, getAchievements, getNowEntries,
+} from "@/lib/data";
+import {
+  HomeArchitect, HomePractice, HomePhilosophy, HomeRecognition, HomeLatest,
+} from "@/components/hq/home/HomeSections";
 import { JsonLd } from "@/components/JsonLd";
 import {
   ONE_LINER, STUDIO, SITE_URL, absolute, graph, studioSchema, pageMeta,
@@ -25,11 +31,16 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [projects, blocks, settings] = await Promise.all([
-    getProjects(),
-    getContentBlocks(),
-    getSettings(),
-  ]);
+  const [projects, blocks, settings, profile, philosophy, achievements, nowEntries] =
+    await Promise.all([
+      getProjects(),
+      getContentBlocks(),
+      getSettings(),
+      getArchitectProfile(),
+      getPhilosophy(),
+      getAchievements(),
+      getNowEntries(),
+    ]);
 
   const featured = projects.find((p) => p.featured) ?? projects[0];
   const secondary = projects.filter((p) => p.id !== featured?.id).slice(0, 4);
@@ -116,6 +127,41 @@ export default async function HomePage() {
           </Reveal>
         ) : null}
 
+        {/*
+          04–08. Each hides itself when its source is empty, so the order below
+          is the intended reading order and not a promise that all five render.
+          With the current data, Recognition and Latest do and the other three
+          wait on content.
+        */}
+        <HomeArchitect
+          name={profile?.name}
+          roleLine={profile?.roleLine}
+          portrait={profile?.portrait}
+          biography={profile?.biography}
+        />
+
+        <HomePractice
+          headline={settings?.practiceHeadline}
+          body={settings?.practiceBody}
+          disciplines={settings?.practiceDisciplines}
+        />
+
+        {/* Same precedence the About page uses — one source for the text. */}
+        <HomePhilosophy note={profile?.philosophyNote} statement={philosophy?.statement} />
+
+        <HomeRecognition
+          items={achievements.map((a) => ({
+            slug: a.slug,
+            title: a.title,
+            date: a.date,
+            category: a.category,
+          }))}
+          awards={profile?.awards}
+        />
+
+        {/* Most recent first; `active` marks the current ticker line, not
+            publication, so it is not a filter here. */}
+        <HomeLatest entries={nowEntries.slice(0, 3)} />
       </div>
     </SiteShell>
   );

@@ -413,6 +413,21 @@ model SiteSettings {
   statementHeadline     String  @default("")
   statementBody         String  @default("")
 
+  /// "The Practice" — a home-page-only block, with no page behind it.
+  ///
+  /// Deliberately static fields rather than a new content model or a
+  /// /studio/practice route. Nothing in the project describes how the studio
+  /// works, and an earlier "Explore the Practice" footer link was removed
+  /// precisely because it pointed at a page that did not exist. A section that
+  /// lives entirely on the home page is the honest shape for a paragraph of
+  /// content; it can be promoted to a real page later if it outgrows that.
+  practiceHeadline      String  @default("")
+  practiceBody          String  @default("")
+  /// Scope lines — disciplines, services, the kinds of work taken on. A list
+  /// so the section renders as a list rather than a second paragraph block,
+  /// which keeps it visually distinct from the Signature Statement above it.
+  practiceDisciplines   String[] @default([])
+
   heroImage             String?
   avatarImage           String?
   openToOpportunities   Boolean @default(true)

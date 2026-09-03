@@ -27,6 +27,9 @@ type Settings = {
   locations: string[];
   statementHeadline: string;
   statementBody: string;
+  practiceHeadline: string;
+  practiceBody: string;
+  practiceDisciplines: string[];
   openToOpportunities: boolean;
   avatarImage: string;
   heroImage: string;
@@ -340,6 +343,54 @@ export function SettingsForm({
             defaultValue={settings.statementBody}
             className={inputClass}
             placeholder="Add the statement, in the architect's own words"
+          />
+        </label>
+      </section>
+
+      <section className="glow-card p-5 sm:p-6">
+        <h2 className="label-mono text-amber">The Practice</h2>
+        <p className="mt-2 text-xs text-mute">
+          A home page section with no page behind it &mdash; how the studio works. It stays
+          hidden entirely until at least one of these three has content, so leaving it blank
+          costs nothing.
+        </p>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Headline</span>
+          <input
+            name="practiceHeadline"
+            defaultValue={settings.practiceHeadline}
+            className={inputClass}
+            placeholder="Add the section headline"
+          />
+        </label>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Body</span>
+          <p className="mt-1 text-xs text-mute">
+            A short paragraph on the studio&rsquo;s approach, in its own words.
+          </p>
+          <textarea
+            name="practiceBody"
+            rows={5}
+            defaultValue={settings.practiceBody}
+            className={inputClass}
+            placeholder="Add the studio's own description of how it works"
+          />
+        </label>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Disciplines</span>
+          <p className="mt-1 text-xs text-mute">
+            One per line &mdash; the kinds of work taken on. Rendered as a list beside the
+            paragraph, so the section does not read as a second statement block.
+          </p>
+          <textarea
+            name="practiceDisciplines"
+            rows={4}
+            defaultValue={settings.practiceDisciplines.join("\n")}
+            className={inputClass}
+            placeholder={"Residential\nCultural\nInterior"}
           />
         </label>
       </section>

@@ -17,7 +17,19 @@ import { Modal } from "./Modal";
  * turning every card into a button that opens a popup repeating the line
  * already on screen would be a worse interaction than no popup at all.
  */
-export function NowList({ entries }: { entries: NowEntry[] }) {
+export function NowList({
+  entries,
+  /**
+   * The home page's "Latest" teaser omits dates. It is a compact digest sitting
+   * between two other sections, and the full dated record is one click away on
+   * /now — repeating the timestamps there would add noise without adding
+   * information.
+   */
+  hideDates = false,
+}: {
+  entries: NowEntry[];
+  hideDates?: boolean;
+}) {
   const [openId, setOpenId] = useState<string | null>(null);
   const active = entries.find((e) => e.id === openId) ?? null;
 
@@ -35,10 +47,14 @@ export function NowList({ entries }: { entries: NowEntry[] }) {
                 }`}
               />
               <div className="min-w-0 flex-1">
-                <p className="data-mono text-[11px] tracking-widest">
-                  {entry.date.toISOString().slice(0, 10)}
+                {hideDates ? null : (
+                  <p className="data-mono text-[11px] tracking-widest">
+                    {entry.date.toISOString().slice(0, 10)}
+                  </p>
+                )}
+                <p className={`text-sm leading-relaxed text-ink/90 ${hideDates ? "" : "mt-2"}`}>
+                  {entry.text}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-ink/90">{entry.text}</p>
                 {/* Optional by design — nothing is rendered when absent, unlike
                     covers and galleries which always reserve a placeholder. */}
                 {entry.image ? (

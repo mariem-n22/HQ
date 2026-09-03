@@ -58,6 +58,8 @@ const TEXT_FIELDS = [
   "homeHeroCredit",
   "statementHeadline",
   "statementBody",
+  "practiceHeadline",
+  "practiceBody",
 ] as const;
 
 export async function saveSettings(form: FormData): Promise<Result> {
@@ -72,6 +74,12 @@ export async function saveSettings(form: FormData): Promise<Result> {
     data.homeHeroUrl = String(form.get("homeHeroUrl") ?? "").trim() || null;
     // One city per line, so more locations need no code change.
     data.locations = String(form.get("locations") ?? "")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
+    // Same shape, same reasoning: one discipline per line, so the list grows
+    // without a schema or a form change.
+    data.practiceDisciplines = String(form.get("practiceDisciplines") ?? "")
       .split("\n")
       .map((l) => l.trim())
       .filter(Boolean);
