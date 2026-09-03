@@ -25,10 +25,15 @@ const navLinkClass =
  * stops being the first thing on the page and the bar reads as a banner
  * pinned over it.
  *
- * On those pages it moves to the foot instead, just above the footer, where a
- * standing dispatch line reads as a closing note rather than an interruption.
+ * On those pages it is dropped altogether. It was briefly moved to the foot
+ * instead, but the home page now carries a "Latest" section reading the same
+ * Now entries and linking to the same page, so the bar was saying a second time
+ * what the section above it had already said. A page that opens with a hero
+ * does not need a standing dispatch line as well.
+ *
  * It is a rule about page shape rather than a list of routes, so any future
- * hero page gets the right behaviour by declaring itself one.
+ * hero page gets the right behaviour by declaring itself one, and every page
+ * that opens with a heading keeps the line under the nav where it belongs.
  */
 export async function SiteShell({
   children,
@@ -99,11 +104,6 @@ export async function SiteShell({
 
       <main className="flex-1">{children}</main>
 
-      {hasHero ? (
-        <div className="mt-24">
-          <CurrentlyLine entries={nowEntries} />
-        </div>
-      ) : null}
 
       <footer className="mt-28 border-t border-line">
         {/*
