@@ -456,7 +456,13 @@ model SiteSettings {
   avatarImage           String?
   openToOpportunities   Boolean @default(true)
   philosophyQuote       String  @default("")
-  github                String  @default("")
+  /// Profile links. ArchDaily and Behance replaced GitHub, which was a
+  /// leftover from the site's previous life as a software portfolio and has no
+  /// place on an architecture one. Empty until real URLs exist — `channelsOf`
+  /// drops any channel with a blank href, so an unfilled profile renders
+  /// nothing rather than a dead link.
+  archdaily             String  @default("")
+  behance               String  @default("")
   linkedin              String  @default("")
   instagram             String  @default("")
   whatsapp              String  @default("")

@@ -16,7 +16,8 @@ type Settings = {
   phone: string;
   whatsapp: string;
   linkedin: string;
-  github: string;
+  archdaily: string;
+  behance: string;
   instagram: string;
   location: string;
   availability: string;
@@ -43,7 +44,8 @@ const CHANNELS: { name: keyof Settings; label: string; placeholder?: string }[] 
   { name: "phone", label: "Phone", placeholder: "+20 105 5210373" },
   { name: "whatsapp", label: "WhatsApp link", placeholder: "https://wa.me/201055210373" },
   { name: "linkedin", label: "LinkedIn URL" },
-  { name: "github", label: "GitHub URL" },
+  { name: "archdaily", label: "ArchDaily URL" },
+  { name: "behance", label: "Behance URL" },
   { name: "instagram", label: "Instagram URL" },
   { name: "location", label: "Location", placeholder: "Egypt — open to remote" },
   { name: "availability", label: "Availability line" },

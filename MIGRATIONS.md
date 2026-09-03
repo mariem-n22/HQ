@@ -144,6 +144,67 @@ author names into what is now the country column.
 Only after steps 1 and 2 have completed successfully. See standing rule 3 for
 what happens if this runs first.
 
+### Also pending — contact channels
+
+GitHub was removed from the contact channels and replaced with ArchDaily and
+Behance. GitHub was a leftover from the site's previous life as a software
+portfolio.
+
+The development database was migrated as follows, and production needs the
+same. The drop is listed first because it is the destructive half:
+
+```sql
+-- Verify it is empty before dropping. It held "" in development; if production
+-- holds a real URL, decide what to do with it before running this.
+select "github" from "SiteSettings";
+
+ALTER TABLE "SiteSettings" DROP COLUMN IF EXISTS "github";
+```
+
+Then a plain, additive push adds `archdaily` and `behance`:
+
+```bash
+bunx prisma db push
+```
+
+Both new columns default to `""`. `channelsOf()` drops any channel with a blank
+href, so they render nothing at all until real URLs are entered through
+**Dashboard → Settings** — no empty icon, no dead link.
+
+### Also pending — a data fix, not a schema one
+
+`SiteSettings.linkedin` held a paragraph of prose rather than a URL:
+
+> "Skilled in architectural design, teamwork, leadership, and communication…"
+
+`channelsOf()` treats that field as an href, so the contact page rendered a
+link pointing at a sentence. Cleared to `""` in development. **Check production
+for the same value** — it was almost certainly entered through the dashboard on
+whichever database was live at the time.
+
+---
+
+## Open work, not yet started
+
+### Derive `sameAs` from settings instead of the SOCIALS constant
+
+`SOCIALS` in `lib/seo.ts` is a hardcoded array feeding the `Person` schema's
+`sameAs` and the profile lines in llms.txt. The contact channels read the same
+kind of URLs from `SiteSettings` instead, where they are dashboard-editable.
+
+That is two sources of truth for one fact. The moment a profile URL is entered
+in the dashboard and not also added to `SOCIALS` — or the reverse — the
+structured data and the visible contact links disagree, and the failure is
+silent: nothing breaks, the entity reconciliation just quietly stops working.
+
+The fix is to derive `sameAs` from the settings row so the URL is entered once.
+`personSchema()` is currently a synchronous no-argument function called from
+server components that already load settings, so it would take the settings (or
+the URL list) as a parameter. Contained, but it touches every caller, which is
+why it was not folded into the channel swap.
+
+Not urgent. It becomes urgent the first time a real profile URL is added.
+
 ### Not included
 
 No route or slug has been renamed. `/skills`, `/business`, `/story` and `/misc`

@@ -253,7 +253,8 @@ async function main() {
       avatarImage: str(settings.avatar_image) || null,
       openToOpportunities: bool(settings.open_to_opportunities, true),
       philosophyQuote: str(settings.philosophy_quote),
-      github: str(settings.github),
+      // `github` intentionally not carried across: the column was dropped when
+      // the contact channels moved to ArchDaily and Behance.
       linkedin: str(settings.linkedin),
       instagram: str(settings.instagram),
       whatsapp: str(settings.whatsapp),

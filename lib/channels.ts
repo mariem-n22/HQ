@@ -1,8 +1,10 @@
 import type { IconType } from "react-icons";
-import { SiGithub, SiInstagram, SiWhatsapp } from "react-icons/si";
+import { SiBehance, SiInstagram, SiWhatsapp } from "react-icons/si";
 // LinkedIn is not in simple-icons v5 — Font Awesome still carries the mark.
 import { FaLinkedinIn } from "react-icons/fa6";
-import { Mail, Phone } from "lucide-react";
+// ArchDaily has no mark in simple-icons, so it borrows a lucide glyph the
+// same way Phone and Mail below do.
+import { Building2, Mail, Phone } from "lucide-react";
 import { isTodo, type SiteSettings } from "@/lib/types";
 
 export type Channel = {
@@ -37,11 +39,19 @@ export function channelsOf(settings: SiteSettings | null): Channel[] {
 
   const all: Channel[] = [
     {
-      key: "github",
-      label: "GitHub",
-      value: settings.github,
-      href: settings.github,
-      Icon: SiGithub,
+      key: "archdaily",
+      label: "ArchDaily",
+      value: settings.archdaily,
+      href: settings.archdaily,
+      Icon: Building2 as IconType,
+      hover: "hover:text-amber",
+    },
+    {
+      key: "behance",
+      label: "Behance",
+      value: settings.behance,
+      href: settings.behance,
+      Icon: SiBehance,
       hover: "hover:text-amber",
     },
     {

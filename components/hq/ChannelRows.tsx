@@ -92,8 +92,10 @@ export function ChannelRows({ settings }: { settings: SiteSettings | null }) {
               ? "Connect on LinkedIn"
               : channel.key === "instagram"
                 ? "Follow on Instagram"
-                : channel.key === "github"
-                  ? "Code on GitHub"
+                : channel.key === "archdaily"
+                  ? "Projects on ArchDaily"
+                  : channel.key === "behance"
+                    ? "Portfolio on Behance"
                   : channel.label
           }
           value={channel.value.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
