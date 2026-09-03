@@ -54,6 +54,10 @@ const TEXT_FIELDS = [
   "location",
   "availability",
   "philosophyQuote",
+  "signatureStatement",
+  "homeHeroCredit",
+  "statementHeadline",
+  "statementBody",
 ] as const;
 
 export async function saveSettings(form: FormData): Promise<Result> {
@@ -65,6 +69,12 @@ export async function saveSettings(form: FormData): Promise<Result> {
     data.openToOpportunities = form.get("openToOpportunities") === "on";
     data.avatarImage = String(form.get("avatarImage") ?? "").trim() || null;
     data.heroImage = String(form.get("heroImage") ?? "").trim() || null;
+    data.homeHeroUrl = String(form.get("homeHeroUrl") ?? "").trim() || null;
+    // One city per line, so more locations need no code change.
+    data.locations = String(form.get("locations") ?? "")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
 
     await prisma.siteSettings.upsert({
       where: { id: "singleton" },

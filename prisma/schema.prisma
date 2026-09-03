@@ -388,6 +388,31 @@ model HeroImage {
 /// Singleton — enforced by always reading/writing id = "singleton".
 model SiteSettings {
   id                    String  @id @default("singleton")
+
+  /// Home page hero.
+  ///
+  /// Deliberately its own field rather than reusing `heroImage` or the
+  /// HeroImage gallery: those feed the portfolio page, and the home hero is a
+  /// single asset that should be swappable without disturbing them. Accepts an
+  /// image or a video — the kind is inferred from the file extension, so the
+  /// operator uploads one file and does not have to declare which it is.
+  homeHeroUrl           String?
+  /// Credit line shown small in the hero corner. Required for any image whose
+  /// licence asks for attribution — a CC BY-SA photograph published without it
+  /// is a licence breach — and useful anyway once real photography lands, since
+  /// architectural photographers are credited by convention.
+  homeHeroCredit        String  @default("")
+  /// The signature line over the hero. Left blank until the studio supplies a
+  /// real statement; the page shows an obvious placeholder rather than any
+  /// invented copy.
+  signatureStatement    String  @default("")
+  /// Location tags, e.g. ["Cairo", "Egypt"] or ["Cairo", "London", "Dubai"].
+  /// A list, so more cities need no code change.
+  locations             String[] @default([])
+  /// The Signature Statement section, directly beneath the hero.
+  statementHeadline     String  @default("")
+  statementBody         String  @default("")
+
   heroImage             String?
   avatarImage           String?
   openToOpportunities   Boolean @default(true)

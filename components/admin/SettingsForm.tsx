@@ -21,6 +21,12 @@ type Settings = {
   location: string;
   availability: string;
   philosophyQuote: string;
+  homeHeroUrl: string;
+  homeHeroCredit: string;
+  signatureStatement: string;
+  locations: string[];
+  statementHeadline: string;
+  statementBody: string;
   openToOpportunities: boolean;
   avatarImage: string;
   heroImage: string;
@@ -247,7 +253,99 @@ export function SettingsForm({
           <span className="text-sm text-ink">Open to opportunities</span>
         </label>
 
+      </section>
+
+      <section className="glow-card p-5 sm:p-6">
+        <h2 className="label-mono text-amber">Home page</h2>
+        <p className="mt-2 text-xs text-mute">
+          The hero and the statement beneath it. Both statements should be the architect&rsquo;s own
+          words — the page shows an obvious placeholder until they are filled in, rather than any
+          stand-in copy.
+        </p>
+
+        <div className="mt-5">
+          <span className="label-mono">Hero media</span>
+          <p className="mt-1 text-xs text-mute">
+            One image or video, filling the first screen. Video autoplays muted and loops.
+          </p>
+          <ImageField
+            name="homeHeroUrl"
+            initial={settings.homeHeroUrl}
+            label="Hero media"
+            allowVideo
+          />
+        </div>
+
         <label className="mt-5 block">
+          <span className="label-mono">Hero credit</span>
+          <p className="mt-1 text-xs text-mute">
+            Shown small in the hero corner. Required if the image&rsquo;s licence asks for
+            attribution; otherwise use it to credit the photographer.
+          </p>
+          <input
+            name="homeHeroCredit"
+            defaultValue={settings.homeHeroCredit}
+            className={inputClass}
+            placeholder="Photograph by …"
+          />
+        </label>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Signature statement (hero)</span>
+          <p className="mt-1 text-xs text-mute">
+            The single line over the hero image. One sentence.
+          </p>
+          <textarea
+            name="signatureStatement"
+            rows={2}
+            defaultValue={settings.signatureStatement}
+            className={inputClass}
+            placeholder="Add the studio's signature statement"
+          />
+        </label>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Locations</span>
+          <p className="mt-1 text-xs text-mute">
+            One per line — shown in the hero as &ldquo;Cairo · Egypt&rdquo;. Add or remove lines
+            freely.
+          </p>
+          <textarea
+            name="locations"
+            rows={3}
+            defaultValue={settings.locations.join("\n")}
+            className={inputClass}
+            placeholder={"Cairo\nEgypt"}
+          />
+        </label>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Statement section — headline</span>
+          <input
+            name="statementHeadline"
+            defaultValue={settings.statementHeadline}
+            className={inputClass}
+            placeholder="Add the section headline"
+          />
+        </label>
+
+        <label className="mt-5 block">
+          <span className="label-mono">Statement section — body</span>
+          <p className="mt-1 text-xs text-mute">
+            A short paragraph or a real quote. Blank line separates paragraphs.
+          </p>
+          <textarea
+            name="statementBody"
+            rows={5}
+            defaultValue={settings.statementBody}
+            className={inputClass}
+            placeholder="Add the statement, in the architect's own words"
+          />
+        </label>
+      </section>
+
+      <section className="glow-card p-5 sm:p-6">
+        <label className="block">
           <span className="label-mono">Philosophy quote</span>
           <textarea
             name="philosophyQuote"

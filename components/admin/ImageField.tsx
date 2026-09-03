@@ -14,10 +14,18 @@ export function ImageField({
   name,
   initial,
   label,
+  /**
+   * Allow video as well as an image. Used by the home hero, which is one
+   * asset that may be either — the upload route already has a `video` rule
+   * with its own size ceiling, so this only widens the picker and tells the
+   * route which limit to apply.
+   */
+  allowVideo = false,
 }: {
   name: string;
   initial: string;
   label: string;
+  allowVideo?: boolean;
 }) {
   const [url, setUrl] = useState(initial);
   const [busy, setBusy] = useState(false);
@@ -35,6 +43,7 @@ export function ImageField({
     try {
       const body = new FormData();
       body.append("file", file);
+        body.append("kind", file.type.startsWith("video/") ? "video" : "image");
       const res = await fetch("/api/upload", { method: "POST", body });
       const json = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !json.url) throw new Error(json.error ?? "Upload failed.");
@@ -106,7 +115,7 @@ export function ImageField({
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept={allowVideo ? "image/*,video/*" : "image/*"}
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];

@@ -12,6 +12,7 @@
     "db:import": "tsx scripts/migrate-from-supabase.ts",
     "db:studio": "prisma studio",
     "fix:achievement-slugs": "tsx scripts/backfill-achievement-slugs.ts",
+    "hero:placeholder": "tsx scripts/seed-placeholder-hero.ts",
     "fix:slugs": "tsx scripts/fix-slugs.ts",
     "qa:seed": "tsx scripts/qa-seed-projects.ts",
     "qa:clean": "tsx scripts/qa-seed-projects.ts --remove",
