@@ -28,7 +28,7 @@ export default async function AchievementsPage() {
       <SectorHeader
         sector="10"
         label="Achievements"
-        title="Recognition"
+        title="Achievements"
         intro="Competitions and awards, with the submitted work and the events themselves."
       />
       <div className="mt-10">

@@ -6,7 +6,7 @@ import { Frame } from "@/components/hq/Frame";
 import { getContentBlocks, getMiscEntries, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Free Practice — notes and miscellany",
+  title: "Misc Entries — notes and miscellany",
   description: "Notes, references and everything from the studio that fits no other section.",
   path: "/misc",
 });
@@ -17,7 +17,7 @@ export default async function MiscPage() {
 
   return (
     <SectorPage>
-      <SectorHeader sector="06" label="Free Practice" title={block?.title ?? "Free Practice"} intro={block?.body} />
+      <SectorHeader sector="06" label="Free Practice" title={block?.title ?? "Misc Entries"} intro={block?.body} />
       <div className="mt-10">
         {entries.length === 0 ? (
           <EmptyState what="entries" />

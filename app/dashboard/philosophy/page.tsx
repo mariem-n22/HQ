@@ -28,7 +28,11 @@ export default async function PhilosophyDashboardPage() {
 
         <div className="mt-10">
           <PhilosophyForm
-            initial={{ statement: philosophy?.statement ?? "", body: philosophy?.body ?? "" }}
+            initial={{
+              statement: philosophy?.statement ?? "",
+              body: philosophy?.body ?? "",
+              image: philosophy?.image ?? "",
+            }}
           />
         </div>
       </div>

@@ -169,6 +169,17 @@ export const STATUS_LABELS: Record<string, string> = {
   UNBUILT: "Unbuilt",
 };
 
+/**
+ * Book categories. Orthogonal to BookStatus, which is reading progress — a book
+ * is both a category and a status, never one or the other.
+ */
+export const BOOK_CATEGORY_LABELS: Record<string, string> = {
+  GENERAL: "General",
+  CODES_AND_STANDARDS: "Codes & Standards",
+};
+
+export const BOOK_CATEGORY_VALUES = Object.keys(BOOK_CATEGORY_LABELS);
+
 export const TYPOLOGY_VALUES = Object.keys(TYPOLOGY_LABELS);
 export const STATUS_VALUES = Object.keys(STATUS_LABELS);
 

@@ -52,6 +52,7 @@ export default async function SettingsPage() {
               practiceHeadline: settings?.practiceHeadline ?? "",
               practiceBody: settings?.practiceBody ?? "",
               practiceDisciplines: settings?.practiceDisciplines ?? [],
+              practiceImage: settings?.practiceImage ?? "",
               openToOpportunities: settings?.openToOpportunities ?? true,
               avatarImage: settings?.avatarImage ?? "",
               heroImage: settings?.heroImage ?? "",

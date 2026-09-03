@@ -68,6 +68,7 @@ export async function savePhilosophy(form: FormData): Promise<Result> {
     const data = {
       statement: String(form.get("statement") ?? "").trim(),
       body: String(form.get("body") ?? "").trim(),
+      image: String(form.get("image") ?? "").trim() || null,
     };
     await prisma.philosophy.upsert({
       where: { id: "singleton" },

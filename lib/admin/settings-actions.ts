@@ -72,6 +72,7 @@ export async function saveSettings(form: FormData): Promise<Result> {
     data.avatarImage = String(form.get("avatarImage") ?? "").trim() || null;
     data.heroImage = String(form.get("heroImage") ?? "").trim() || null;
     data.homeHeroUrl = String(form.get("homeHeroUrl") ?? "").trim() || null;
+    data.practiceImage = String(form.get("practiceImage") ?? "").trim() || null;
     // One city per line, so more locations need no code change.
     data.locations = String(form.get("locations") ?? "")
       .split("\n")

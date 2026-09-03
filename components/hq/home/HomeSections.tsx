@@ -101,22 +101,46 @@ export function HomePractice({
   headline,
   body,
   disciplines,
+  image,
 }: {
   headline?: string;
   body?: string;
   disciplines?: string[];
+  image?: string;
 }) {
   const h = (headline ?? "").trim();
   const b = (body ?? "").trim();
   const list = (disciplines ?? []).map((d) => d.trim()).filter(Boolean);
+  const img = (image ?? "").trim();
 
   // The only section with no page behind it, and the only one with no other
-  // source to fall back on — so all three fields empty means no section.
+  // source to fall back on — so all three text fields empty means no section.
+  //
+  // The image is deliberately not part of that test. A picture with no words is
+  // not yet a description of how the studio works, so it cannot bring the
+  // section into existence on its own; it only enriches one that already has
+  // something to say.
   if (!h && !b && list.length === 0) return null;
 
   return (
     <Section eyebrow="The practice">
-      <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] md:gap-16">
+      {/*
+        With an image the section is a two-column pairing, image first — the
+        same order the About page uses for its portrait, so the two read as one
+        family. `md:` is the breakpoint, so on a phone the grid collapses and
+        the image stacks above the text in source order, with no ordering
+        classes needed to make that happen.
+
+        Without one the text keeps its original wider measure rather than
+        stretching across the space the image would have taken.
+      */}
+      <div
+        className={`mt-8 grid gap-10 md:gap-14 ${
+          img ? "md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:items-start" : ""
+        }`}
+      >
+        {img ? <Frame src={img} alt="" ratio="4/5" tone={false} /> : null}
+        <div className={img ? "" : "grid gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] md:gap-16"}>
         <div>
           {h ? (
             <p className="display-title text-2xl leading-[1.2] text-ink sm:text-3xl">{h}</p>
@@ -130,7 +154,7 @@ export function HomePractice({
           ) : null}
         </div>
         {list.length > 0 ? (
-          <ul className="flex flex-col gap-0 self-start border-t border-line">
+          <ul className={`flex flex-col gap-0 self-start border-t border-line ${img ? "mt-8" : ""}`}>
             {list.map((d) => (
               <li key={d} className="border-b border-line py-3 text-sm text-ink/90">
                 {d}
@@ -138,6 +162,7 @@ export function HomePractice({
             ))}
           </ul>
         ) : null}
+        </div>
       </div>
     </Section>
   );
@@ -148,21 +173,25 @@ export function HomePractice({
 export function HomePhilosophy({
   note,
   statement,
+  image,
 }: {
   /** The purpose-written short note, if the profile carries one. */
   note?: string;
   /** The full statement, which is also what the link leads to. */
   statement?: string;
+  image?: string;
 }) {
   // Identical precedence to the About page's philosophy block, deliberately:
   // one source, and a purpose-written excerpt wins over a truncated statement.
   const full = (statement ?? "").trim();
   const short = (note ?? "").trim() || full;
+  const img = (image ?? "").trim();
+  // The statement gates the section; the image only enriches it.
   if (!short) return null;
 
-  return (
-    <Section eyebrow="Philosophy" className="text-center">
-      <blockquote className="mx-auto mt-8 max-w-3xl">
+  const quote = (
+    <>
+      <blockquote className={img ? "" : "mx-auto max-w-3xl"}>
         <p className="display-title text-2xl leading-[1.3] text-ink sm:text-3xl">
           {excerpt(short, 320)}
         </p>
@@ -175,6 +204,27 @@ export function HomePhilosophy({
           Read the full philosophy →
         </Link>
       ) : null}
+    </>
+  );
+
+  // Centred is right for a pull quote standing alone and wrong for one paired
+  // with a picture, where centred text beside a left-aligned image just looks
+  // misaligned. So the section changes shape rather than dropping an image into
+  // a layout built for something else.
+  if (!img) {
+    return (
+      <Section eyebrow="Philosophy" className="text-center">
+        <div className="mt-8">{quote}</div>
+      </Section>
+    );
+  }
+
+  return (
+    <Section eyebrow="Philosophy">
+      <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:items-center md:gap-14">
+        <Frame src={img} alt="" ratio="4/5" tone={false} />
+        <div>{quote}</div>
+      </div>
     </Section>
   );
 }

@@ -144,10 +144,15 @@ export default async function HomePage() {
           headline={settings?.practiceHeadline}
           body={settings?.practiceBody}
           disciplines={settings?.practiceDisciplines}
+          image={settings?.practiceImage ?? undefined}
         />
 
         {/* Same precedence the About page uses — one source for the text. */}
-        <HomePhilosophy note={profile?.philosophyNote} statement={philosophy?.statement} />
+        <HomePhilosophy
+          note={profile?.philosophyNote}
+          statement={philosophy?.statement}
+          image={philosophy?.image ?? undefined}
+        />
 
         <HomeRecognition
           items={achievements.map((a) => ({

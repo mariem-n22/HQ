@@ -6,7 +6,7 @@ import { ExperienceList } from "@/components/hq/ExperienceList";
 import { getContentBlocks, getExperiences, getSettings, findBlock } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Story",
+  title: "Experience",
   description: "The narrative behind the work — how the practice came to be, and how it operates.",
   path: "/story",
 });
@@ -21,7 +21,7 @@ export default async function StoryPage() {
 
   return (
     <SectorPage>
-      <SectorHeader sector="01" label="Story" title={block?.title ?? "Story"} />
+      <SectorHeader sector="01" label="Story" title={block?.title ?? "Experience"} />
       {settings?.cvUrl ? (
         <a
           href="/cv"

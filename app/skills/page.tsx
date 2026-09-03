@@ -6,7 +6,7 @@ import { SkillStack } from "@/components/hq/SkillStack";
 import { getSkills } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta({
-  title: "Practice",
+  title: "Expertise",
   description: "How the studio works, and the areas it works in.",
   path: "/skills",
 });
@@ -19,7 +19,7 @@ export default async function SkillsPage() {
       <SectorHeader
         sector="03"
         label="Setup"
-        title="Practice"
+        title="Expertise"
         intro="The areas the studio works in, and how deep the practice runs in each."
       />
       <div className="mt-10">

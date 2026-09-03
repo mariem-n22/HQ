@@ -182,7 +182,11 @@ export function ArchitectForm({
   );
 }
 
-export function PhilosophyForm({ initial }: { initial: { statement: string; body: string } }) {
+export function PhilosophyForm({
+  initial,
+}: {
+  initial: { statement: string; body: string; image: string };
+}) {
   const { state, error, onSubmit, settle } = useSaver(savePhilosophy);
 
   return (
@@ -214,6 +218,16 @@ export function PhilosophyForm({ initial }: { initial: { statement: string; body
           Optional. A short elaboration beneath the statement. Blank line separates paragraphs.
         </p>
         <textarea name="body" defaultValue={initial.body} rows={8} className={inputClass} />
+      </label>
+
+      <label className="block">
+        <span className="label-mono">Image</span>
+        <p className="mt-1 text-xs text-mute">
+          Optional. Shown beside the statement in the home page&rsquo;s Philosophy section. The
+          section still needs a statement to appear &mdash; an image on its own is not a
+          philosophy.
+        </p>
+        <ImageField name="image" initial={initial.image} label="Philosophy image" />
       </label>
 
       <SaveButton state={state} idleLabel="Save philosophy" onSettled={settle} />

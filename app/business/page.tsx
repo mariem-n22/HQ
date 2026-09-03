@@ -17,7 +17,7 @@ export default async function BusinessPage() {
 
   return (
     <SectorPage>
-      <SectorHeader sector="05" label="Business" title={block?.title ?? "Business"} intro={block?.body} />
+      <SectorHeader sector="05" label="Business" title={block?.title ?? "Ventures"} intro={block?.body} />
       <div className="mt-10">
         {ventures.length === 0 ? (
           <EmptyState what="ventures" />

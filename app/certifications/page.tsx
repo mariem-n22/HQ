@@ -21,7 +21,7 @@ export default async function CertificationsPage() {
       <SectorHeader
         sector="09"
         label="Certifications"
-        title={block?.title ?? "Credentials"}
+        title={block?.title ?? "Certifications"}
         intro={block?.body ?? "Courses and certifications, each linking to where it can be verified."}
       />
       <div className="mt-10">

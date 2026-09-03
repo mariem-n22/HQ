@@ -26,9 +26,27 @@ export default async function PhilosophyPage() {
       <p className="label-mono text-amber">Studio</p>
 
       {statement ? (
-        <blockquote className="mt-10 max-w-4xl">
-          <p className="display-title text-4xl leading-[1.15] text-ink sm:text-6xl">{statement}</p>
-        </blockquote>
+        <>
+          {/*
+            Screen-reader only, and only on this branch.
+
+            The statement is the page's display element and a visible "Philosophy"
+            heading above a full-bleed pull quote would change the design, so the
+            page carried no h1 at all once a statement existed — the quote is a
+            <p> inside a blockquote, which is not a heading to assistive tech.
+            Every other page on the site announces itself with a real heading;
+            this gives this one the same landmark without altering what is drawn.
+
+            The empty state below has its own visible h1, so this must not be
+            rendered there or the page would have two.
+          */}
+          <h1 className="sr-only">Philosophy</h1>
+          <blockquote className="mt-10 max-w-4xl">
+            <p className="display-title text-4xl leading-[1.15] text-ink sm:text-6xl">
+              {statement}
+            </p>
+          </blockquote>
+        </>
       ) : (
         <div className="mt-10 max-w-2xl">
           <h1 className="display-title text-4xl text-ink sm:text-5xl">Philosophy</h1>

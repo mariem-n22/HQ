@@ -30,6 +30,7 @@ type Settings = {
   practiceHeadline: string;
   practiceBody: string;
   practiceDisciplines: string[];
+  practiceImage: string;
   openToOpportunities: boolean;
   avatarImage: string;
   heroImage: string;
@@ -378,6 +379,20 @@ export function SettingsForm({
             placeholder="Add the studio's own description of how it works"
           />
         </label>
+
+        <div className="mt-5">
+          <span className="label-mono">Image</span>
+          <p className="mt-1 text-xs text-mute">
+            Optional. Sits beside the text on wide screens and above it on a phone. The section
+            still needs text to appear &mdash; an image alone is not a description of the
+            practice.
+          </p>
+          <ImageField
+            name="practiceImage"
+            initial={settings.practiceImage}
+            label="Practice image"
+          />
+        </div>
 
         <label className="mt-5 block">
           <span className="label-mono">Disciplines</span>

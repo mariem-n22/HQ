@@ -343,11 +343,31 @@ enum BookStatus {
   FINISHED
 }
 
+/// What kind of book it is, which is orthogonal to how far through it is.
+///
+/// Deliberately an enum rather than free text, matching every other classifier
+/// in this schema (ProjectStatus, Typology, MediaCategory). Only the two values
+/// that exist in practice today — a third goes in when a real third category
+/// turns up, not before.
+enum BookCategory {
+  GENERAL
+  CODES_AND_STANDARDS
+}
+
 /// A reading log entry — what he pulled out of a book, not a summary of it.
 model Book {
   id         String     @id @default(cuid())
   title      String
-  author     String     @default("")
+  /// Country of origin or publication.
+  ///
+  /// This field was `author` until the shelf was repurposed for an architecture
+  /// practice, where the useful fact about a code or standard is which
+  /// jurisdiction it belongs to. Renamed rather than added alongside: there is
+  /// no reason to carry both, and the single row that existed held a leftover
+  /// software title with its own name repeated in the author field, so nothing
+  /// was migrated across.
+  country    String     @default("")
+  category   BookCategory @default(GENERAL)
   coverImage String?
   /// Standout lines worth quoting. Rendered as pulled quotes, not prose.
   highlights String[]   @default([])
@@ -427,6 +447,10 @@ model SiteSettings {
   /// so the section renders as a list rather than a second paragraph block,
   /// which keeps it visually distinct from the Signature Statement above it.
   practiceDisciplines   String[] @default([])
+  /// Optional image beside the Practice text. An enhancement, not a gate — the
+  /// section still hides unless one of the three text fields above has content,
+  /// because a picture on its own is not a description of how the studio works.
+  practiceImage         String?
 
   heroImage             String?
   avatarImage           String?
@@ -516,5 +540,8 @@ model Philosophy {
   statement String   @default("")
   /// Optional supporting paragraphs beneath the statement.
   body      String   @default("")
+  /// Optional image for the home page section. Same rule as Practice: the
+  /// statement is what gates the section, this only enriches it.
+  image     String?
   updatedAt DateTime @updatedAt
 }

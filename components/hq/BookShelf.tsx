@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Book } from "@/lib/types";
+import { BOOK_CATEGORY_LABELS, type Book } from "@/lib/types";
 import { Frame } from "./Frame";
 import { Reveal } from "./Reveal";
 import { Modal } from "./Modal";
@@ -45,7 +45,12 @@ export function BookShelf({ books }: { books: Book[] }) {
                     </span>
                   ) : null}
                 </div>
-                {book.author ? <p className="mt-1 text-sm text-ink/80">{book.author}</p> : null}
+                {book.country ? <p className="mt-1 text-sm text-ink/80">{book.country}</p> : null}
+                {/* Only the non-default category is worth a badge — tagging
+                    every general title "General" is noise. */}
+                {book.category === "CODES_AND_STANDARDS" ? (
+                  <p className="label-mono mt-2">{BOOK_CATEGORY_LABELS[book.category]}</p>
+                ) : null}
                 <p className="mt-auto pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-amber">
                   {book.highlights.length > 0
                     ? `${book.highlights.length} highlight${book.highlights.length === 1 ? "" : "s"} →`
@@ -61,7 +66,7 @@ export function BookShelf({ books }: { books: Book[] }) {
         open={Boolean(active)}
         onClose={() => setOpenId(null)}
         title={active?.title ?? ""}
-        eyebrow={<p className="label-mono text-amber">{active?.author}</p>}
+        eyebrow={<p className="label-mono text-amber">{active?.country}</p>}
       >
         {active ? (
           <div className="space-y-8">

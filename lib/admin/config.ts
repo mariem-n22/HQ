@@ -458,12 +458,25 @@ export const MODELS: Record<string, ModelConfig> = {
     plural: "Books",
     model: "book",
     primaryField: "title",
-    secondaryFields: ["author", "status"],
+    secondaryFields: ["country", "category", "status"],
     orderBy: { order: "asc" },
     revalidate: ["/books"],
     fields: [
       { name: "title", label: "Title", type: "text", required: true },
-      { name: "author", label: "Author", type: "text" },
+      {
+        name: "country",
+        label: "Country",
+        type: "text",
+        help: "Country of origin or publication — for a code or standard, the jurisdiction it applies to.",
+      },
+      {
+        name: "category",
+        label: "Category",
+        type: "select",
+        // Raw enum values, as with project status above — this file stays
+        // import-free and serialisable, and the select renders values as-is.
+        options: ["GENERAL", "CODES_AND_STANDARDS"],
+      },
       {
         name: "status",
         label: "Status",
