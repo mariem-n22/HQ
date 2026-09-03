@@ -36,7 +36,7 @@ export const ARCHIVE_LIGHT = {
   surface: "#F3F1EB",
   /** Graphite — primary text. */
   ink: "#171715",
-  mute: "#66635C",
+  mute: "#55534F",
   line: "#D2CEC4",
   /**
    * Brass, value-adjusted for the light ground. Identical hue (37°) and
@@ -45,5 +45,5 @@ export const ARCHIVE_LIGHT = {
    * limestone, which fails contrast for the small text it carries (nav
    * active state, eyebrow labels, project metadata). This measures 4.52:1.
    */
-  brass: "#75654C",
+  brass: "#62563F",
 } as const;

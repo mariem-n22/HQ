@@ -175,7 +175,19 @@
   --line: #d4cfc5;
   --line-strong: #877f71; /* Input and control boundaries */
   --ink: #181817; /* Near-black, not pure black */
-  --mute: #65635e;
+  /*
+   * Secondary text, one step darker than the #65635e it started at.
+   *
+   * That value measured 5.32:1 on this ground — comfortably past the 4.5:1
+   * floor, and still reading as washed out at body size on warm paper, which
+   * is the gap between passing a threshold and being comfortable to read.
+   * #55534f measures 6.80:1.
+   *
+   * Value only: hue holds at 43 degrees and saturation at 7%, so this is the
+   * same neutral a shade deeper rather than a different colour. Dark mode's
+   * --mute is untouched.
+   */
+  --mute: #55534f;
 
   /*
    * Brass, one step darker than the #88785E the palette names.
@@ -188,8 +200,14 @@
    * rewire 123 component classes, the whole accent takes the darker value.
    * Borders lose nothing by it — they gain, since faint borders were part
    * of the original complaint.
+   *
+   * Darkened once more, from #6e6047 to #62563f, for the same reason as --mute
+   * above: 5.43:1 passed but read soft, and this accent carries almost all of
+   * the small text on the site — sector codes, eyebrows, dates, metadata. It
+   * now measures 6.37:1. Hue holds at 38 degrees and saturation at 35%, which
+   * are the values the brass identity is defined by; only lightness moves.
    */
-  --amber: #6e6047;
+  --amber: #62563f;
 
   --signal: #8c4234;
   --go: #4a6350;
