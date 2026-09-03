@@ -73,42 +73,76 @@ export function findBlock(blocks: ContentBlock[], key: string) {
 }
 
 /**
- * Grouped nav entries.
+ * The navigation, as four groups plus a standalone Contact link.
  *
- * A group renders as a single parent label with its children beneath, and it
- * follows the same rule as everything else in the nav: the parent appears only
- * if at least one child has content, and only the children that have content
- * are listed. A group whose children are all empty disappears entirely.
+ * Every entry follows the same rule as before: an item appears only when its
+ * page has content, and a group whose children are all empty disappears
+ * rather than opening onto an empty menu. `getNavPresence()` in lib/data.ts
+ * supplies the per-route answer; this file only declares the shape.
  *
- * Kept out of SECTORS deliberately: SECTORS also drives the home page
- * "contents" grid and the sector codes, and a group has no sector code.
+ * Two labels are relabels rather than new pages, resolved by audit rather
+ * than assumed: "Ventures" is /business, which already renders ventures and
+ * was misnamed, and "Experience" is /story, where the experience list lives
+ * under its "Track record" heading.
  */
-export type NavGroup = {
-  label: string;
-  children: { label: string; to: string }[];
-};
+export type NavItem = { label: string; to: string };
+export type NavGroup = { label: string; children: NavItem[] };
 
 export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Studio",
+    label: "Work",
+    children: [
+      { label: "Projects", to: "/work" },
+      { label: "Expertise", to: "/skills" },
+    ],
+  },
+  {
+    label: "About",
     children: [
       { label: "About", to: "/studio/architect" },
+      { label: "Experience", to: "/story" },
+      { label: "Identity", to: "/identity" },
+      { label: "Ventures", to: "/business" },
+      { label: "Misc Entries", to: "/misc" },
+    ],
+  },
+  {
+    label: "Studio",
+    children: [
       { label: "Philosophy", to: "/studio/philosophy" },
+      { label: "Now", to: "/now" },
+    ],
+  },
+  {
+    label: "Archive",
+    children: [
+      { label: "Achievements", to: "/achievements" },
+      { label: "Certifications", to: "/certifications" },
+      { label: "Books", to: "/books" },
     ],
   },
 ];
 
+/** Flat list of every routed nav destination, for the home contents grid. */
+export const NAV_ITEMS: NavItem[] = NAV_GROUPS.flatMap((g) => g.children);
+
+/**
+ * The home page "contents" grid. Labels are kept in step with NAV_GROUPS —
+ * the same destination must not be called two different things in two places.
+ */
 export const SECTORS = [
-  { code: "S1", label: "Story", to: "/story", blurb: "How the practice came to be, and how it works." },
-  { code: "S2", label: "Work", to: "/work", blurb: "Built, unbuilt and ongoing projects." },
-  { code: "S3", label: "Practice", to: "/skills", blurb: "The areas the studio works in." },
-  { code: "S4", label: "Identity", to: "/identity", blurb: "What shapes the way the studio designs." },
-  { code: "S5", label: "Business", to: "/business", blurb: "The practice as a company." },
-  { code: "S6", label: "Studio Notes", to: "/misc", blurb: "Notes and references that fit nowhere else." },
-  { code: "S7", label: "Now", to: "/now", blurb: "What the studio is working on this week." },
-  { code: "S8", label: "Books", to: "/books", blurb: "Books read, and what the studio took from each." },
-  { code: "S9", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
-  { code: "S10", label: "Achievements", to: "/achievements", blurb: "Competitions, awards and the work behind them." },
+  { code: "S1", label: "Projects", to: "/work", blurb: "Built, unbuilt and ongoing work." },
+  { code: "S2", label: "Expertise", to: "/skills", blurb: "The areas the studio works in." },
+  { code: "S3", label: "About", to: "/studio/architect", blurb: "The architect behind the practice." },
+  { code: "S4", label: "Experience", to: "/story", blurb: "How the practice came to be, and its track record." },
+  { code: "S5", label: "Identity", to: "/identity", blurb: "What shapes the way the studio designs." },
+  { code: "S6", label: "Ventures", to: "/business", blurb: "The practice as a company." },
+  { code: "S7", label: "Philosophy", to: "/studio/philosophy", blurb: "The studio's design position." },
+  { code: "S8", label: "Now", to: "/now", blurb: "What the studio is working on this week." },
+  { code: "S9", label: "Achievements", to: "/achievements", blurb: "Competitions, awards and recognition." },
+  { code: "S10", label: "Certifications", to: "/certifications", blurb: "Credentials, and where to verify them." },
+  { code: "S11", label: "Books", to: "/books", blurb: "Books read, and what the studio took from each." },
+  { code: "S12", label: "Misc Entries", to: "/misc", blurb: "Notes and references that fit nowhere else." },
 ] as const;
 
 
