@@ -37,20 +37,50 @@ const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 const GAP = 5; // px, as captured
 const CENTRE_ACTIVE = true;
 
-/** Slide width as a fraction of the canvas. The remainder is the peek. */
-const ITEM_RATIO = { base: 0.86, sm: 0.72, lg: 0.66 };
+/**
+ * Slide width as a fraction of the canvas; the remainder is split evenly into
+ * the two peeks.
+ *
+ * 0.86 leaves ~7% showing on each side — a sliver that says "there is more"
+ * without reading as a second panel. The earlier 0.66 came from measuring the
+ * wrong reference: ZHA's project pages carry two carousels, a small in-article
+ * `carousel jagged sm` and the large photo one, and the 66% was taken from the
+ * former. On mobile the slide takes almost the whole width, since a 7% peek at
+ * 390px is 27px and reads as a rendering error rather than an affordance.
+ */
+const ITEM_RATIO = { base: 0.92, sm: 0.88, lg: 0.86 };
+
+/**
+ * Neighbour slides are shorter than the active one, and anchored to the top of
+ * the stage.
+ *
+ * This is the detail that makes the peek read correctly. A neighbour at full
+ * stage height is just a narrow vertical strip of a second picture, which
+ * looks like a cropping accident. At ~70% height, top-aligned, what shows is a
+ * smaller fragment sitting in the upper corner with ground beneath it — the
+ * set clearly continues, and the active slide is unmistakably the subject.
+ */
+const NEIGHBOUR_HEIGHT = 0.7;
 
 export function CinematicSlider({
   count,
   label,
   renderItem,
   creditFor,
-  ratio = "16 / 9",
+  /**
+   * Stage height. Defaults to filling most of the viewport below the nav, so
+   * the carousel reads as a full-bleed band rather than a boxed gallery with
+   * dead ground above and below it. Pass a CSS aspect-ratio instead where the
+   * content's own proportions must be preserved.
+   */
+  height = "clamp(420px, 78vh, 900px)",
+  ratio,
 }: {
   count: number;
   label: string;
   renderItem: (index: number) => ReactNode;
   creditFor?: (index: number) => string | null;
+  height?: string;
   ratio?: string;
 }) {
   const [active, setActive] = useState(0);
@@ -157,9 +187,23 @@ export function CinematicSlider({
         }}
         className="relative focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
       >
-        <div ref={canvasRef} className="overflow-hidden" style={{ aspectRatio: ratio }}>
+        {/*
+          Full-bleed: the canvas breaks out of the page's max-width column the
+          same way the hero does. `SiteShell` carries `overflow-x-clip`, which
+          already absorbs the difference between 100vw and the scrollbar-less
+          viewport — the guard the hero breakout needed, reused here rather
+          than reintroducing the same horizontal-scrollbar bug.
+        */}
+        <div className="relative mx-[calc(50%-50vw)] w-[100vw]">
+        <div
+          ref={canvasRef}
+          className="overflow-hidden"
+          style={ratio ? { aspectRatio: ratio } : { height }}
+        >
           <div
-            className="flex h-full"
+            // items-start, so a shorter neighbour hangs from the top of the
+            // stage rather than centring itself in the leftover space.
+            className="flex h-full items-start"
             style={{
               gap: `${GAP}px`,
               transform: `translateX(${offset}px)`,
@@ -175,13 +219,16 @@ export function CinematicSlider({
                 // taken out of the tab order so focus never lands on a
                 // half-cropped item.
                 inert={i !== active}
-                className="h-full shrink-0 overflow-hidden border border-line bg-surface"
+                className="shrink-0 overflow-hidden border border-line bg-surface"
                 style={{
                   width: metrics.item ? `${metrics.item}px` : "100%",
+                  height: i === active ? "100%" : `${NEIGHBOUR_HEIGHT * 100}%`,
                   // Neighbours sit back a little so the active slide reads as
                   // the subject rather than one of three equal pictures.
                   opacity: reduced || i === active ? 1 : 0.55,
-                  transition: reduced ? "none" : `opacity ${DURATION}ms ${EASE}`,
+                  transition: reduced
+                    ? "none"
+                    : `opacity ${DURATION}ms ${EASE}, height ${DURATION}ms ${EASE}`,
                 }}
               >
                 {renderItem(i)}
@@ -206,6 +253,7 @@ export function CinematicSlider({
         >
           {control("prev", atStart)}
           {control("next", atEnd)}
+        </div>
         </div>
       </div>
 

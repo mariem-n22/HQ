@@ -1,5 +1,6 @@
 import { MediaFigure } from "./MediaFigure";
 import type { MediaItem } from "@/lib/types";
+import { HeroLabel } from "../HeroLabel";
 
 /**
  * Project hero — full-bleed image, with the type set at reading scale.
@@ -44,19 +45,26 @@ export function ProjectHero({
   const heading = (
     <div className="mx-auto flex h-full max-w-6xl flex-col justify-end px-6 pb-12 sm:px-8 sm:pb-16">
       {tags.length > 0 ? (
-        <ul className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <ul className="flex flex-wrap items-center gap-x-2 gap-y-2">
           {tags.map((tag) => (
-            <li
-              key={tag}
-              className="label-mono border border-ink/30 px-3 py-1.5 text-ink/90 backdrop-blur-sm"
-            >
-              {tag}
+            <li key={tag} className="label-mono" style={{ fontSize: "clamp(10px, 0.9vw, 13px)" }}>
+              <HeroLabel>{tag}</HeroLabel>
             </li>
           ))}
         </ul>
       ) : null}
-      <h1 className="display-title mt-5 max-w-3xl text-4xl leading-[1.06] text-ink sm:text-5xl">
-        {title}
+      {/* Same fluid mechanics as the home hero, one step down its range: this
+          is a project record rather than the front door, so it should read as
+          large without competing with the wordmark. */}
+      <h1
+        className="display-title mt-5 max-w-4xl"
+        style={{
+          fontSize: "clamp(28px, 4.2vw, 66px)",
+          letterSpacing: "-0.04em",
+          lineHeight: 0.92,
+        }}
+      >
+        <HeroLabel>{title}</HeroLabel>
       </h1>
     </div>
   );
@@ -103,20 +111,14 @@ export function ProjectHero({
           />
         ) : null}
 
-        {/* Scrim, not a tint: enough at the foot to hold the type, gone by the
-            upper third. Skipped over video, where it would sit on the film. */}
-        {!embedSrc ? (
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-base via-base/55 to-transparent"
-          />
-        ) : null}
-
         {!embedSrc ? <div className="absolute inset-0">{heading}</div> : null}
 
         {!embedSrc && credit ? (
-          <p className="absolute bottom-4 right-4 text-[11px] text-ink/70 sm:bottom-6 sm:right-8">
-            {credit}
+          <p
+            className="absolute bottom-4 right-4 sm:bottom-6 sm:right-8"
+            style={{ fontSize: "clamp(10px, 0.78vw, 12px)" }}
+          >
+            <HeroLabel>{credit}</HeroLabel>
           </p>
         ) : null}
       </div>

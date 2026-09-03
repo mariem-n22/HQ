@@ -80,7 +80,6 @@ export function PhotoStrip({ items, label }: { items: MediaItem[]; label: string
         <CinematicSlider
           count={items.length}
           label={label}
-          ratio="16 / 9"
           creditFor={(i) => items[i].caption ?? items[i].label ?? null}
           renderItem={(i) => (
             <button
@@ -139,7 +138,6 @@ function DrawingStrip({ label, items }: { label: string; items: MediaItem[] }) {
         <CinematicSlider
           count={items.length}
           label={label}
-          ratio="4 / 3"
           creditFor={(i) => items[i].caption ?? items[i].label ?? null}
           renderItem={(i) => (
             <button
@@ -184,7 +182,6 @@ export function DiagramSequence({ items }: { items: MediaItem[] }) {
         <CinematicSlider
           count={items.length}
           label="Concept"
-          ratio="16 / 10"
           creditFor={(i) => items[i].label ?? items[i].caption ?? null}
           renderItem={(i) => (
             <button

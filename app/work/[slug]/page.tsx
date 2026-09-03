@@ -123,7 +123,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const next = order.length > 1 ? order[(at + 1) % order.length] : null;
 
   return (
-    <SectorPage>
+    <SectorPage hasHero={Boolean(heroEmbed || heroItem)}>
       <JsonLd
         data={graph({
           "@type": "CreativeWork",
