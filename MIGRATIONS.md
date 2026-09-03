@@ -5,9 +5,10 @@ development fast and puts the entire burden of ordering on whoever runs the
 deploy. This file exists so that ordering is written down where it will be read
 at the moment it matters, rather than reconstructed from memory.
 
-Read the **Standing rules** before running anything. The **Pending** section at
-the bottom is the specific work waiting to go out; delete each entry once it has
-been applied to production.
+Read the **Standing rules** before running anything. **Status** records what has
+actually been applied, verified against the live schema rather than assumed from
+what a command printed. Re-verify rather than trusting that table if time has
+passed — it is a snapshot, not a guarantee.
 
 ---
 
@@ -89,21 +90,78 @@ an example where they were not.
 
 ---
 
-## Pending — not yet applied to production
+## Status — verified 2026-09-04
 
-Covers commits `ae00a7c` (home page sections) and `3ebab83` (book shelf and page
-names). Everything below has been applied to the development database only.
+**There is no production deployment.** No `.vercel` directory, no `vercel.json`,
+`NEXTAUTH_URL` is localhost, and the fallback URL hard-coded in `lib/seo.ts`
+(`portfolio-hq-e8g7.vercel.app`) returns `DEPLOYMENT_NOT_FOUND`. Vercel's own
+environment variables cannot be read from this machine, so if a deployment is
+created later, whether it points at this database or a new one is a fact that
+has to be established then rather than assumed now.
 
-### Step 1 — rename, by hand, before anything else
+There is therefore exactly one database, and everything below was verified
+against it directly — reading `information_schema` and `pg_type` rather than
+trusting that a command run earlier had the effect it claimed.
+
+Host: `ep-cool-salad-awmxd8qr-pooler.c-12.us-east-1.aws.neon.tech`
+
+| Change | State |
+|---|---|
+| `Book.author` → `country` renamed | applied |
+| `BookCategory` enum created | applied |
+| `Book.category` added | applied |
+| `SiteSettings.practiceImage` added | applied |
+| `Philosophy.image` added | applied |
+| `SiteSettings.practiceHeadline` / `practiceBody` / `practiceDisciplines` | applied |
+| `SiteSettings.github` dropped | applied |
+| `SiteSettings.archdaily` + `behance` added | applied |
+| AIMA book row deleted | applied — 0 book rows |
+| `SiteSettings.linkedin` prose cleared | applied — empty |
+| Achievement `order` sequenced | applied — 0,1,2,3 |
+| BMawy Now entries removed | **no — see below** |
+
+### The BMawy Now entries came back
+
+They were deleted earlier, and two rows carrying the same subjects exist again
+with **different ids**, so these are new records rather than a failed delete:
+
+- `BMawy Automobili` — dated 2032-07-21, active, 368 characters of detail
+- `BMawy Track` — dated 2028-07-21, active, 388 characters of detail
+
+The earlier pair were inactive with empty `details`. These are active, and the
+long prose has been moved into `details` where it belongs, which is the field
+working as designed. That pattern reads as someone deliberately re-entering the
+content through the dashboard, not an accident or a restore.
+
+**They have deliberately not been deleted again.** The instruction to remove
+them referred to specific rows that are already gone; re-deleting content that
+someone has since chosen to create would be acting on stale authority.
+
+Two things are worth a decision either way:
+
+- Whether this content belongs on an architecture portfolio at all. A supercar
+  factory and a Formula 1 circuit were the reason for removing them the first
+  time.
+- The dates are 2032 and 2028, both in the future. Whatever is decided about
+  the entries themselves, those dates will render as-is.
+
+## If production is ever a separate database
+
+Nothing here has been run anywhere except the database above. If a deployment
+is created and pointed at a *different* database, run these in order. Read the
+standing rules first — particularly rule 1, because step 1 is the destructive
+half and `db push` cannot do it safely on its own.
+
+### Step 1 — renames and drops, by hand
 
 ```sql
+-- The rename. db push cannot infer it and would drop the column instead.
 ALTER TABLE "Book" RENAME COLUMN "author" TO "country";
-```
 
-The book shelf was repurposed for an architecture practice, where the useful
-fact about a code or standard is the jurisdiction it belongs to rather than an
-author. Without this step, step 2 will demand `--accept-data-loss` and, if given
-it, will delete every author value in the table.
+-- The drop. Check it is empty first; it held "" here.
+select "github" from "SiteSettings";
+ALTER TABLE "SiteSettings" DROP COLUMN IF EXISTS "github";
+```
 
 ### Step 2 — additive push
 
@@ -111,78 +169,26 @@ it, will delete every author value in the table.
 bunx prisma db push
 ```
 
-No flags. This adds:
+No flags. Adds the `BookCategory` enum, `Book.category`,
+`SiteSettings.practiceImage` / `practiceHeadline` / `practiceBody` /
+`practiceDisciplines` / `archdaily` / `behance`, and `Philosophy.image`.
 
-| Change | Table | Note |
-|---|---|---|
-| `BookCategory` enum | — | `GENERAL`, `CODES_AND_STANDARDS` |
-| `category` | `Book` | defaults to `GENERAL`, so existing rows stay valid |
-| `practiceImage` | `SiteSettings` | nullable |
-| `image` | `Philosophy` | nullable |
-| `practiceHeadline`, `practiceBody`, `practiceDisciplines` | `SiteSettings` | from `ae00a7c`, if production has not had it yet |
+If it asks for `--accept-data-loss`, step 1 did not take. Stop and check.
 
-If this asks for `--accept-data-loss`, step 1 did not take. Go back and check.
+### Step 3 — data
 
-### Step 3 — clean up the renamed column's contents
-
-After step 1, whatever was in `author` is sitting in `country` — author names in
-a country field. They are not valid data any more and there is no automatic way
-to convert them.
-
-On the development database there was exactly one row, titled `AIMA` with
-`AIMA` repeated in the author field — a leftover from the site's previous life
-as a software portfolio — and it was deleted outright rather than migrated.
-Production has its own rows: clear or re-enter them through
-**Dashboard → Books**, or delete the ones that are stale in the same way.
-
-`scripts/seed-books.ts` was deleted in `3ebab83` and must not be restored to
-"fix" this. Its only function was recreating those software titles, and it wrote
-author names into what is now the country column.
+- Book rows: after the rename, old author values sit in `country`. Clear or
+  re-enter them. `scripts/seed-books.ts` was deleted and must not be restored
+  to "fix" this — it wrote author names into what is now the country column.
+- `SiteSettings.linkedin`: check for a pasted paragraph rather than a URL. It
+  held one here, and `channelsOf()` renders that field as an href, so the
+  contact page shows a link pointing at a sentence.
+- Achievement `order`: all rows default to 999, so nothing is sequenced and the
+  Recognition section's "first three" is arbitrary until they are.
 
 ### Step 4 — redeploy
 
-Only after steps 1 and 2 have completed successfully. See standing rule 3 for
-what happens if this runs first.
-
-### Also pending — contact channels
-
-GitHub was removed from the contact channels and replaced with ArchDaily and
-Behance. GitHub was a leftover from the site's previous life as a software
-portfolio.
-
-The development database was migrated as follows, and production needs the
-same. The drop is listed first because it is the destructive half:
-
-```sql
--- Verify it is empty before dropping. It held "" in development; if production
--- holds a real URL, decide what to do with it before running this.
-select "github" from "SiteSettings";
-
-ALTER TABLE "SiteSettings" DROP COLUMN IF EXISTS "github";
-```
-
-Then a plain, additive push adds `archdaily` and `behance`:
-
-```bash
-bunx prisma db push
-```
-
-Both new columns default to `""`. `channelsOf()` drops any channel with a blank
-href, so they render nothing at all until real URLs are entered through
-**Dashboard → Settings** — no empty icon, no dead link.
-
-### Also pending — a data fix, not a schema one
-
-`SiteSettings.linkedin` held a paragraph of prose rather than a URL:
-
-> "Skilled in architectural design, teamwork, leadership, and communication…"
-
-`channelsOf()` treats that field as an href, so the contact page rendered a
-link pointing at a sentence. Cleared to `""` in development. **Check production
-for the same value** — it was almost certainly entered through the dashboard on
-whichever database was live at the time.
-
----
+Only after 1 and 2 succeed. See standing rule 3.
 
 ## Open work, not yet started
 
