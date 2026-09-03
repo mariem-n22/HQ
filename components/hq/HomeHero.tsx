@@ -74,8 +74,16 @@ export function HomeHero({
 
       <div className="relative mx-auto flex w-full max-w-6xl items-start justify-between gap-6 px-6 pt-10 sm:px-8">
         {/*
+          The title form here, not the short one the nav uses.
+
+          The nav mark is a repeated piece of furniture on every page and stays
+          "Mariem"; the hero says the name once, on the page most likely to be
+          someone's first and only view, so it gives the fuller form. `title`
+          rather than `full` because this is still a mark set at display size —
+          three names at 84px would wrap on any laptop.
+
           Fluid rather than stepped: one clamp() covers every width instead of
-          jumping at the sm/lg breakpoints, so the wordmark is always in
+          jumping at the sm/lg breakpoints, so the mark is always in
           proportion to the frame it sits in.
 
           The sizing mechanics come from the supplied spec — the clamp range,
@@ -93,7 +101,7 @@ export function HomeHero({
             lineHeight: 0.9,
           }}
         >
-          <HeroLabel>{PERSON.short}</HeroLabel>
+          <HeroLabel>{PERSON.title}</HeroLabel>
         </p>
         {places.length > 0 ? (
           <p
